@@ -225,6 +225,8 @@ namespace Python
             this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
             this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
 
+            var headers = this.CreateHeaderContainer("$(packagedir)/Include/*.h");
+
             var parserSource = this.CreateCSourceContainer("$(packagedir)/Parser/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$"));
             parserSource.PrivatePatch(settings =>
                 {
@@ -241,6 +243,7 @@ namespace Python
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                     }
                 });
+            headers.AddFiles("$(packagedir)/Parser/*.h");
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(settings =>
@@ -271,6 +274,7 @@ namespace Python
                         var compiler = settings as C.ICOnlyCompilerSettings;
                         compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                     }));
+            headers.AddFiles("$(packagedir)/Objects/*.h");
 
             var pythonSource = this.CreateCSourceContainer("$(packagedir)/Python/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*dynload_)(?!.*dup2)(?!.*strdup)(?!.*frozenmain)(?!.*sigcheck).*)$"));
@@ -320,10 +324,10 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("tautological-constant-out-of-range-compare"); // numbers out of range of comparison
                     }));
             }
+            headers.AddFiles("$(packagedir)/Python/*.h");
 
             var moduleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             moduleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
-            //moduleSource.AddFiles("$(packagedir)/Modules/config.c");
 
             moduleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
             moduleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
@@ -408,6 +412,10 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
                     }));
+            headers.AddFiles("$(packagedir)/Modules/*.h");
+            headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
+            headers.AddFiles("$(packagedir)/Modules/zlib/*.h");
+            headers.AddFiles("$(packagedir)/Modules/_io/*.h");
 
 #if false
             // sigcheck has a simplified error check compared to signalmodule
@@ -455,6 +463,7 @@ namespace Python
                         linker.Libraries.Add("Ws2_32.lib");
                         linker.Libraries.Add("User32.lib");
                     });
+                headers.AddFiles("$(packagedir)/PC/*.h");
             }
             else
             {
