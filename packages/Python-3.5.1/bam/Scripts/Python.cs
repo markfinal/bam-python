@@ -142,6 +142,66 @@ namespace Python
         }
     }
 
+    class ConfigSource :
+        C.SourceFile
+    {
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+            this.GeneratedPaths[Key] = this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c");
+
+            this.PublicPatch((settings, appliedTo) =>
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    if (null != compiler)
+                    {
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagebuilddir)/$(config)"));
+                    }
+                });
+        }
+
+        public override void
+        Evaluate()
+        {
+            this.ReasonToExecute = null;
+            var outputPath = this.GeneratedPaths[Key].Parse();
+            if (!System.IO.File.Exists(outputPath))
+            {
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                return;
+            }
+        }
+
+        protected override void
+        ExecuteInternal(
+            ExecutionContext context)
+        {
+            var destPath = this.GeneratedPaths[Key].Parse();
+            var destDir = System.IO.Path.GetDirectoryName(destPath);
+            if (!System.IO.Directory.Exists(destDir))
+            {
+                System.IO.Directory.CreateDirectory(destDir);
+            }
+            using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
+            {
+                writeFile.WriteLine("#include \"Python.h\"");
+                writeFile.WriteLine("struct _inittab _PyImport_Inittab[] = {");
+                writeFile.WriteLine("\t/* Sentinel */");
+                writeFile.WriteLine("\t{0, 0}");
+                writeFile.WriteLine("};");
+            }
+        }
+
+        protected override void
+        GetExecutionPolicy(
+            string mode)
+        {
+            // TODO: do nothing
+        }
+    }
+
     sealed class PythonLibrary :
         C.DynamicLibrary
     {
@@ -296,6 +356,9 @@ namespace Python
             else
             {
                 moduleSource.AddFiles("$(packagedir)/Modules/getpath.c");
+
+                var configSource = Bam.Core.Graph.Instance.FindReferencedModule<ConfigSource>();
+                moduleSource.AddFile(configSource);
             }
 
             moduleSource.PrivatePatch(settings =>
