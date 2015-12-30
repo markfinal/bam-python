@@ -122,15 +122,23 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_UNISTD_H");
                 writeFile.WriteLine("#define HAVE_SIGNAL_H");
                 writeFile.WriteLine("#define TIME_WITH_SYS_TIME");
-                writeFile.WriteLine("#define HAVE_CLOCK_GETTIME");
                 writeFile.WriteLine("#define HAVE_DIRENT_H");
                 writeFile.WriteLine("#define HAVE_CLOCK");
-                writeFile.WriteLine("#define daylight __daylight");
                 writeFile.WriteLine("#define HAVE_GETTIMEOFDAY");
                 writeFile.WriteLine("#define WITH_THREAD");
                 writeFile.WriteLine("#define WITH_PYMALLOC");
                 writeFile.WriteLine("#define HAVE_SYSCONF"); // or my_getallocationgranularity is undefined
                 writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    writeFile.WriteLine("#define HAVE_FSTATVFS");
+                    writeFile.WriteLine("#define HAVE_SYS_STATVFS_H");
+                }
+                else
+                {
+                    writeFile.WriteLine("#define HAVE_CLOCK_GETTIME");
+                    writeFile.WriteLine("#define daylight __daylight");
+                }
                 writeFile.WriteLine("#endif");
             }
         }
@@ -296,6 +304,22 @@ namespace Python
                         var compiler = settings as C.ICOnlyCompilerSettings;
                         compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                     }));
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+            {
+                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("dtoa.c")).ToList().ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("parentheses"); // if (y = value) type expression
+                    }));
+                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("pytime.c")).ToList().ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("tautological-constant-out-of-range-compare"); // numbers out of range of comparison
+                    }));
+            }
 
             var moduleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             moduleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
