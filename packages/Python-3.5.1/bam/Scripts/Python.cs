@@ -478,4 +478,18 @@ namespace Python
             }
         }
     }
+
+    sealed class PythonRuntime :
+        Publisher.Collation
+    {
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            var app = this.Include<PythonInterpreter>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
+            this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
+        }
+    }
 }
