@@ -129,6 +129,7 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_GETTIMEOFDAY");
                 writeFile.WriteLine("#define WITH_THREAD");
                 writeFile.WriteLine("#define WITH_PYMALLOC");
+                writeFile.WriteLine("#define HAVE_SYSCONF"); // or my_getallocationgranularity is undefined
                 writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
                 writeFile.WriteLine("#endif");
             }
