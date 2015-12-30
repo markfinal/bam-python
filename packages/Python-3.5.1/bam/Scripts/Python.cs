@@ -32,8 +32,113 @@ namespace Python
             {
                 this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(source);
             }
+            else
+            {
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+                source.DependsOn(pyConfigHeader);
+                source.UsePublicPatches(pyConfigHeader);
+            }
 
             this.LinkAgainst<PythonLibrary>();
+        }
+    }
+
+    class PyConfigHeader :
+        C.CModule
+    {
+        private static Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("PyConfig header");
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+            this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/pyconfig.h"));
+
+            this.PublicPatch((settings, appliedTo) =>
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    if (null != compiler)
+                    {
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagebuilddir)/$(config)"));
+                    }
+                });
+        }
+
+        public override void
+        Evaluate()
+        {
+            this.ReasonToExecute = null;
+            var outputPath = this.GeneratedPaths[Key].Parse();
+            if (!System.IO.File.Exists(outputPath))
+            {
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                return;
+            }
+        }
+
+        protected override void
+        ExecuteInternal(
+            ExecutionContext context)
+        {
+            var destPath = this.GeneratedPaths[Key].Parse();
+            var destDir = System.IO.Path.GetDirectoryName(destPath);
+            if (!System.IO.Directory.Exists(destDir))
+            {
+                System.IO.Directory.CreateDirectory(destDir);
+            }
+            using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
+            {
+                writeFile.WriteLine("#ifndef PYCONFIG_H");
+                writeFile.WriteLine("#define PYCONFIG_H");
+                writeFile.WriteLine("#define _BSD_SOURCE 1");
+                writeFile.WriteLine("#include <limits.h>"); // so that __USE_POSIX is not undeffed
+                writeFile.WriteLine("#define __USE_POSIX 1");
+                writeFile.WriteLine("#define __USE_POSIX199309 1");
+                writeFile.WriteLine("#define HAVE_STDINT_H");
+                writeFile.WriteLine("#define HAVE_SYS_TIME_H");
+                writeFile.WriteLine("#define HAVE_SYS_STAT_H");
+                writeFile.WriteLine("#define HAVE_LONG_LONG 1"); // required to have a value in Modules/arraymodule.c
+                writeFile.WriteLine("#define HAVE_STRING_H");
+                writeFile.WriteLine("#define HAVE_ERRNO_H");
+                writeFile.WriteLine("#define PY_INT64_T PY_LONG_LONG");
+                writeFile.WriteLine("#define PY_FORMAT_LONG_LONG \"ll\"");
+                writeFile.WriteLine("#define PY_FORMAT_SIZE_T \"z\"");
+                writeFile.WriteLine("#define SIZEOF_WCHAR_T 2");
+                writeFile.WriteLine("#define SIZEOF_LONG 8");
+                writeFile.WriteLine("#define SIZEOF_LONG_LONG 8");
+                writeFile.WriteLine("#define SIZEOF_INT 4");
+                writeFile.WriteLine("#define SIZEOF_SHORT 2");
+                writeFile.WriteLine("#define SIZEOF_VOID_P 8");
+                writeFile.WriteLine("#define SIZEOF_SIZE_T 8");
+                writeFile.WriteLine("#define SIZEOF_OFF_T 8");
+                writeFile.WriteLine("#define VA_LIST_IS_ARRAY 1");
+                writeFile.WriteLine("#define HAVE_STDARG_PROTOTYPES");
+                writeFile.WriteLine("#define HAVE_UINTPTR_T");
+                writeFile.WriteLine("#define HAVE_WCHAR_H");
+                writeFile.WriteLine("#define HAVE_UINT32_T");
+                writeFile.WriteLine("#define HAVE_INT32_T");
+                writeFile.WriteLine("#define HAVE_FCNTL_H");
+                writeFile.WriteLine("#define HAVE_UNISTD_H");
+                writeFile.WriteLine("#define HAVE_SIGNAL_H");
+                writeFile.WriteLine("#define TIME_WITH_SYS_TIME");
+                writeFile.WriteLine("#define HAVE_CLOCK_GETTIME");
+                writeFile.WriteLine("#define HAVE_DIRENT_H");
+                writeFile.WriteLine("#define HAVE_CLOCK");
+                writeFile.WriteLine("#define daylight __daylight");
+                writeFile.WriteLine("#define HAVE_GETTIMEOFDAY");
+                writeFile.WriteLine("#define WITH_THREAD");
+                writeFile.WriteLine("#define WITH_PYMALLOC");
+                writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
+                writeFile.WriteLine("#endif");
+            }
+        }
+
+        protected override void
+        GetExecutionPolicy(
+            string mode)
+        {
+            // TODO: do nothing
         }
     }
 
@@ -85,11 +190,28 @@ namespace Python
                     }
                 });
 
+            objectSource.Children.Where(item => item.InputPath.Parse().Contains("bytesobject.c")).ToList().ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICOnlyCompilerSettings;
+                        compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
+                    }));
+            objectSource.Children.Where(item => item.InputPath.Parse().Contains("odictobject.c")).ToList().ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICOnlyCompilerSettings;
+                        compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
+                    }));
+
             var pythonSource = this.CreateCSourceContainer("$(packagedir)/Python/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*dynload_)(?!.*dup2)(?!.*strdup)(?!.*frozenmain)(?!.*sigcheck).*)$"));
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 pythonSource.AddFiles("$(packagedir)/Python/dynload_win.c");
+            }
+            else
+            {
+                //pythonSource.AddFiles("$(packagedir)/Python/strdup.c");
             }
             pythonSource.PrivatePatch(settings =>
                 {
@@ -107,10 +229,16 @@ namespace Python
                     }
                 });
 
+            pythonSource.Children.Where(item => item.InputPath.Parse().Contains("_warnings.c")).ToList().ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICOnlyCompilerSettings;
+                        compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
+                    }));
+
             var moduleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             moduleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
             //moduleSource.AddFiles("$(packagedir)/Modules/config.c");
-            //moduleSource.AddFiles("$(packagedir)/Modules/getpath.c");
 
             moduleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
             moduleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
@@ -164,6 +292,10 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 moduleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
+            }
+            else
+            {
+                moduleSource.AddFiles("$(packagedir)/Modules/getpath.c");
             }
 
             moduleSource.PrivatePatch(settings =>
@@ -234,6 +366,26 @@ namespace Python
                         linker.Libraries.Add("Advapi32.lib");
                         linker.Libraries.Add("Ws2_32.lib");
                         linker.Libraries.Add("User32.lib");
+                    });
+            }
+            else
+            {
+                // TODO: is there a call for a CompileWith function?
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+                parserSource.DependsOn(pyConfigHeader);
+                parserSource.UsePublicPatches(pyConfigHeader);
+                objectSource.DependsOn(pyConfigHeader);
+                objectSource.UsePublicPatches(pyConfigHeader);
+                pythonSource.DependsOn(pyConfigHeader);
+                pythonSource.UsePublicPatches(pyConfigHeader);
+                moduleSource.DependsOn(pyConfigHeader);
+                moduleSource.UsePublicPatches(pyConfigHeader);
+                // TODO: end of function
+                this.PrivatePatch(settings =>
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        linker.Libraries.Add("-lpthread");
+                        linker.Libraries.Add("-lm");
                     });
             }
         }
