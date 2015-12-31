@@ -26,6 +26,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -241,6 +242,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
             headers.AddFiles("$(packagedir)/Parser/*.h");
@@ -259,6 +261,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
 
@@ -299,6 +302,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
 
@@ -380,7 +384,9 @@ namespace Python
             moduleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
+                moduleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
                 moduleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
+                moduleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
             }
             else
             {
@@ -403,6 +409,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
 
@@ -433,6 +440,7 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
 #endif
@@ -453,6 +461,7 @@ namespace Python
                         }
                         compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                         compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+                        compiler.PreprocessorDefines.Add("WIN32");
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     });
                 this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
