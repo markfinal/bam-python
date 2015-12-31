@@ -17,6 +17,7 @@ namespace Python
             source.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -241,6 +242,7 @@ namespace Python
             parserSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -260,6 +262,7 @@ namespace Python
             objectSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -301,6 +304,7 @@ namespace Python
             pythonSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -408,6 +412,7 @@ namespace Python
             moduleSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -464,6 +469,7 @@ namespace Python
                 pcSource.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                         if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                         {
                             compiler.PreprocessorDefines.Add("Py_DEBUG");
