@@ -18,6 +18,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
+                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -243,6 +245,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
+                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -263,6 +267,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
+                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -305,6 +311,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
+                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -413,6 +421,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
+                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
