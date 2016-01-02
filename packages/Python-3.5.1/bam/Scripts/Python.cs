@@ -206,13 +206,11 @@ namespace Python
             {
                 System.IO.Directory.CreateDirectory(destDir);
             }
+            var stubPath = this.CreateTokenizedString("$(packagedir)/Modules/config.c.in").Parse();
+            var stubText = System.IO.File.ReadAllText(stubPath);
             using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
             {
-                writeFile.WriteLine("#include \"Python.h\"");
-                writeFile.WriteLine("struct _inittab _PyImport_Inittab[] = {");
-                writeFile.WriteLine("\t/* Sentinel */");
-                writeFile.WriteLine("\t{0, 0}");
-                writeFile.WriteLine("};");
+                writeFile.Write(stubText);
             }
         }
 
