@@ -114,6 +114,7 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_LONG_LONG 1"); // required to have a value in Modules/arraymodule.c
                 writeFile.WriteLine("#define HAVE_STRING_H");
                 writeFile.WriteLine("#define HAVE_ERRNO_H");
+                writeFile.WriteLine("#define HAVE_LSTAT");
                 writeFile.WriteLine("#define PY_INT64_T PY_LONG_LONG");
                 writeFile.WriteLine("#define PY_FORMAT_LONG_LONG \"ll\"");
                 writeFile.WriteLine("#define PY_FORMAT_SIZE_T \"z\"");
