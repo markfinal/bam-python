@@ -149,6 +149,7 @@ namespace Python
                 writeFile.WriteLine("#define WITH_PYMALLOC");
                 writeFile.WriteLine("#define HAVE_SYSCONF"); // or my_getallocationgranularity is undefined
                 writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
+                writeFile.WriteLine("#define PyAPI_DATA(RTYPE) extern __attribute__ ((visibility(\"default\"))) RTYPE");
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     writeFile.WriteLine("#define HAVE_FSTATVFS");
@@ -508,14 +509,8 @@ namespace Python
             {
                 // TODO: is there a call for a CompileWith function?
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-                parserSource.DependsOn(pyConfigHeader);
-                parserSource.UsePublicPatches(pyConfigHeader);
-                objectSource.DependsOn(pyConfigHeader);
-                objectSource.UsePublicPatches(pyConfigHeader);
-                pythonSource.DependsOn(pyConfigHeader);
-                pythonSource.UsePublicPatches(pyConfigHeader);
-                moduleSource.DependsOn(pyConfigHeader);
-                moduleSource.UsePublicPatches(pyConfigHeader);
+                this.DependsOn(pyConfigHeader);
+                this.UsePublicPatches(pyConfigHeader);
                 // TODO: end of function
                 this.PrivatePatch(settings =>
                     {
@@ -525,6 +520,65 @@ namespace Python
                     });
             }
         }
+    }
+
+    class PythonModule :
+        C.Plugin
+    {
+        protected string sourceBasename;
+
+        protected PythonModule(
+            string moduleSource)
+        {
+            this.sourceBasename = moduleSource;
+        }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.Macros["pluginsuffix"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
+            }
+            else
+            {
+                this.Macros["pluginprefix"] = Bam.Core.TokenizedString.CreateVerbatim(string.Empty);
+                this.Macros["pluginsuffix"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
+            }
+            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.sourceBasename);
+
+            var source = this.CreateCSourceContainer(System.String.Format("$(packagedir)/Modules/{0}.c", this.sourceBasename));
+            source.PrivatePatch(settings =>
+            {
+                var compiler = settings as C.ICommonCompilerSettings;
+                if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
+                {
+                    compiler.PreprocessorDefines.Add("Py_DEBUG");
+                }
+                compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+                compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                {
+                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                    compiler.PreprocessorDefines.Add("WIN32");
+                }
+            });
+
+            this.CompileAndLinkAgainst<PythonLibrary>(source);
+        }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
+    sealed class WeakRefModule :
+        PythonModule
+    {
+        public WeakRefModule()
+            :
+            base("_weakref")
+        {}
     }
 
     sealed class PythonRuntime :
@@ -540,6 +594,11 @@ namespace Python
             this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
 
             this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), "Lib/python3.5", app);
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
+            {
+                this.Include<WeakRefModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+            }
         }
     }
 }
