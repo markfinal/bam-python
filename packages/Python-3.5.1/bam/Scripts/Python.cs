@@ -117,7 +117,14 @@ namespace Python
                 writeFile.WriteLine("#define PY_INT64_T PY_LONG_LONG");
                 writeFile.WriteLine("#define PY_FORMAT_LONG_LONG \"ll\"");
                 writeFile.WriteLine("#define PY_FORMAT_SIZE_T \"z\"");
-                writeFile.WriteLine("#define SIZEOF_WCHAR_T 2");
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    writeFile.WriteLine("#define SIZEOF_WCHAR_T 4");
+                }
+                else
+                {
+                    writeFile.WriteLine("#define SIZEOF_WCHAR_T 2");
+                }
                 writeFile.WriteLine("#define SIZEOF_LONG 8");
                 writeFile.WriteLine("#define SIZEOF_LONG_LONG 8");
                 writeFile.WriteLine("#define SIZEOF_INT 4");
