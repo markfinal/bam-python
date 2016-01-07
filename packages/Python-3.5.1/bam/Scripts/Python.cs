@@ -679,8 +679,16 @@ namespace Python
             var app = this.Include<PythonInterpreter>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
 
-            var platIndependentModules = this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), "lib", app);
-            platIndependentModules.CopiedFilename = "python3.5";
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                var platIndependentModules = this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), ".", app);
+                platIndependentModules.CopiedFilename = "lib";
+            }
+            else
+            {
+                var platIndependentModules = this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), "lib", app);
+                platIndependentModules.CopiedFilename = "python3.5";
+            }
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
             {
