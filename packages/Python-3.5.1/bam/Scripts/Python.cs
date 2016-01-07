@@ -151,6 +151,10 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_SYSCONF"); // or my_getallocationgranularity is undefined
                 writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
                 writeFile.WriteLine("#define PyAPI_DATA(RTYPE) extern __attribute__ ((visibility(\"default\"))) RTYPE");
+                writeFile.WriteLine("#define HAVE_DYNAMIC_LOADING");
+                writeFile.WriteLine("#define SOABI \"cpython-35\"");
+                writeFile.WriteLine("#define HAVE_DLFCN_H");
+                writeFile.WriteLine("#define HAVE_DLOPEN");
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     writeFile.WriteLine("#define HAVE_FSTATVFS");
@@ -387,7 +391,8 @@ namespace Python
             }
             else
             {
-                //pythonSource.AddFiles("$(packagedir)/Python/strdup.c");
+                // don't use dynload_next, as it's for older OSX (10.2 or below)
+                pythonSource.AddFiles("$(packagedir)/Python/dynload_shlib.c");
             }
             pythonSource.PrivatePatch(settings =>
                 {
