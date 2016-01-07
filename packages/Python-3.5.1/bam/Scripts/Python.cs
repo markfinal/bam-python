@@ -59,7 +59,7 @@ namespace Python
     class PyConfigHeader :
         C.CModule
     {
-        private static Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("PyConfig header");
+        public static Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("PyConfig header");
 
         protected override void
         Init(
@@ -595,6 +595,10 @@ namespace Python
                         linker.Libraries.Add("-lpthread");
                         linker.Libraries.Add("-lm");
                     });
+
+                // TODO: would like to do this, but can't, see bug#101
+                //headers.AddFile(pyConfigHeader);
+                headers.AddFile(pyConfigHeader.GeneratedPaths[PyConfigHeader.Key].Parse());
             }
         }
     }
