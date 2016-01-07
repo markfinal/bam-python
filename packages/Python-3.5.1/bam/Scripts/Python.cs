@@ -599,6 +599,7 @@ namespace Python
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.Add("-lpthread");
                         linker.Libraries.Add("-lm");
+                        linker.Libraries.Add("-ldl");
                     });
 
                 // TODO: would like to do this, but can't, see bug#101
