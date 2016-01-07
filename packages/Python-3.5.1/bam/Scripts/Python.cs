@@ -160,6 +160,7 @@ namespace Python
                 {
                     writeFile.WriteLine("#define HAVE_CLOCK_GETTIME");
                     writeFile.WriteLine("#define daylight __daylight");
+                    writeFile.WriteLine("#define HAVE_LANGINFO_H"); // defines CODESET
                 }
                 writeFile.WriteLine("#endif");
             }
