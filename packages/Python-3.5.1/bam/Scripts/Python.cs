@@ -17,9 +17,6 @@ namespace Python
             source.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
-                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -330,9 +327,6 @@ namespace Python
             parserSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
-                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -352,9 +346,6 @@ namespace Python
             objectSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
-                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -397,9 +388,6 @@ namespace Python
             pythonSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
-                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -503,14 +491,19 @@ namespace Python
 
                 var configSource = Bam.Core.Graph.Instance.FindReferencedModule<ConfigSource>();
                 moduleSource.AddFile(configSource);
+
+                moduleSource.Children.Where(item => item.InputPath.Parse().Contains("getpath.c")).ToList().ForEach(item =>
+                    item.PrivatePatch(settings =>
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
+                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\".\\\"");
+                        }));
             }
 
             moduleSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                    compiler.PreprocessorDefines.Add("PREFIX", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1\\\"");
-                    compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\"/home/mark/dev/bam-python/packages/Python-3.5.1/Lib\\\"");
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                     {
                         compiler.PreprocessorDefines.Add("Py_DEBUG");
@@ -567,7 +560,6 @@ namespace Python
                 pcSource.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
                         if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
                         {
                             compiler.PreprocessorDefines.Add("Py_DEBUG");
