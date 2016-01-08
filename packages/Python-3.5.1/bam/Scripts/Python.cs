@@ -148,6 +148,11 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_SYSCONF"); // or my_getallocationgranularity is undefined
                 writeFile.WriteLine("#define PyAPI_FUNC(RTYPE) __attribute__ ((visibility(\"default\"))) RTYPE");
                 writeFile.WriteLine("#define PyAPI_DATA(RTYPE) extern __attribute__ ((visibility(\"default\"))) RTYPE");
+                writeFile.WriteLine("#ifdef Py_BUILD_CORE");
+                writeFile.WriteLine("#define PyMODINIT_FUNC PyObject*");
+                writeFile.WriteLine("#else");
+                writeFile.WriteLine("#define PyMODINIT_FUNC extern __attribute__ ((visibility(\"default\"))) PyObject*");
+                writeFile.WriteLine("#endif");
                 writeFile.WriteLine("#define HAVE_DYNAMIC_LOADING");
                 writeFile.WriteLine("#define SOABI \"cpython-35\"");
                 writeFile.WriteLine("#define HAVE_DLFCN_H");
@@ -473,6 +478,25 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("tautological-constant-out-of-range-compare"); // numbers out of range of comparison
                     }));
             }
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
+            {
+                // TODO: I cannot see how else some symbols are exported with preprocessor settings
+                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("getargs.c")).ToList().ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            gccCompiler.Visibility = GccCommon.EVisibility.Default;
+                        }
+
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            clangCompiler.Visibility = ClangCommon.EVisibility.Default;
+                        }
+                    }));
+            }
             headers.AddFiles("$(packagedir)/Python/*.h");
 
             var moduleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
@@ -704,12 +728,12 @@ namespace Python
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
-    sealed class WeakRefModule :
+    sealed class StructModule :
         PythonModule
     {
-        public WeakRefModule()
+        public StructModule()
             :
-            base("_weakref")
+            base("_struct")
         {}
     }
 
@@ -740,7 +764,7 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
             {
-                this.Include<WeakRefModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                this.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
             }
         }
     }
