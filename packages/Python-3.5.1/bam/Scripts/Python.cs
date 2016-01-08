@@ -496,8 +496,8 @@ namespace Python
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.PreprocessorDefines.Add("VERSION", "\\\"3.5\\\"");
-                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\\\".\\\"");
+                            compiler.PreprocessorDefines.Add("VERSION", "\"3.5\"");
+                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".\"");
                         }));
             }
 
