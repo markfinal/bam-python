@@ -760,11 +760,9 @@ namespace Python
                 platIndependentModules.CopiedFilename = "python3.5";
 
                 this.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", app);
-            }
 
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
-            {
-                this.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                var structModule = this.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                structModule.DependsOn(platIndependentModules);
             }
         }
     }
