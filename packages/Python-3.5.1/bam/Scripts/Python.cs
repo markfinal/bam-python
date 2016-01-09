@@ -499,73 +499,73 @@ namespace Python
             }
             headers.AddFiles("$(packagedir)/Python/*.h");
 
-            var moduleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
+            var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
 
-            moduleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/audioop.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/binascii.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/md5module.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
 
-            moduleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_csv.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_json.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_math.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_operator.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_sre.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_stat.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_struct.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
-            moduleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                moduleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
-                moduleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
+                builtinModuleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
             }
             else
             {
-                moduleSource.AddFiles("$(packagedir)/Modules/getpath.c");
-                moduleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/getpath.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
 
                 var configSource = Bam.Core.Graph.Instance.FindReferencedModule<ConfigSource>();
-                moduleSource.AddFile(configSource);
+                builtinModuleSource.AddFile(configSource);
 
-                moduleSource.Children.Where(item => item.InputPath.Parse().Contains("getpath.c")).ToList().ForEach(item =>
+                builtinModuleSource.Children.Where(item => item.InputPath.Parse().Contains("getpath.c")).ToList().ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
@@ -574,7 +574,7 @@ namespace Python
                         }));
             }
 
-            moduleSource.PrivatePatch(settings =>
+            builtinModuleSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
@@ -591,7 +591,7 @@ namespace Python
                     }
                 });
 
-            moduleSource.Children.Where(item => item.InputPath.Parse().Contains("zlibmodule.c")).ToList().ForEach(item =>
+            builtinModuleSource.Children.Where(item => item.InputPath.Parse().Contains("zlibmodule.c")).ToList().ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
@@ -684,9 +684,9 @@ namespace Python
         protected string sourceBasename;
 
         protected PythonModule(
-            string moduleSource)
+            string source)
         {
-            this.sourceBasename = moduleSource;
+            this.sourceBasename = source;
         }
 
         protected override void
