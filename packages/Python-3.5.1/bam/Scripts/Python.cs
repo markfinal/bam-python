@@ -249,14 +249,16 @@ namespace Python
             declarations.AppendLine("extern PyObject* PyInit_itertools(void);");
             inittab.AppendLine("\t{\"itertools\", PyInit_itertools},");
 
-            declarations.AppendLine("extern PyObject* PyInit_atexit(void);");
-            inittab.AppendLine("\t{\"atexit\", PyInit_atexit},");
+            // TODO: should be builtin?
+            //declarations.AppendLine("extern PyObject* PyInit_atexit(void);");
+            //inittab.AppendLine("\t{\"atexit\", PyInit_atexit},");
 
             declarations.AppendLine("extern PyObject* PyInit__stat(void);");
             inittab.AppendLine("\t{\"_stat\", PyInit__stat},");
 
-            declarations.AppendLine("extern PyObject* PyInit_time(void);");
-            inittab.AppendLine("\t{\"time\", PyInit_time},");
+            // TODO: should be builtin?
+            //declarations.AppendLine("extern PyObject* PyInit_time(void);");
+            //inittab.AppendLine("\t{\"time\", PyInit_time},");
 
             declarations.AppendLine("extern PyObject* PyInit__locale(void);");
             inittab.AppendLine("\t{\"_locale\", PyInit__locale},");
@@ -509,12 +511,16 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
@@ -536,7 +542,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
@@ -553,8 +558,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
@@ -923,6 +926,33 @@ namespace Python
         {}
     }
 
+    sealed class LSProfModule :
+        PythonExtensionModule
+    {
+        public LSProfModule()
+            :
+            base("_lsprof", new Bam.Core.StringArray("_lsprof", "rotatingtree"))
+        {}
+    }
+
+    sealed class UnicodeDataModule :
+        PythonExtensionModule
+    {
+        public UnicodeDataModule()
+            :
+            base("unicodedata")
+        {}
+    }
+
+    sealed class OpCodeModule :
+        PythonExtensionModule
+    {
+        public OpCodeModule()
+            :
+            base("_opcode")
+        {}
+    }
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -995,6 +1025,15 @@ namespace Python
 
                 var testMultiPhaseModule = this.Include<TestMultiPhaseModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 testMultiPhaseModule.DependsOn(platIndependentModules);
+
+                var lsprofModule = this.Include<LSProfModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                lsprofModule.DependsOn(platIndependentModules);
+
+                var unicodeDataModule = this.Include<UnicodeDataModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                unicodeDataModule.DependsOn(platIndependentModules);
+
+                var opcodeModule = this.Include<OpCodeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                opcodeModule.DependsOn(platIndependentModules);
             }
         }
     }
