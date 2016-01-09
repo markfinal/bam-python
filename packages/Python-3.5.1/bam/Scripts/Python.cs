@@ -506,15 +506,19 @@ namespace Python
             {
                 // Windows builds includes many more modules in the core library
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
             }
 
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
@@ -538,20 +542,16 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
 
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
@@ -829,6 +829,51 @@ namespace Python
         {}
     }
 
+    sealed class RandomModule :
+        PythonExtensionModule
+    {
+        public RandomModule()
+            :
+            base("_random", "_randommodule")
+        {}
+    }
+
+    sealed class BisectModule :
+        PythonExtensionModule
+    {
+        public BisectModule()
+            :
+            base("_bisect", "_bisectmodule")
+        {}
+    }
+
+    sealed class HeapqModule :
+        PythonExtensionModule
+    {
+        public HeapqModule()
+            :
+            base("_heapq", "_heapqmodule")
+        {}
+    }
+
+    sealed class PickleModule :
+        PythonExtensionModule
+    {
+        public PickleModule()
+            :
+            base("_pickle", "_pickle")
+        {}
+    }
+
+    sealed class AtexitModule :
+        PythonExtensionModule
+    {
+        public AtexitModule()
+            :
+            base("atexit", "atexitmodule")
+        {}
+    }
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -871,6 +916,21 @@ namespace Python
 
                 var datetimeModule = this.Include<DateTimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 datetimeModule.DependsOn(platIndependentModules);
+
+                var randomModule = this.Include<RandomModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                randomModule.DependsOn(platIndependentModules);
+
+                var bisectModule = this.Include<BisectModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                bisectModule.DependsOn(platIndependentModules);
+
+                var heapqModule = this.Include<HeapqModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                heapqModule.DependsOn(platIndependentModules);
+
+                var pickleModule = this.Include<PickleModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                pickleModule.DependsOn(platIndependentModules);
+
+                var atexitModule = this.Include<AtexitModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                atexitModule.DependsOn(platIndependentModules);
             }
         }
     }
