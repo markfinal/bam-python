@@ -783,6 +783,16 @@ namespace Python
         {}
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
+    sealed class ArrayModule :
+        PythonExtensionModule
+    {
+        public ArrayModule()
+            :
+            base("array", "arraymodule")
+        {}
+    }
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -807,8 +817,12 @@ namespace Python
 
                 this.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", app);
 
+                // extension modules
                 var structModule = this.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 structModule.DependsOn(platIndependentModules);
+
+                var arrayModule = this.Include<ArrayModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                arrayModule.DependsOn(platIndependentModules);
             }
         }
     }
