@@ -728,12 +728,12 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["pluginsuffix"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
+                this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
             }
             else
             {
                 this.Macros["pluginprefix"] = Bam.Core.TokenizedString.CreateVerbatim(string.Empty);
-                this.Macros["pluginsuffix"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
+                this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
             }
             this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
 
