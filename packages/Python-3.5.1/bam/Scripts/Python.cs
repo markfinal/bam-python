@@ -685,13 +685,39 @@ namespace Python
     class PythonExtensionModule :
         C.Plugin
     {
-        protected string sourceBasename;
+        protected string ModuleName;
+        protected Bam.Core.StringArray SourceFiles;
+        protected Bam.Core.StringArray Libraries;
 
         protected PythonExtensionModule(
-            string source)
+            string moduleName,
+            Bam.Core.StringArray sourceFiles,
+            Bam.Core.StringArray libraries)
         {
-            this.sourceBasename = source;
+            this.ModuleName = moduleName;
+            this.SourceFiles = sourceFiles;
+            this.Libraries = libraries;
         }
+
+        protected PythonExtensionModule(
+            string moduleName,
+            Bam.Core.StringArray sourceFiles)
+            :
+            this(moduleName, sourceFiles, null)
+        {}
+
+        protected PythonExtensionModule(
+            string moduleName,
+            string sourceFile)
+            :
+            this(moduleName, new Bam.Core.StringArray(sourceFile), null)
+        {}
+
+        protected PythonExtensionModule(
+            string moduleName)
+            :
+            this(moduleName, new Bam.Core.StringArray(moduleName), null)
+        {}
 
         protected override void
         Init(
@@ -708,9 +734,13 @@ namespace Python
                 this.Macros["pluginprefix"] = Bam.Core.TokenizedString.CreateVerbatim(string.Empty);
                 this.Macros["pluginsuffix"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
             }
-            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.sourceBasename);
+            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
 
-            var source = this.CreateCSourceContainer(System.String.Format("$(packagedir)/Modules/{0}.c", this.sourceBasename));
+            var source = this.CreateCSourceContainer();
+            foreach (var basename in this.SourceFiles)
+            {
+                source.AddFiles(System.String.Format("$(packagedir)/Modules/{0}.c", basename));
+            }
             source.PrivatePatch(settings =>
             {
                 var compiler = settings as C.ICommonCompilerSettings;
@@ -728,6 +758,18 @@ namespace Python
             });
 
             this.CompileAndLinkAgainst<PythonLibrary>(source);
+
+            if (this.Libraries != null)
+            {
+                this.PrivatePatch(settings =>
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        foreach (var lib in this.Libraries)
+                        {
+                            linker.Libraries.AddUnique(lib);
+                        }
+                    });
+            }
         }
     }
 
