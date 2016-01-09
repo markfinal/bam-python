@@ -505,21 +505,22 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 // Windows builds includes many more modules in the core library
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
             }
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
@@ -547,7 +548,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
@@ -794,6 +794,26 @@ namespace Python
         {}
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
+    sealed class CMathModule :
+        PythonExtensionModule
+    {
+        public CMathModule()
+            :
+            base("cmath", new Bam.Core.StringArray("cmathmodule", "_math"))
+        {}
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
+    sealed class MathModule :
+        PythonExtensionModule
+    {
+        public MathModule()
+            :
+            base("math", new Bam.Core.StringArray("mathmodule", "_math"))
+        {}
+    }
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -824,6 +844,12 @@ namespace Python
 
                 var arrayModule = this.Include<ArrayModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 arrayModule.DependsOn(platIndependentModules);
+
+                var cmathModule = this.Include<CMathModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                cmathModule.DependsOn(platIndependentModules);
+
+                var mathModule = this.Include<MathModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                mathModule.DependsOn(platIndependentModules);
             }
         }
     }
