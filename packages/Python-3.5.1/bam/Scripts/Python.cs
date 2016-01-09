@@ -682,12 +682,12 @@ namespace Python
         }
     }
 
-    class PythonModule :
+    class PythonExtensionModule :
         C.Plugin
     {
         protected string sourceBasename;
 
-        protected PythonModule(
+        protected PythonExtensionModule(
             string source)
         {
             this.sourceBasename = source;
@@ -733,7 +733,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     sealed class StructModule :
-        PythonModule
+        PythonExtensionModule
     {
         public StructModule()
             :
