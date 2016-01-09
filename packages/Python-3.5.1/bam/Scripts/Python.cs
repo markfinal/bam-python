@@ -504,10 +504,11 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
+                // Windows builds includes many more modules in the core library
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
             }
 
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
