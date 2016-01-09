@@ -508,6 +508,8 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
             }
@@ -531,7 +533,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
@@ -541,7 +542,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
@@ -683,6 +683,7 @@ namespace Python
         }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     class PythonExtensionModule :
         C.Plugin
     {
@@ -774,7 +775,6 @@ namespace Python
         }
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     sealed class StructModule :
         PythonExtensionModule
     {
@@ -784,7 +784,6 @@ namespace Python
         {}
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     sealed class ArrayModule :
         PythonExtensionModule
     {
@@ -794,7 +793,6 @@ namespace Python
         {}
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     sealed class CMathModule :
         PythonExtensionModule
     {
@@ -804,13 +802,30 @@ namespace Python
         {}
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     sealed class MathModule :
         PythonExtensionModule
     {
         public MathModule()
             :
             base("math", new Bam.Core.StringArray("mathmodule", "_math"))
+        {}
+    }
+
+    sealed class TimeModule :
+        PythonExtensionModule
+    {
+        public TimeModule()
+            :
+            base("time", "timemodule")
+        {}
+    }
+
+    sealed class DateTimeModule :
+        PythonExtensionModule
+    {
+        public DateTimeModule()
+            :
+            base("_datetime", "_datetimemodule")
         {}
     }
 
@@ -850,6 +865,12 @@ namespace Python
 
                 var mathModule = this.Include<MathModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 mathModule.DependsOn(platIndependentModules);
+
+                var timeModule = this.Include<TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                timeModule.DependsOn(platIndependentModules);
+
+                var datetimeModule = this.Include<DateTimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                datetimeModule.DependsOn(platIndependentModules);
             }
         }
     }
