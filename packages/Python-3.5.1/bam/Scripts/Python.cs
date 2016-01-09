@@ -502,6 +502,11 @@ namespace Python
             var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
 
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
+            }
+
             builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
@@ -548,7 +553,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
