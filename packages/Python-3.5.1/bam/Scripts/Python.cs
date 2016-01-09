@@ -513,10 +513,15 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testbuffer.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testcapimodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testimportmultiple.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testmultiphase.c");
             }
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
@@ -547,7 +552,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
@@ -861,7 +865,7 @@ namespace Python
     {
         public PickleModule()
             :
-            base("_pickle", "_pickle")
+            base("_pickle")
         {}
     }
 
@@ -871,6 +875,51 @@ namespace Python
         public AtexitModule()
             :
             base("atexit", "atexitmodule")
+        {}
+    }
+
+    sealed class JsonModule :
+        PythonExtensionModule
+    {
+        public JsonModule()
+            :
+            base("_json")
+        {}
+    }
+
+    sealed class TestCAPIModule :
+        PythonExtensionModule
+    {
+        public TestCAPIModule()
+            :
+            base("_testcapi", "_testcapimodule")
+        {}
+    }
+
+    sealed class TestBufferModule :
+        PythonExtensionModule
+    {
+        public TestBufferModule()
+            :
+            base("_testbuffer")
+        {}
+    }
+
+    sealed class TestImportMultipleModule :
+        PythonExtensionModule
+    {
+        public TestImportMultipleModule()
+            :
+            base("_testimportmultiple")
+        {}
+    }
+
+    sealed class TestMultiPhaseModule :
+        PythonExtensionModule
+    {
+        public TestMultiPhaseModule()
+            :
+            base("_testmultiphase")
         {}
     }
 
@@ -931,6 +980,21 @@ namespace Python
 
                 var atexitModule = this.Include<AtexitModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 atexitModule.DependsOn(platIndependentModules);
+
+                var jsonModule = this.Include<JsonModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                jsonModule.DependsOn(platIndependentModules);
+
+                var testcapiModule = this.Include<TestCAPIModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                testcapiModule.DependsOn(platIndependentModules);
+
+                var testBufferModule = this.Include<TestBufferModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                testBufferModule.DependsOn(platIndependentModules);
+
+                var testImportMultipleModule = this.Include<TestImportMultipleModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                testImportMultipleModule.DependsOn(platIndependentModules);
+
+                var testMultiPhaseModule = this.Include<TestMultiPhaseModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                testMultiPhaseModule.DependsOn(platIndependentModules);
             }
         }
     }
