@@ -127,6 +127,7 @@ namespace Python
                     writeFile.WriteLine("#define SIZEOF_SIZE_T 8");
                     writeFile.WriteLine("#define SIZEOF_VOID_P 8");
                     writeFile.WriteLine("#define VA_LIST_IS_ARRAY 1");
+                    writeFile.WriteLine("#define SIZEOF_TIME_T 8");
                 }
                 writeFile.WriteLine("#define SIZEOF_LONG_LONG 8");
                 writeFile.WriteLine("#define SIZEOF_INT 4");
