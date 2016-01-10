@@ -225,8 +225,9 @@ namespace Python
             declarations.AppendLine("extern PyObject* PyInit_errno(void);");
             inittab.AppendLine("\t{\"errno\", PyInit_errno},");
 
-            declarations.AppendLine("extern PyObject* PyInit_pwd(void);");
-            inittab.AppendLine("\t{\"pwd\", PyInit_pwd},");
+            // TODO: should be builtin?
+            //declarations.AppendLine("extern PyObject* PyInit_pwd(void);");
+            //inittab.AppendLine("\t{\"pwd\", PyInit_pwd},");
 
             declarations.AppendLine("extern PyObject* PyInit__sre(void);");
             inittab.AppendLine("\t{\"_sre\", PyInit__sre},");
@@ -511,6 +512,8 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
@@ -538,9 +541,7 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
@@ -572,7 +573,6 @@ namespace Python
             else
             {
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/getpath.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
 
                 var configSource = Bam.Core.Graph.Instance.FindReferencedModule<ConfigSource>();
                 builtinModuleSource.AddFile(configSource);
@@ -953,6 +953,80 @@ namespace Python
         {}
     }
 
+    sealed class FcntlModule :
+        PythonExtensionModule
+    {
+        public FcntlModule()
+            :
+            base("fcntl", "fcntlmodule")
+        {}
+    }
+
+    sealed class PwdModule :
+        PythonExtensionModule
+    {
+        public PwdModule()
+            :
+            base("pwd", "pwdmodule")
+        {}
+    }
+
+    sealed class GrpModule :
+        PythonExtensionModule
+    {
+        public GrpModule()
+            :
+            base("grp", "grpmodule")
+        {}
+    }
+
+#if false
+    sealed class SPwdModule :
+        PythonExtensionModule
+    {
+        public SPwdModule()
+            :
+            base("spwd", "spwdmodule")
+        {}
+    }
+#endif
+
+    sealed class SelectModule :
+        PythonExtensionModule
+    {
+        public SelectModule()
+            :
+            base("select", "selectmodule")
+        {}
+    }
+
+    sealed class ParserModule :
+        PythonExtensionModule
+    {
+        public ParserModule()
+            :
+            base("parser", "parsermodule")
+        {}
+    }
+
+    sealed class MMapModule :
+        PythonExtensionModule
+    {
+        public MMapModule()
+            :
+            base("mmap", "mmapmodule")
+        {}
+    }
+
+    sealed class SysLogModule :
+        PythonExtensionModule
+    {
+        public SysLogModule()
+            :
+            base("syslog", "syslogmodule")
+        {}
+    }
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -1034,6 +1108,30 @@ namespace Python
 
                 var opcodeModule = this.Include<OpCodeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 opcodeModule.DependsOn(platIndependentModules);
+
+                var fcntlModule = this.Include<FcntlModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                fcntlModule.DependsOn(platIndependentModules);
+
+                var pwdModule = this.Include<PwdModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                pwdModule.DependsOn(platIndependentModules);
+
+                var grpModule = this.Include<GrpModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                grpModule.DependsOn(platIndependentModules);
+
+                //var spwdModule = this.Include<SPwdModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                //spwdModule.DependsOn(platIndependentModules);
+
+                var selectModule = this.Include<SelectModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                selectModule.DependsOn(platIndependentModules);
+
+                var parserModule = this.Include<ParserModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                parserModule.DependsOn(platIndependentModules);
+
+                var mmapModule = this.Include<MMapModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                mmapModule.DependsOn(platIndependentModules);
+
+                var syslogModule = this.Include<SysLogModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                syslogModule.DependsOn(platIndependentModules);
             }
         }
     }
