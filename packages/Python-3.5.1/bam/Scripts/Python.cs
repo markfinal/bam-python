@@ -515,9 +515,13 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
@@ -548,11 +552,7 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
@@ -1078,6 +1078,8 @@ namespace Python
         {}
     }
 
+    // TODO: deprecated APIs called on OSX
+#if false
     sealed class SSLModule :
         PythonExtensionModule
     {
@@ -1087,8 +1089,6 @@ namespace Python
         {}
     }
 
-    // TODO: deprecated APIs called on OSX
-#if false
     sealed class HashLibModule :
         PythonExtensionModule
     {
@@ -1098,6 +1098,80 @@ namespace Python
         {}
     }
 #endif
+
+    sealed class SHA256Module :
+        PythonExtensionModule
+    {
+        public SHA256Module()
+            :
+            base("_sha256", "sha256module")
+        {}
+    }
+
+    sealed class SHA512Module :
+        PythonExtensionModule
+    {
+        public SHA512Module()
+            :
+            base("_sha512", "sha512module")
+        {}
+    }
+
+    sealed class MD5Module :
+        PythonExtensionModule
+    {
+        public MD5Module()
+            :
+            base("_md5", "md5module")
+        {}
+    }
+
+    sealed class SHA1Module :
+        PythonExtensionModule
+    {
+        public SHA1Module()
+            :
+            base("_sha1", "sha1module")
+        {}
+    }
+
+    // TODO sqlite3
+    // TODO dbm
+    // TODO gdbm
+
+    sealed class TermiosModule :
+        PythonExtensionModule
+    {
+        public TermiosModule()
+            :
+            base("termios")
+        {}
+    }
+
+    sealed class ResourceModule :
+        PythonExtensionModule
+    {
+        public ResourceModule()
+            :
+            base("resource")
+        {}
+    }
+
+    // TODO nis
+
+    // TODO: needs a library
+    #if false
+    sealed class CursesModule :
+        PythonExtensionModule
+    {
+        public CursesModule()
+            :
+            base("_curses", "_cursesmodule")
+        {}
+    }
+    #endif
+
+    // TODO: curses_panel
 
     sealed class PythonRuntime :
         Publisher.Collation
@@ -1220,12 +1294,35 @@ namespace Python
                 var socketModule = this.Include<SocketModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 socketModule.DependsOn(platIndependentModules);
 
+                #if false
                 var sslModule = this.Include<SSLModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 sslModule.DependsOn(platIndependentModules);
 
-                #if false
                 var hashlibModule = this.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 hashlibModule.DependsOn(platIndependentModules);
+                #endif
+
+                var sha256Module = this.Include<SHA256Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                sha256Module.DependsOn(platIndependentModules);
+
+                var sha512Module = this.Include<SHA512Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                sha512Module.DependsOn(platIndependentModules);
+
+                var md5Module = this.Include<MD5Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                md5Module.DependsOn(platIndependentModules);
+
+                var sha1Module = this.Include<SHA1Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                sha1Module.DependsOn(platIndependentModules);
+
+                var termiosModule = this.Include<TermiosModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                termiosModule.DependsOn(platIndependentModules);
+
+                var resourceModule = this.Include<ResourceModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                resourceModule.DependsOn(platIndependentModules);
+
+                #if false
+                var cursesModule = this.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                cursesModule.DependsOn(platIndependentModules);
                 #endif
             }
         }
