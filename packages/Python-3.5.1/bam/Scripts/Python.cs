@@ -157,6 +157,8 @@ namespace Python
                 writeFile.WriteLine("#define SOABI \"cpython-35\"");
                 writeFile.WriteLine("#define HAVE_DLFCN_H");
                 writeFile.WriteLine("#define HAVE_DLOPEN");
+                writeFile.WriteLine("#define HAVE_ADDRINFO"); // for socket extension module
+                writeFile.WriteLine("#define HAVE_SOCKADDR_STORAGE"); // for socket extension module
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     writeFile.WriteLine("#define HAVE_FSTATVFS");
@@ -510,15 +512,20 @@ namespace Python
                 // Windows builds includes many more modules in the core library
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_cryptmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
@@ -526,6 +533,7 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testbuffer.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testcapimodule.c");
@@ -533,7 +541,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testmultiphase.c");
             }
 
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
@@ -555,7 +562,6 @@ namespace Python
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
@@ -1027,6 +1033,72 @@ namespace Python
         {}
     }
 
+    sealed class AudioOpModule :
+        PythonExtensionModule
+    {
+        public AudioOpModule()
+            :
+            base("audioop")
+        {}
+    }
+
+    sealed class CryptModule :
+        PythonExtensionModule
+    {
+        public CryptModule()
+            :
+            base("_crypt", "_cryptmodule")
+        {}
+    }
+
+    sealed class CSVModule :
+        PythonExtensionModule
+    {
+        public CSVModule()
+            :
+            base("_csv")
+        {}
+    }
+
+    sealed class PosixSubprocessModule :
+        PythonExtensionModule
+    {
+        public PosixSubprocessModule()
+            :
+            base("_posixsubprocess")
+        {}
+    }
+
+    sealed class SocketModule :
+        PythonExtensionModule
+    {
+        public SocketModule()
+            :
+            base("_socket", "socketmodule")
+        {}
+    }
+
+    sealed class SSLModule :
+        PythonExtensionModule
+    {
+        public SSLModule()
+            :
+            base("_ssl")
+        {}
+    }
+
+    // TODO: deprecated APIs called on OSX
+#if false
+    sealed class HashLibModule :
+        PythonExtensionModule
+    {
+        public HashLibModule()
+            :
+            base("_hashlib", "_hashopenssl")
+        {}
+    }
+#endif
+
     sealed class PythonRuntime :
         Publisher.Collation
     {
@@ -1132,6 +1204,29 @@ namespace Python
 
                 var syslogModule = this.Include<SysLogModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
                 syslogModule.DependsOn(platIndependentModules);
+
+                var audioopModule = this.Include<AudioOpModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                audioopModule.DependsOn(platIndependentModules);
+
+                var cryptModule = this.Include<CryptModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                cryptModule.DependsOn(platIndependentModules);
+
+                var csvModule = this.Include<CSVModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                csvModule.DependsOn(platIndependentModules);
+
+                var posixSubprocessModule = this.Include<PosixSubprocessModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                posixSubprocessModule.DependsOn(platIndependentModules);
+
+                var socketModule = this.Include<SocketModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                socketModule.DependsOn(platIndependentModules);
+
+                var sslModule = this.Include<SSLModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                sslModule.DependsOn(platIndependentModules);
+
+                #if false
+                var hashlibModule = this.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                hashlibModule.DependsOn(platIndependentModules);
+                #endif
             }
         }
     }
