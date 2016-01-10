@@ -118,19 +118,20 @@ namespace Python
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     writeFile.WriteLine("#define SIZEOF_WCHAR_T 4");
+                    // see Include/pymacconfig.h for some defines
                 }
                 else
                 {
                     writeFile.WriteLine("#define SIZEOF_WCHAR_T 2");
+                    writeFile.WriteLine("#define SIZEOF_LONG 8");
+                    writeFile.WriteLine("#define SIZEOF_SIZE_T 8");
+                    writeFile.WriteLine("#define SIZEOF_VOID_P 8");
+                    writeFile.WriteLine("#define VA_LIST_IS_ARRAY 1");
                 }
-                writeFile.WriteLine("#define SIZEOF_LONG 8");
                 writeFile.WriteLine("#define SIZEOF_LONG_LONG 8");
                 writeFile.WriteLine("#define SIZEOF_INT 4");
                 writeFile.WriteLine("#define SIZEOF_SHORT 2");
-                writeFile.WriteLine("#define SIZEOF_VOID_P 8");
-                writeFile.WriteLine("#define SIZEOF_SIZE_T 8");
                 writeFile.WriteLine("#define SIZEOF_OFF_T 8");
-                writeFile.WriteLine("#define VA_LIST_IS_ARRAY 1");
                 writeFile.WriteLine("#define HAVE_STDARG_PROTOTYPES");
                 writeFile.WriteLine("#define HAVE_UINTPTR_T");
                 writeFile.WriteLine("#define HAVE_WCHAR_H");
