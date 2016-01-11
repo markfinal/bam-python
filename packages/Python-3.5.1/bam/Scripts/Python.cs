@@ -533,10 +533,10 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_cryptmodule.c");
+                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_cryptmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c");
+                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
@@ -544,10 +544,10 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c");
+                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c"); // needs OpenSSL
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testbuffer.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testcapimodule.c");
+                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_testcapimodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testimportmultiple.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testmultiphase.c");
             }
