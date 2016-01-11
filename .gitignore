@@ -1,1 +1,6 @@
 .DS_Store
+PackageDebug
+tests/*/build
+tests/*/debug_build
+tests/Logs
+*.pyc
