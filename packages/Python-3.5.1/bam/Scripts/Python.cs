@@ -387,6 +387,19 @@ namespace Python
             this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
             this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
 
+            this.PublicPatch((settings, appliedTo) =>
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    if (null != compiler)
+                    {
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                        if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                        {
+                            compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                        }
+                    }
+                });
+
             var headers = this.CreateHeaderContainer("$(packagedir)/Include/*.h");
 
             var parserSource = this.CreateCSourceContainer("$(packagedir)/Parser/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$"));
