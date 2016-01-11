@@ -159,6 +159,7 @@ namespace Python
                 writeFile.WriteLine("#define SOABI \"cpython-35\"");
                 writeFile.WriteLine("#define HAVE_DLFCN_H");
                 writeFile.WriteLine("#define HAVE_DLOPEN");
+                writeFile.WriteLine("#define HAVE_GETADDRINFO"); // for socket extension module
                 writeFile.WriteLine("#define HAVE_ADDRINFO"); // for socket extension module
                 writeFile.WriteLine("#define HAVE_SOCKADDR_STORAGE"); // for socket extension module
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
@@ -171,6 +172,9 @@ namespace Python
                     writeFile.WriteLine("#define HAVE_CLOCK_GETTIME");
                     writeFile.WriteLine("#define daylight __daylight");
                     writeFile.WriteLine("#define HAVE_LANGINFO_H"); // defines CODESET
+                    writeFile.WriteLine("#define HAVE_NET_IF_H"); // for socket extension module
+                    writeFile.WriteLine("#define HAVE_LINUX_CAN_H"); // for socket extension module
+                    writeFile.WriteLine("#define HAVE_SYS_IOCTL_H"); // for socket extension module
                 }
                 writeFile.WriteLine("#endif");
             }
@@ -702,38 +706,49 @@ namespace Python
     class PythonExtensionModule :
         C.Plugin
     {
-        protected string ModuleName;
-        protected Bam.Core.StringArray SourceFiles;
-        protected Bam.Core.StringArray Libraries;
+        private string ModuleName;
+        private Bam.Core.StringArray SourceFiles;
+        private Bam.Core.StringArray Libraries;
+        private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
 
         protected PythonExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles,
-            Bam.Core.StringArray libraries)
+            Bam.Core.StringArray libraries,
+            Bam.Core.Module.PrivatePatchDelegate compilationPatch)
         {
             this.ModuleName = moduleName;
             this.SourceFiles = sourceFiles;
             this.Libraries = libraries;
+            this.CompilationPatch = compilationPatch;
         }
 
         protected PythonExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles)
             :
-            this(moduleName, sourceFiles, null)
+            this(moduleName, sourceFiles, null, null)
         {}
 
         protected PythonExtensionModule(
             string moduleName,
             string sourceFile)
             :
-            this(moduleName, new Bam.Core.StringArray(sourceFile), null)
+            this(moduleName, new Bam.Core.StringArray(sourceFile))
+        {}
+
+        protected PythonExtensionModule(
+            string moduleName,
+            string sourceFile,
+            Bam.Core.Module.PrivatePatchDelegate compilationPatch)
+            :
+            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch)
         {}
 
         protected PythonExtensionModule(
             string moduleName)
             :
-            this(moduleName, new Bam.Core.StringArray(moduleName), null)
+            this(moduleName, new Bam.Core.StringArray(moduleName))
         {}
 
         protected override void
@@ -773,6 +788,10 @@ namespace Python
                     compiler.PreprocessorDefines.Add("WIN32");
                 }
             });
+            if (null != this.CompilationPatch)
+            {
+                source.PrivatePatch(this.CompilationPatch);
+            }
 
             this.CompileAndLinkAgainst<PythonLibrary>(source);
 
@@ -966,7 +985,11 @@ namespace Python
     {
         public FcntlModule()
             :
-            base("fcntl", "fcntlmodule")
+            base("fcntl", "fcntlmodule", settings =>
+                    {
+                        var compiler = settings as C.ICOnlyCompilerSettings;
+                        compiler.LanguageStandard = C.ELanguageStandard.C99;
+                    })
         {}
     }
 
