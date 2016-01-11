@@ -175,6 +175,7 @@ namespace Python
                     writeFile.WriteLine("#define HAVE_NET_IF_H"); // for socket extension module
                     writeFile.WriteLine("#define HAVE_LINUX_CAN_H"); // for socket extension module
                     writeFile.WriteLine("#define HAVE_SYS_IOCTL_H"); // for socket extension module
+                    writeFile.WriteLine("#define HAVE_NETPACKET_PACKET_H"); // for socket extension module
                 }
                 writeFile.WriteLine("#endif");
             }
