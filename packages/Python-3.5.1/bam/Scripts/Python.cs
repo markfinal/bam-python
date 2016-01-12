@@ -179,6 +179,7 @@ namespace Python
                 }
                 writeFile.WriteLine("#endif");
             }
+            Bam.Core.Log.MessageAll("Written '{0}'", destPath);
         }
 
         protected override void
@@ -314,6 +315,7 @@ namespace Python
             {
                 writeFile.Write(stubText);
             }
+            Bam.Core.Log.MessageAll("Written '{0}'", destPath);
         }
 
         protected override void
@@ -724,8 +726,11 @@ namespace Python
             {
                 // TODO: is there a call for a CompileWith function?
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-                this.DependsOn(pyConfigHeader);
                 this.UsePublicPatches(pyConfigHeader);
+                parserSource.DependsOn(pyConfigHeader);
+                objectSource.DependsOn(pyConfigHeader);
+                pythonSource.DependsOn(pyConfigHeader);
+                builtinModuleSource.DependsOn(pyConfigHeader);
                 // TODO: end of function
 
                 var sysConfigDataPy = Bam.Core.Graph.Instance.FindReferencedModule<SysConfigDataPythonFile>();
