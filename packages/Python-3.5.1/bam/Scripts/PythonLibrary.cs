@@ -14,6 +14,20 @@ namespace Python
             }
         }
 
+        private void
+        CoreBuildPatch(
+            Bam.Core.Settings settings)
+        {
+            var compiler = settings as C.ICommonCompilerSettings;
+            compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
+            compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                winCompiler.CharacterSet = C.ECharacterSet.NotSet;
+            }
+        }
+
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -54,31 +68,11 @@ namespace Python
             var headers = this.CreateHeaderContainer("$(packagedir)/Include/*.h");
 
             var parserSource = this.CreateCSourceContainer("$(packagedir)/Parser/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$"));
-            parserSource.PrivatePatch(settings =>
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                    compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                    {
-                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                    }
-                });
+            parserSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Parser/*.h");
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
-            objectSource.PrivatePatch(settings =>
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                    compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                    {
-                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                    }
-                });
+            objectSource.PrivatePatch(this.CoreBuildPatch);
 
             objectSource.Children.Where(item => item.InputPath.Parse().Contains("bytesobject.c")).ToList().ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -105,17 +99,7 @@ namespace Python
                 // don't use dynload_next, as it's for older OSX (10.2 or below)
                 pythonSource.AddFiles("$(packagedir)/Python/dynload_shlib.c");
             }
-            pythonSource.PrivatePatch(settings =>
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                    compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                    {
-                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                    }
-                });
+            pythonSource.PrivatePatch(this.CoreBuildPatch);
 
             pythonSource.Children.Where(item => item.InputPath.Parse().Contains("_warnings.c")).ToList().ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -248,17 +232,7 @@ namespace Python
                         }));
             }
 
-            builtinModuleSource.PrivatePatch(settings =>
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                    compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                    {
-                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                    }
-                });
+            builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
 
             builtinModuleSource.Children.Where(item => item.InputPath.Parse().Contains("zlibmodule.c")).ToList().ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -299,14 +273,7 @@ namespace Python
                 //pcSource.AddFiles("$(packagedir)/PC/frozen_dllmain.c");
                 pcSource.AddFiles("$(packagedir)/PC/getpathp.c");
                 pcSource.AddFiles("$(packagedir)/PC/winreg.c");
-                pcSource.PrivatePatch(settings =>
-                    {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                        compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                    });
+                pcSource.PrivatePatch(this.CoreBuildPatch);
                 this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
                 this.PrivatePatch(settings =>
                     {
