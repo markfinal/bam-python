@@ -11,6 +11,14 @@ namespace InterpreterTest1
             base.Init(parent);
 
             var source = this.CreateCSourceContainer("$(packagedir)/source/*.c");
+            source.PrivatePatch(settings =>
+                {
+                    var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                    if (null != winCompiler)
+                    {
+                        winCompiler.CharacterSet = C.ECharacterSet.Unicode;
+                    }
+                });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
