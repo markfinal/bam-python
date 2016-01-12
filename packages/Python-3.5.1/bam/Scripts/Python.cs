@@ -18,11 +18,6 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
-                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                    {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                    }
                 });
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
@@ -427,10 +422,8 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -443,10 +436,8 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -482,10 +473,8 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -627,10 +616,8 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -655,10 +642,8 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -682,7 +667,6 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                         compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     });
@@ -800,10 +784,8 @@ namespace Python
             {
                 var compiler = settings as C.ICommonCompilerSettings;
                 compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                 {
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;
                     winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                 }
