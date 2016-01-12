@@ -29,6 +29,10 @@ namespace InterpreterTest1
             var source = this.CreateCSourceContainer("$(packagedir)/source/*.c");
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.LinkAgainst<WindowsSDK.WindowsSDK>();
+            }
         }
     }
 }
