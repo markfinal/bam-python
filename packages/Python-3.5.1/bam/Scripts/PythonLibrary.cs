@@ -57,6 +57,10 @@ namespace Python
                         {
                             compiler.PreprocessorDefines.Add("Py_DEBUG");
                         }
+                        else
+                        {
+                            compiler.PreprocessorDefines.Add("NDEBUG");
+                        }
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                         {
