@@ -110,6 +110,8 @@ namespace Python
                 writeFile.WriteLine("#define HAVE_GETADDRINFO"); // for socket extension module
                 writeFile.WriteLine("#define HAVE_ADDRINFO"); // for socket extension module
                 writeFile.WriteLine("#define HAVE_SOCKADDR_STORAGE"); // for socket extension module
+                writeFile.WriteLine("#define HAVE_SYS_WAIT_H"); // for help() to work in the shell
+                writeFile.WriteLine("#define HAVE_WAITPID"); // for help() to work in the shell
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     writeFile.WriteLine("#define HAVE_FSTATVFS");
