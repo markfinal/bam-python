@@ -17,10 +17,6 @@ namespace Python
             source.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -411,6 +407,10 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     if (null != compiler)
                     {
+                        if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
+                        {
+                            compiler.PreprocessorDefines.Add("Py_DEBUG");
+                        }
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                         {
@@ -425,10 +425,6 @@ namespace Python
             parserSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -445,10 +441,6 @@ namespace Python
             objectSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -488,10 +480,6 @@ namespace Python
             pythonSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -637,10 +625,6 @@ namespace Python
             builtinModuleSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -669,10 +653,6 @@ namespace Python
             signalSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
-                    if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                    {
-                        compiler.PreprocessorDefines.Add("Py_DEBUG");
-                    }
                     compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -700,10 +680,6 @@ namespace Python
                 pcSource.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
-                        if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                        {
-                            compiler.PreprocessorDefines.Add("Py_DEBUG");
-                        }
                         compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                         compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
@@ -823,10 +799,6 @@ namespace Python
             source.PrivatePatch(settings =>
             {
                 var compiler = settings as C.ICommonCompilerSettings;
-                if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                {
-                    compiler.PreprocessorDefines.Add("Py_DEBUG");
-                }
                 compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                 compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
