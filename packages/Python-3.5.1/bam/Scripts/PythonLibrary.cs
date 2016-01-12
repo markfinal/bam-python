@@ -141,6 +141,19 @@ namespace Python
                             clangCompiler.Visibility = ClangCommon.EVisibility.Default;
                         }
                     }));
+                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("getplatform.c")).ToList().ForEach(item =>
+                    item.PrivatePatch(settings =>
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+                            {
+                                compiler.PreprocessorDefines.Add("PLATFORM", "\"linux\"");
+                            }
+                            else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                            {
+                                compiler.PreprocessorDefines.Add("PLATFORM", "\"darwin\"");
+                            }
+                        }));
             }
             headers.AddFiles("$(packagedir)/Python/*.h");
 
