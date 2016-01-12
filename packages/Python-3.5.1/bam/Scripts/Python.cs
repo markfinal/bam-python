@@ -2,7 +2,7 @@ using Bam.Core;
 using System.Linq;
 namespace Python
 {
-    sealed class PythonInterpreter :
+    sealed class PythonShell :
         C.ConsoleApplication
     {
         protected override void
@@ -1195,7 +1195,7 @@ namespace Python
 
     // TODO: curses_panel
 
-    sealed class PythonRuntime :
+    sealed class ShellRuntime :
         Publisher.Collation
     {
         protected override void
@@ -1204,7 +1204,7 @@ namespace Python
         {
             base.Init(parent);
 
-            var app = this.Include<PythonInterpreter>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
+            var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var pyLibCopy = this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
 
