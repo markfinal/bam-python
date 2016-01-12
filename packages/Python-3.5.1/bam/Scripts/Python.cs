@@ -382,7 +382,14 @@ namespace Python
         {
             base.Init(parent);
 
-            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35");
+            }
+            else
+            {
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+            }
             this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("3");
             this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
             this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
@@ -417,6 +424,8 @@ namespace Python
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         compiler.PreprocessorDefines.Add("WIN32");
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
                 });
             headers.AddFiles("$(packagedir)/Parser/*.h");
@@ -436,6 +445,8 @@ namespace Python
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         compiler.PreprocessorDefines.Add("WIN32");
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
                 });
 
@@ -478,6 +489,8 @@ namespace Python
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         compiler.PreprocessorDefines.Add("WIN32");
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
                 });
 
@@ -626,6 +639,8 @@ namespace Python
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         compiler.PreprocessorDefines.Add("WIN32");
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
                 });
 
@@ -657,6 +672,8 @@ namespace Python
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                         compiler.PreprocessorDefines.Add("WIN32");
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
                 });
 #endif
@@ -679,6 +696,8 @@ namespace Python
                         compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                         compiler.PreprocessorDefines.Add("WIN32");
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                        var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     });
                 this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
                 this.PrivatePatch(settings =>
@@ -800,6 +819,8 @@ namespace Python
                 {
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                     compiler.PreprocessorDefines.Add("WIN32");
+                    var winCompiler = settings as C.ICommonCompilerSettingsWin;
+                    winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                 }
             });
             if (null != this.CompilationPatch)
