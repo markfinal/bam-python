@@ -376,6 +376,15 @@ namespace Python
     sealed class PythonLibrary :
         C.DynamicLibrary
     {
+        public Bam.Core.TokenizedString
+        LibraryDirectory
+        {
+            get
+            {
+                return this.Macros["PythonLibDirectory"];
+            }
+        }
+
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -393,6 +402,8 @@ namespace Python
             this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("3");
             this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
             this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
+
+            this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 
             this.PublicPatch((settings, appliedTo) =>
                 {
@@ -1243,16 +1254,17 @@ namespace Python
             base.Init(parent);
 
             var app = this.Include<PythonInterpreter>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
+            var pyLibCopy = this.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", app);
+            var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                var platIndependentModules = this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), ".", app);
+                var platIndependentModules = this.IncludeDirectory(pyLibDir, ".", app);
                 platIndependentModules.CopiedFilename = "lib";
             }
             else
             {
-                var platIndependentModules = this.IncludeDirectory(this.CreateTokenizedString("$(packagedir)/Lib"), "lib", app);
+                var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", app);
                 platIndependentModules.CopiedFilename = "python3.5";
 
                 this.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", app);
