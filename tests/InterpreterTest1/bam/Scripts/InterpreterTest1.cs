@@ -33,6 +33,16 @@ namespace InterpreterTest1
             {
                 this.LinkAgainst<WindowsSDK.WindowsSDK>();
             }
+
+            this.PrivatePatch(settings =>
+                {
+                    var gccCommon = settings as GccCommon.ICommonLinkerSettings;
+                    if (null != gccCommon)
+                    {
+                        gccCommon.CanUseOrigin = true;
+                        gccCommon.RPath.AddUnique("$ORIGIN");
+                    }
+                });
         }
     }
 
@@ -58,6 +68,10 @@ namespace InterpreterTest1
             {
                 var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", app);
                 platIndependentModules.CopiedFilename = "python3.5";
+                this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", app);
+
+                var timeModule = this.Include<Python.TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
+                timeModule.DependsOn(platIndependentModules);
             }
         }
     }

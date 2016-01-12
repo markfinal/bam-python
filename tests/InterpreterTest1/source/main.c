@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
     Py_VerboseFlag++;
     Py_VerboseFlag++;
     */
-    Py_SetProgramName(argv[0]);
+    wchar_t *programName = Py_DecodeLocale(argv[0], 0);
+    Py_SetProgramName(programName);
     Py_Initialize();
     PyRun_SimpleString("from time import time,ctime\n"
                        "print('Today is',ctime(time()))\n");
