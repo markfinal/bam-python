@@ -26,7 +26,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                     }
                 });
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -436,7 +435,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -457,7 +455,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -501,7 +498,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -651,7 +647,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -684,7 +679,6 @@ namespace Python
                     if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                        compiler.PreprocessorDefines.Add("WIN32");
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
@@ -694,7 +688,12 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pcSource = this.CreateCSourceContainer("$(packagedir)/PC/dl_nt.c");
-                pcSource.AddFiles("$(packagedir)/PC/config.c");
+                var pcConfig = pcSource.AddFiles("$(packagedir)/PC/config.c");
+                pcConfig[0].PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("WIN32"); // required to register two extension modules
+                    });
                 //pcSource.AddFiles("$(packagedir)/PC/frozen_dllmain.c");
                 pcSource.AddFiles("$(packagedir)/PC/getpathp.c");
                 pcSource.AddFiles("$(packagedir)/PC/winreg.c");
@@ -707,7 +706,6 @@ namespace Python
                         }
                         compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
                         compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                        compiler.PreprocessorDefines.Add("WIN32");
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         var winCompiler = settings as C.ICommonCompilerSettingsWin;
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
@@ -834,7 +832,6 @@ namespace Python
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                 {
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
-                    compiler.PreprocessorDefines.Add("WIN32");
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;
                     winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                 }
