@@ -123,6 +123,13 @@ namespace Python
                         gccCompiler.ExtraWarnings = false;
                         gccCompiler.Pedantic = false;
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        clangCompiler.AllWarnings = false;
+                        clangCompiler.ExtraWarnings = false;
+                        clangCompiler.Pedantic = false;
+                    }
                 });
             if (null != this.CompilationPatch)
             {

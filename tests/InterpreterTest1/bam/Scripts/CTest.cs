@@ -60,6 +60,13 @@ namespace InterpreterTest1
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = false;
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        clangCompiler.AllWarnings = true;
+                        clangCompiler.ExtraWarnings = true;
+                        clangCompiler.Pedantic = false;
+                    }
                 });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
