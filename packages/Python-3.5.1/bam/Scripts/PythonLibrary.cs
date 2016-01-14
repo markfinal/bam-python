@@ -50,10 +50,16 @@ namespace Python
             var compiler = settings as C.ICommonCompilerSettings;
             compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
             compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            var winCompiler = settings as C.ICommonCompilerSettingsWin;
+            if (null != winCompiler)
             {
-                var winCompiler = settings as C.ICommonCompilerSettingsWin;
                 winCompiler.CharacterSet = C.ECharacterSet.NotSet;
+            }
+            var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+            if (null != visualcCompiler)
+            {
+                // warnings are present over warning level 2
+                visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level2;
             }
         }
 
