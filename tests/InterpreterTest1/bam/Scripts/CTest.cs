@@ -47,6 +47,12 @@ namespace InterpreterTest1
                     {
                         winCompiler.CharacterSet = C.ECharacterSet.Unicode;
                     }
+                    var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != visualcCompiler)
+                    {
+                        // warnings in pyhash.h and pytime.h
+                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
+                    }
                 });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
@@ -57,11 +63,11 @@ namespace InterpreterTest1
 
             this.PrivatePatch(settings =>
                 {
-                    var gccCommon = settings as GccCommon.ICommonLinkerSettings;
-                    if (null != gccCommon)
+                    var gccLinker = settings as GccCommon.ICommonLinkerSettings;
+                    if (null != gccLinker)
                     {
-                        gccCommon.CanUseOrigin = true;
-                        gccCommon.RPath.AddUnique("$ORIGIN");
+                        gccLinker.CanUseOrigin = true;
+                        gccLinker.RPath.AddUnique("$ORIGIN");
                     }
                 });
         }
