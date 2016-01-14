@@ -102,15 +102,28 @@ namespace Python
                 source.AddFiles(System.String.Format("$(packagedir)/Modules/{0}.c", basename));
             }
             source.PrivatePatch(settings =>
-            {
-                var compiler = settings as C.ICommonCompilerSettings;
-                compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
-                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                 {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                    winCompiler.CharacterSet = C.ECharacterSet.NotSet;
-                }
-            });
+                    if (null != winCompiler)
+                    {
+                        winCompiler.CharacterSet = C.ECharacterSet.NotSet;
+                    }
+                    var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != visualcCompiler)
+                    {
+                        // warnings are present over warning level 3
+                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
+                    }
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        gccCompiler.AllWarnings = false;
+                        gccCompiler.ExtraWarnings = false;
+                        gccCompiler.Pedantic = false;
+                    }
+                });
             if (null != this.CompilationPatch)
             {
                 source.PrivatePatch(this.CompilationPatch);

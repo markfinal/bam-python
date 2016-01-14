@@ -61,6 +61,13 @@ namespace Python
                 // warnings are present over warning level 2
                 visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level2;
             }
+            var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+            if (null != gccCompiler)
+            {
+                gccCompiler.AllWarnings = false;
+                gccCompiler.ExtraWarnings = false;
+                gccCompiler.Pedantic = false;
+            }
         }
 
         protected override void

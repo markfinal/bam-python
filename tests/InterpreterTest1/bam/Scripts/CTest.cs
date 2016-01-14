@@ -53,6 +53,13 @@ namespace InterpreterTest1
                         // warnings in pyhash.h and pytime.h
                         visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
                     }
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        gccCompiler.AllWarnings = true;
+                        gccCompiler.ExtraWarnings = true;
+                        gccCompiler.Pedantic = false;
+                    }
                 });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
