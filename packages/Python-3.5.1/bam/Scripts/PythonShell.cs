@@ -51,18 +51,27 @@ namespace Python
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
                 source.DependsOn(pyConfigHeader);
                 source.UsePublicPatches(pyConfigHeader);
-                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
-                {
-                    this.PrivatePatch(settings =>
-                        {
-                            var gccLinker = settings as GccCommon.ICommonLinkerSettings;
-                            gccLinker.CanUseOrigin = true;
-                            gccLinker.RPath.AddUnique("$ORIGIN");
-                        });
-                }
             }
+            source.PrivatePatch(settings =>
+                {
+                    var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != visualcCompiler)
+                    {
+                        // warnings in pyhash.h and pytime.h
+                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
+                    }
+                });
 
             this.LinkAgainst<PythonLibrary>();
+            this.PrivatePatch(settings =>
+            {
+                var gccLinker = settings as GccCommon.ICommonLinkerSettings;
+                if (null != gccLinker)
+                {
+                    gccLinker.CanUseOrigin = true;
+                    gccLinker.RPath.AddUnique("$ORIGIN");
+                }
+            });
         }
     }
 
