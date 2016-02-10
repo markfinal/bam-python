@@ -30,6 +30,7 @@
 using Bam.Core;
 namespace Python
 {
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class SysConfigDataPythonFile :
         Bam.Core.Module
     {

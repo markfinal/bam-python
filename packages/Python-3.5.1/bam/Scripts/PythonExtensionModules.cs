@@ -30,6 +30,7 @@
 using Bam.Core;
 namespace Python
 {
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)]
     class PythonExtensionModule :
         C.Plugin

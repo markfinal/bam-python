@@ -30,6 +30,7 @@
 using Bam.Core;
 namespace Python
 {
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     sealed class PythonShell :
         C.ConsoleApplication
     {

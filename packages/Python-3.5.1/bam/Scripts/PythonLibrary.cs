@@ -31,6 +31,7 @@ using Bam.Core;
 using System.Linq;
 namespace Python
 {
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     sealed class PythonLibrary :
         C.DynamicLibrary
     {
