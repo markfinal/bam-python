@@ -68,6 +68,7 @@ namespace Python
             }
             using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
             {
+                writeFile.NewLine = "\n";
                 writeFile.WriteLine("build_time_vars = {}");
             }
         }

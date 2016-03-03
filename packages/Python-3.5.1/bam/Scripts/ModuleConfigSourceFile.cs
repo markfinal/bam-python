@@ -154,6 +154,7 @@ namespace Python
             insertBuiltinModules(ref stubText);
             using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
             {
+                writeFile.NewLine = "\n";
                 writeFile.Write(stubText);
             }
             Bam.Core.Log.MessageAll("Written '{0}'", destPath);
