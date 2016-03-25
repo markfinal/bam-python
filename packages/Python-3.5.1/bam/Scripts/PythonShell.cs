@@ -45,7 +45,10 @@ namespace Python
             var source = this.CreateCSourceContainer("$(packagedir)/Programs/python.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(source);
+                if (this.Linker is VisualCCommon.LinkerBase)
+                {
+                    this.CompileAndLinkAgainst<WindowsSDK.WindowsSDK>(source);
+                }
             }
             else
             {
