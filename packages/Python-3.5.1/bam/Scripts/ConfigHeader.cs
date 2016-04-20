@@ -34,6 +34,21 @@ namespace Python
     class PyConfigHeader :
         C.ProceduralHeaderFile
     {
+        public bool PyDEBUG
+        {
+            get;
+            set;
+        }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+            // TODO: can this be exposed on a command line option?
+            this.PyDEBUG = false; // set to true to enable Py_DEBUG
+        }
+
         protected override TokenizedString OutputPath
         {
             get
@@ -47,6 +62,10 @@ namespace Python
             get
             {
                 var contents = new System.Text.StringBuilder();
+                if (this.PyDEBUG)
+                {
+                    contents.AppendLine("#define Py_DEBUG");
+                }
                 contents.AppendLine("#define _BSD_SOURCE 1");
                 contents.AppendLine("#include <limits.h>"); // so that __USE_POSIX is not undeffed
                 contents.AppendLine("#define __USE_POSIX 1");

@@ -78,6 +78,33 @@ namespace Python
             }
         }
 
+        private void
+        NotPyDEBUGPatch(
+            Bam.Core.Settings settings)
+        {
+            var compiler = settings as C.ICommonCompilerSettings;
+            compiler.PreprocessorDefines.Add("NDEBUG"); // ignore asserts, which depend on Py_DEBUG
+        }
+
+        private void
+        VCNotPyDEBUGClosingPatch(
+            Bam.Core.Settings settings)
+        {
+            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+            if (null != vcCompiler)
+            {
+                if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
+                    vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
+                {
+                    NotPyDEBUGPatch(settings);
+                }
+                else
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35_d");
+                }
+            }
+        }
+
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -103,14 +130,6 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     if (null != compiler)
                     {
-                        if (Bam.Core.EConfiguration.Debug == this.BuildEnvironment.Configuration)
-                        {
-                            compiler.PreprocessorDefines.Add("Py_DEBUG");
-                        }
-                        else
-                        {
-                            compiler.PreprocessorDefines.Add("NDEBUG");
-                        }
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                         {
@@ -350,6 +369,11 @@ namespace Python
                         linker.Libraries.Add("User32.lib");
                     });
                 headers.AddFiles("$(packagedir)/PC/*.h");
+
+                parserSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
+                objectSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
+                pythonSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
+                builtinModuleSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
             }
             else
             {
@@ -361,6 +385,14 @@ namespace Python
                 pythonSource.DependsOn(pyConfigHeader);
                 builtinModuleSource.DependsOn(pyConfigHeader);
                 // TODO: end of function
+
+                if (!pyConfigHeader.PyDEBUG)
+                {
+                    parserSource.PrivatePatch(NotPyDEBUGPatch);
+                    objectSource.PrivatePatch(NotPyDEBUGPatch);
+                    pythonSource.PrivatePatch(NotPyDEBUGPatch);
+                    builtinModuleSource.PrivatePatch(NotPyDEBUGPatch);
+                }
 
                 var sysConfigDataPy = Bam.Core.Graph.Instance.FindReferencedModule<SysConfigDataPythonFile>();
                 this.Requires(sysConfigDataPy);
