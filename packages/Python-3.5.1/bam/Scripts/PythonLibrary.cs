@@ -228,6 +228,19 @@ namespace Python
                             }
                         }));
             }
+            else
+            {
+                pythonSource["compile.c"].ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4312"); // Python-3.5.1\Python\compile.c(480): warning C4312: 'type cast': conversion from 'unsigned int' to 'void *' of greater size
+                        }
+                    }));
+            }
             headers.AddFiles("$(packagedir)/Python/*.h");
 
             var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
@@ -295,12 +308,31 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
+            var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
+            traceMallocModule[0].PrivatePatch(settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4359"); // Python-3.5.1\Modules\_tracemalloc.c(67): warning C4359: '<unnamed-tag>': Alignment specifier is less than actual alignment (8), and will be ignored
+                    }
+                });
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
-                builtinModuleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
+                var msvcrtmodule = builtinModuleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
+                msvcrtmodule[0].PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4312"); // Python-3.5.1\PC\msvcrtmodule.c(391): warning C4312: 'type cast': conversion from 'int' to '_HFILE' of greater size
+                            compiler.DisableWarnings.AddUnique("4311"); // Python-3.5.1\PC\msvcrtmodule.c(391): warning C4311: 'type cast': pointer truncation from '_HFILE' to 'long'
+                        }
+                    });
             }
             else
             {
@@ -358,7 +390,16 @@ namespace Python
                     });
                 //pcSource.AddFiles("$(packagedir)/PC/frozen_dllmain.c");
                 pcSource.AddFiles("$(packagedir)/PC/getpathp.c");
-                pcSource.AddFiles("$(packagedir)/PC/winreg.c");
+                var winreg = pcSource.AddFiles("$(packagedir)/PC/winreg.c");
+                winreg[0].PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4311"); // Python-3.5.1\PC\winreg.c(885): warning C4311: 'type cast': pointer truncation from 'void *' to 'DWORD'
+                        }
+                    });
                 pcSource.PrivatePatch(this.CoreBuildPatch);
                 this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
                 this.PrivatePatch(settings =>
