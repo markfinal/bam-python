@@ -147,13 +147,13 @@ namespace Python
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
 
-            objectSource.Children.Where(item => item.InputPath.Parse().Contains("bytesobject.c")).ToList().ForEach(item =>
+            objectSource["bytesobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICOnlyCompilerSettings;
                         compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                     }));
-            objectSource.Children.Where(item => item.InputPath.Parse().Contains("odictobject.c")).ToList().ForEach(item =>
+            objectSource["odictobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICOnlyCompilerSettings;
@@ -174,7 +174,7 @@ namespace Python
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
 
-            pythonSource.Children.Where(item => item.InputPath.Parse().Contains("_warnings.c")).ToList().ForEach(item =>
+            pythonSource["_warnings.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICOnlyCompilerSettings;
@@ -183,13 +183,13 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
-                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("dtoa.c")).ToList().ForEach(item =>
+                pythonSource["dtoa.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("parentheses"); // if (y = value) type expression
                     }));
-                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("pytime.c")).ToList().ForEach(item =>
+                pythonSource["pytime.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
@@ -199,7 +199,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
             {
                 // TODO: I cannot see how else some symbols are exported with preprocessor settings
-                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("getargs.c")).ToList().ForEach(item =>
+                pythonSource["getargs.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                     {
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
@@ -214,7 +214,7 @@ namespace Python
                             clangCompiler.Visibility = ClangCommon.EVisibility.Default;
                         }
                     }));
-                pythonSource.Children.Where(item => item.InputPath.Parse().Contains("getplatform.c")).ToList().ForEach(item =>
+                pythonSource["getplatform.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
@@ -309,7 +309,7 @@ namespace Python
                 var ModuleConfigSourceFile = Bam.Core.Graph.Instance.FindReferencedModule<ModuleConfigSourceFile>();
                 builtinModuleSource.AddFile(ModuleConfigSourceFile);
 
-                builtinModuleSource.Children.Where(item => item.InputPath.Parse().Contains("getpath.c")).ToList().ForEach(item =>
+                builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
@@ -320,7 +320,7 @@ namespace Python
 
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
 
-            builtinModuleSource.Children.Where(item => item.InputPath.Parse().Contains("zlibmodule.c")).ToList().ForEach(item =>
+            builtinModuleSource["zlibmodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
