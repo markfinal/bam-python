@@ -32,6 +32,7 @@ using System.Linq;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
+    [C.Thirdparty("$(packagedir)/PC/python_nt.rc")]
     sealed class PythonLibrary :
         C.DynamicLibrary
     {
@@ -416,6 +417,27 @@ namespace Python
                 objectSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
                 pythonSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
                 builtinModuleSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
+
+                if (null != this.WindowsVersionResource)
+                {
+                    this.WindowsVersionResource.PrivatePatch(settings =>
+                        {
+                            var rcCompiler = settings as C.ICommonWinResourceCompilerSettings;
+                            rcCompiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/include"));
+                        });
+                    this.WindowsVersionResource.UsePublicPatchesPrivately(C.DefaultToolchain.C_Compiler(this.BitDepth));
+
+                    var versionHeader = Bam.Core.Graph.Instance.FindReferencedModule<PythonMakeVersionHeader>();
+                    this.WindowsVersionResource.DependsOn(versionHeader);
+                    this.WindowsVersionResource.UsePublicPatchesPrivately(versionHeader);
+                    headers.AddFile(versionHeader);
+
+                    this.PrivatePatch(settings =>
+                        {
+                            var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                            vcLinker.GenerateManifest = false; // as the .rc file refers to this already
+                        });
+                }
             }
             else
             {

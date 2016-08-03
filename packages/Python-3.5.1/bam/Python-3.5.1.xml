@@ -8,11 +8,12 @@
     <Package name="MakeFileBuilder" />
     <Package name="NativeBuilder" />
     <Package name="Publisher" />
-    <Package name="VisualC" version="12.0" />
+    <Package name="VisualC" version="12.0" default="true" />
+    <Package name="VisualC" version="14.0" />
     <Package name="VSSolutionBuilder" />
   </Dependents>
   <BamAssemblies>
-    <BamAssembly name="Bam.Core" major="1" minor="0" patch="2" />
+    <BamAssembly name="Bam.Core" major="1" minor="0" patch="3" />
   </BamAssemblies>
   <DotNetAssemblies>
     <DotNetAssembly name="System" requiredTargetFramework="4.0.30319" />
