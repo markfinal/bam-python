@@ -58,6 +58,13 @@ namespace Python
             }
             source.PrivatePatch(settings =>
                 {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                    }
+
                     var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != visualcCompiler)
                     {
