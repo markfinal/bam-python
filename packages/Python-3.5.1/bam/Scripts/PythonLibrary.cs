@@ -33,7 +33,7 @@ namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     [C.Thirdparty("$(packagedir)/PC/python_nt.rc")]
-    sealed class PythonLibrary :
+    class PythonLibrary :
         C.DynamicLibrary
     {
         public Bam.Core.TokenizedString

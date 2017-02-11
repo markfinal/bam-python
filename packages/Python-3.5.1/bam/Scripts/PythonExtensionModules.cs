@@ -153,7 +153,7 @@ namespace Python
         }
     }
 
-    sealed class StructModule :
+    class StructModule :
         PythonExtensionModule
     {
         public StructModule()
@@ -162,7 +162,7 @@ namespace Python
         {}
     }
 
-    sealed class ArrayModule :
+    class ArrayModule :
         PythonExtensionModule
     {
         public ArrayModule()
@@ -171,7 +171,7 @@ namespace Python
         {}
     }
 
-    sealed class CMathModule :
+    class CMathModule :
         PythonExtensionModule
     {
         public CMathModule()
@@ -180,7 +180,7 @@ namespace Python
         {}
     }
 
-    sealed class MathModule :
+    class MathModule :
         PythonExtensionModule
     {
         public MathModule()
@@ -189,7 +189,7 @@ namespace Python
         {}
     }
 
-    sealed class TimeModule :
+    class TimeModule :
         PythonExtensionModule
     {
         public TimeModule()
@@ -198,7 +198,7 @@ namespace Python
         {}
     }
 
-    sealed class DateTimeModule :
+    class DateTimeModule :
         PythonExtensionModule
     {
         public DateTimeModule()
@@ -207,7 +207,7 @@ namespace Python
         {}
     }
 
-    sealed class RandomModule :
+    class RandomModule :
         PythonExtensionModule
     {
         public RandomModule()
@@ -216,7 +216,7 @@ namespace Python
         {}
     }
 
-    sealed class BisectModule :
+    class BisectModule :
         PythonExtensionModule
     {
         public BisectModule()
@@ -225,7 +225,7 @@ namespace Python
         {}
     }
 
-    sealed class HeapqModule :
+    class HeapqModule :
         PythonExtensionModule
     {
         public HeapqModule()
@@ -234,7 +234,7 @@ namespace Python
         {}
     }
 
-    sealed class PickleModule :
+    class PickleModule :
         PythonExtensionModule
     {
         public PickleModule()
@@ -243,7 +243,7 @@ namespace Python
         {}
     }
 
-    sealed class AtexitModule :
+    class AtexitModule :
         PythonExtensionModule
     {
         public AtexitModule()
@@ -252,7 +252,7 @@ namespace Python
         {}
     }
 
-    sealed class JsonModule :
+    class JsonModule :
         PythonExtensionModule
     {
         public JsonModule()
@@ -261,7 +261,7 @@ namespace Python
         {}
     }
 
-    sealed class TestCAPIModule :
+    class TestCAPIModule :
         PythonExtensionModule
     {
         public TestCAPIModule()
@@ -270,7 +270,7 @@ namespace Python
         {}
     }
 
-    sealed class TestBufferModule :
+    class TestBufferModule :
         PythonExtensionModule
     {
         public TestBufferModule()
@@ -279,7 +279,7 @@ namespace Python
         {}
     }
 
-    sealed class TestImportMultipleModule :
+    class TestImportMultipleModule :
         PythonExtensionModule
     {
         public TestImportMultipleModule()
@@ -288,7 +288,7 @@ namespace Python
         {}
     }
 
-    sealed class TestMultiPhaseModule :
+    class TestMultiPhaseModule :
         PythonExtensionModule
     {
         public TestMultiPhaseModule()
@@ -297,7 +297,7 @@ namespace Python
         {}
     }
 
-    sealed class LSProfModule :
+    class LSProfModule :
         PythonExtensionModule
     {
         public LSProfModule()
@@ -306,7 +306,7 @@ namespace Python
         {}
     }
 
-    sealed class UnicodeDataModule :
+    class UnicodeDataModule :
         PythonExtensionModule
     {
         public UnicodeDataModule()
@@ -315,7 +315,7 @@ namespace Python
         {}
     }
 
-    sealed class OpCodeModule :
+    class OpCodeModule :
         PythonExtensionModule
     {
         public OpCodeModule()
@@ -324,7 +324,7 @@ namespace Python
         {}
     }
 
-    sealed class FcntlModule :
+    class FcntlModule :
         PythonExtensionModule
     {
         public FcntlModule()
@@ -337,7 +337,7 @@ namespace Python
         {}
     }
 
-    sealed class PwdModule :
+    class PwdModule :
         PythonExtensionModule
     {
         public PwdModule()
@@ -346,7 +346,7 @@ namespace Python
         {}
     }
 
-    sealed class GrpModule :
+    class GrpModule :
         PythonExtensionModule
     {
         public GrpModule()
@@ -356,7 +356,7 @@ namespace Python
     }
 
 #if false
-    sealed class SPwdModule :
+    class SPwdModule :
         PythonExtensionModule
     {
         public SPwdModule()
@@ -366,7 +366,7 @@ namespace Python
     }
 #endif
 
-    sealed class SelectModule :
+    class SelectModule :
         PythonExtensionModule
     {
         public SelectModule()
@@ -375,7 +375,7 @@ namespace Python
         {}
     }
 
-    sealed class ParserModule :
+    class ParserModule :
         PythonExtensionModule
     {
         public ParserModule()
@@ -384,7 +384,7 @@ namespace Python
         {}
     }
 
-    sealed class MMapModule :
+    class MMapModule :
         PythonExtensionModule
     {
         public MMapModule()
@@ -393,7 +393,7 @@ namespace Python
         {}
     }
 
-    sealed class SysLogModule :
+    class SysLogModule :
         PythonExtensionModule
     {
         public SysLogModule()
@@ -402,7 +402,7 @@ namespace Python
         {}
     }
 
-    sealed class AudioOpModule :
+    class AudioOpModule :
         PythonExtensionModule
     {
         public AudioOpModule()
@@ -411,7 +411,7 @@ namespace Python
         {}
     }
 
-    sealed class CryptModule :
+    class CryptModule :
         PythonExtensionModule
     {
         public CryptModule()
@@ -420,7 +420,7 @@ namespace Python
         {}
     }
 
-    sealed class CSVModule :
+    class CSVModule :
         PythonExtensionModule
     {
         public CSVModule()
@@ -429,7 +429,7 @@ namespace Python
         {}
     }
 
-    sealed class PosixSubprocessModule :
+    class PosixSubprocessModule :
         PythonExtensionModule
     {
         public PosixSubprocessModule()
@@ -438,7 +438,7 @@ namespace Python
         {}
     }
 
-    sealed class SocketModule :
+    class SocketModule :
         PythonExtensionModule
     {
         public SocketModule()
@@ -449,7 +449,7 @@ namespace Python
 
     // TODO: deprecated APIs called on OSX
 #if false
-    sealed class SSLModule :
+    class SSLModule :
         PythonExtensionModule
     {
         public SSLModule()
@@ -458,7 +458,7 @@ namespace Python
         {}
     }
 
-    sealed class HashLibModule :
+    class HashLibModule :
         PythonExtensionModule
     {
         public HashLibModule()
@@ -468,7 +468,7 @@ namespace Python
     }
 #endif
 
-    sealed class SHA256Module :
+    class SHA256Module :
         PythonExtensionModule
     {
         public SHA256Module()
@@ -477,7 +477,7 @@ namespace Python
         {}
     }
 
-    sealed class SHA512Module :
+    class SHA512Module :
         PythonExtensionModule
     {
         public SHA512Module()
@@ -486,7 +486,7 @@ namespace Python
         {}
     }
 
-    sealed class MD5Module :
+    class MD5Module :
         PythonExtensionModule
     {
         public MD5Module()
@@ -495,7 +495,7 @@ namespace Python
         {}
     }
 
-    sealed class SHA1Module :
+    class SHA1Module :
         PythonExtensionModule
     {
         public SHA1Module()
@@ -508,7 +508,7 @@ namespace Python
     // TODO dbm
     // TODO gdbm
 
-    sealed class TermiosModule :
+    class TermiosModule :
         PythonExtensionModule
     {
         public TermiosModule()
@@ -517,7 +517,7 @@ namespace Python
         {}
     }
 
-    sealed class ResourceModule :
+    class ResourceModule :
         PythonExtensionModule
     {
         public ResourceModule()
@@ -530,7 +530,7 @@ namespace Python
 
     // TODO: needs a library
     #if false
-    sealed class CursesModule :
+    class CursesModule :
         PythonExtensionModule
     {
         public CursesModule()

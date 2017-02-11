@@ -31,7 +31,7 @@ using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    sealed class PythonShell :
+    class PythonShell :
         C.ConsoleApplication
     {
         protected override void
@@ -100,7 +100,7 @@ namespace Python
         }
     }
 
-    sealed class ShellRuntime :
+    class ShellRuntime :
         Publisher.Collation
     {
         protected override void

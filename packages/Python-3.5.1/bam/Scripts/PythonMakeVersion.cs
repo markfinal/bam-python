@@ -33,7 +33,7 @@ namespace Python
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Windows)]
     [C.Thirdparty]
-    sealed class PythonMakeVersion :
+    class PythonMakeVersion :
         C.ConsoleApplication,
         Bam.Core.ICommandLineTool
     {

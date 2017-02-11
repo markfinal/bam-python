@@ -31,7 +31,7 @@ using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    sealed class PythonMakeVersionHeader :
+    class PythonMakeVersionHeader :
         C.ProceduralHeaderFileFromToolOutput
     {
         protected override TokenizedString OutputPath
