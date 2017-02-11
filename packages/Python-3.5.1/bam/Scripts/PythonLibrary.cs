@@ -250,6 +250,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 // Windows builds includes many more modules in the core library
+                // see PC/config.c
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
@@ -284,7 +285,16 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testimportmultiple.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_testmultiphase.c");
             }
+            else
+            {
+                // TODO: this should be following the rules in Modules/makesetup and Modules/Setup.dist
+                // for which modules are static (and thus part of the Python library) and which are shared
+                // and separate in the distribution
+                // note that you need to read Setup.dist backward, as some modules are mentioned twice
+                // and it is the 'topmost' that overrules
+            }
 
+            // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
