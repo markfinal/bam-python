@@ -44,6 +44,9 @@ namespace Python
             {
                 var platIndependentModules = module.IncludeDirectory(pyLibDir, ".", root);
                 platIndependentModules.CopiedFilename = "lib";
+
+                var unicodeDataModule = module.Include<UnicodeDataModule>(C.DynamicLibrary.Key, "DLLs", root);
+                unicodeDataModule.DependsOn(platIndependentModules);
             }
             else
             {

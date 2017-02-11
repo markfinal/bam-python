@@ -265,7 +265,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/unicodedata.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_cryptmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
