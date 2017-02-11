@@ -151,6 +151,11 @@ namespace Python
             }
             var stubPath = this.CreateTokenizedString("$(packagedir)/Modules/config.c.in").Parse();
             var stubText = System.IO.File.ReadAllText(stubPath);
+            // TODO: this should be following the rules in Modules/makesetup and Modules/Setup.dist
+            // for which modules are static (and thus part of the Python library) and which are shared
+            // and separate in the distribution
+            // note that you need to read Setup.dist backward, as some modules are mentioned twice
+            // and it is the 'topmost' that overrules
             insertBuiltinModules(ref stubText);
             using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
             {
