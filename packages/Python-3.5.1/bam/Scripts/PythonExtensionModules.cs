@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSLL
+    class _ssl :
+        PythonExtensionModule
+    {
+        public _ssl()
+            :
+            base("_ssl")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not linkable on Windows
     class _crypt :
         PythonExtensionModule
@@ -743,15 +753,6 @@ namespace Python
 
     // TODO: deprecated APIs called on OSX
 #if false
-    class SSLModule :
-        PythonExtensionModule
-    {
-        public SSLModule()
-            :
-            base("_ssl")
-        {}
-    }
-
     class HashLibModule :
         PythonExtensionModule
     {
