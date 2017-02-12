@@ -177,6 +177,22 @@ namespace Python
     }
 
     // new list
+    class select :
+        PythonExtensionModule
+    {
+        public select()
+            :
+            base("select", "selectmodule", null, settings =>
+                {
+                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        linker.Libraries.AddUnique("Ws2_32.lib");
+                    }
+                })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class mmap :
         PythonExtensionModule
@@ -774,15 +790,6 @@ namespace Python
         {}
     }
 #endif
-
-    class SelectModule :
-        PythonExtensionModule
-    {
-        public SelectModule()
-            :
-            base("select", "selectmodule")
-        {}
-    }
 
     // TODO: deprecated APIs called on OSX
 #if false
