@@ -161,6 +161,15 @@ namespace Python
     }
 
     // new list
+    class termios :
+        PythonExtensionModule
+    {
+        public termios()
+            :
+            base("termios")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class resource :
         PythonExtensionModule
@@ -736,15 +745,6 @@ namespace Python
     // TODO sqlite3
     // TODO dbm
     // TODO gdbm
-
-    class TermiosModule :
-        PythonExtensionModule
-    {
-        public TermiosModule()
-            :
-            base("termios")
-        {}
-    }
 
     // TODO nis
 

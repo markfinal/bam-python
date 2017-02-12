@@ -44,6 +44,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<termios>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, execDir, root));
@@ -174,9 +175,6 @@ namespace Python
                 var hashlibModule = module.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 hashlibModule.DependsOn(platIndependentModules);
                 #endif
-
-                var termiosModule = module.Include<TermiosModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                termiosModule.DependsOn(platIndependentModules);
 
                 #if false
                 var cursesModule = module.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
