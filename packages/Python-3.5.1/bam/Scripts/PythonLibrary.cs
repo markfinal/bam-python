@@ -251,6 +251,7 @@ namespace Python
             {
                 // Windows builds includes many more modules builtin the core library
                 // see PC/config.c
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
@@ -271,7 +272,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");

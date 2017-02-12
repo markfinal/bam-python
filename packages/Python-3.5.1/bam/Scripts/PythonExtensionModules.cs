@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _md5 :
+        PythonExtensionModule
+    {
+        public _md5()
+            :
+            base("_md5", "md5module")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _sha1 :
         PythonExtensionModule
     {
@@ -710,15 +720,6 @@ namespace Python
         {}
     }
 #endif
-
-    class MD5Module :
-        PythonExtensionModule
-    {
-        public MD5Module()
-            :
-            base("_md5", "md5module")
-        {}
-    }
 
     // TODO sqlite3
     // TODO dbm

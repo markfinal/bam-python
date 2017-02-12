@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha512>(C.DynamicLibrary.Key, execDir, root));
@@ -176,9 +177,6 @@ namespace Python
                 var hashlibModule = module.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 hashlibModule.DependsOn(platIndependentModules);
                 #endif
-
-                var md5Module = module.Include<MD5Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                md5Module.DependsOn(platIndependentModules);
 
                 var termiosModule = module.Include<TermiosModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 termiosModule.DependsOn(platIndependentModules);
