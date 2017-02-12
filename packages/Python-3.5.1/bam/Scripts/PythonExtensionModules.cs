@@ -38,24 +38,27 @@ namespace Python
         private Bam.Core.StringArray SourceFiles;
         private Bam.Core.StringArray Libraries;
         private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
+        private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
 
         protected PythonExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles,
             Bam.Core.StringArray libraries,
-            Bam.Core.Module.PrivatePatchDelegate compilationPatch)
+            Bam.Core.Module.PrivatePatchDelegate compilationPatch,
+            Bam.Core.Module.PrivatePatchDelegate linkerPatch)
         {
             this.ModuleName = moduleName;
             this.SourceFiles = sourceFiles;
             this.Libraries = libraries;
             this.CompilationPatch = compilationPatch;
+            this.LinkerPatch = linkerPatch;
         }
 
         protected PythonExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles)
             :
-            this(moduleName, sourceFiles, null, null)
+            this(moduleName, sourceFiles, null, null, null)
         {}
 
         protected PythonExtensionModule(
@@ -70,15 +73,24 @@ namespace Python
             string sourceFile,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch)
             :
-            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch)
+            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, null)
         {}
+
+        protected PythonExtensionModule(
+            string moduleName,
+            string sourceFile,
+            Bam.Core.Module.PrivatePatchDelegate compilationPatch,
+            Bam.Core.Module.PrivatePatchDelegate linkerPatch)
+            :
+            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, linkerPatch)
+        { }
 
         protected PythonExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch)
             :
-            this(moduleName, sourceFiles, null, compilationPatch)
+            this(moduleName, sourceFiles, null, compilationPatch, null)
         { }
 
         protected PythonExtensionModule(
@@ -157,10 +169,39 @@ namespace Python
                         }
                     });
             }
+            if (null != this.LinkerPatch)
+            {
+                this.PrivatePatch(this.LinkerPatch);
+            }
         }
     }
 
     // new list
+    class _socket :
+        PythonExtensionModule
+    {
+        public _socket()
+            :
+            base("_socket", "socketmodule", settings =>
+                {
+                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("_WINSOCK_DEPRECATED_NO_WARNINGS");
+                        compiler.DisableWarnings.AddUnique("4244");
+                    }
+                },
+                settings =>
+                {
+                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        linker.Libraries.AddUnique("Ws2_32.lib");
+                    }
+                })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSLL
     class _ssl :
         PythonExtensionModule
@@ -304,7 +345,7 @@ namespace Python
     {
         public _curses()
             :
-            base("_curses", new Bam.Core.StringArray("_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null)
+            base("_curses", new Bam.Core.StringArray("_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null)
         { }
     }
 
@@ -314,7 +355,7 @@ namespace Python
     {
         public _curses_panel()
             :
-            base("_curses_panel", new Bam.Core.StringArray("_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null)
+            base("_curses_panel", new Bam.Core.StringArray("_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null)
         { }
     }
 
@@ -739,15 +780,6 @@ namespace Python
         public CSVModule()
             :
             base("_csv")
-        {}
-    }
-
-    class SocketModule :
-        PythonExtensionModule
-    {
-        public SocketModule()
-            :
-            base("_socket", "socketmodule")
         {}
     }
 

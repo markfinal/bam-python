@@ -274,7 +274,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");

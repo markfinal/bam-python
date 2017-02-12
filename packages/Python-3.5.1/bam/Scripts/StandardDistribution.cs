@@ -44,6 +44,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_socket>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, execDir, root));
@@ -163,9 +164,6 @@ namespace Python
 
                 var csvModule = module.Include<CSVModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 csvModule.DependsOn(platIndependentModules);
-
-                var socketModule = module.Include<SocketModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                socketModule.DependsOn(platIndependentModules);
 
                 #if false
                 var sslModule = module.Include<SSLModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
