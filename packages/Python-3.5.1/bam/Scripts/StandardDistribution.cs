@@ -44,7 +44,6 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
-            moduleList.Add(module.Include<termios>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, execDir, root));
@@ -65,6 +64,8 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<nis>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<termios>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<resource>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_posixsubprocess>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, execDir, root));

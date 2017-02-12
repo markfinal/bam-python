@@ -161,6 +161,17 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class nis :
+        PythonExtensionModule
+    {
+        public nis()
+            :
+            base("nis", "nismodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class termios :
         PythonExtensionModule
     {
@@ -745,8 +756,6 @@ namespace Python
     // TODO sqlite3
     // TODO dbm
     // TODO gdbm
-
-    // TODO nis
 
     // TODO: needs a library
     #if false
