@@ -161,6 +161,15 @@ namespace Python
     }
 
     // new list
+    class fpectl :
+        PythonExtensionModule
+    {
+        public fpectl()
+            :
+            base("fpectl", "fpectlmodule")
+        { }
+    }
+
     class fpetest :
         PythonExtensionModule
     {
