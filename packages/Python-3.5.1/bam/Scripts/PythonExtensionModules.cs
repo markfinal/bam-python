@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class grp :
+        PythonExtensionModule
+    {
+        public grp()
+            :
+            base("grp", "grpmodule")
+        { }
+    }
+
     class select :
         PythonExtensionModule
     {
@@ -768,15 +778,6 @@ namespace Python
         public PwdModule()
             :
             base("pwd", "pwdmodule")
-        {}
-    }
-
-    class GrpModule :
-        PythonExtensionModule
-    {
-        public GrpModule()
-            :
-            base("grp", "grpmodule")
         {}
     }
 
