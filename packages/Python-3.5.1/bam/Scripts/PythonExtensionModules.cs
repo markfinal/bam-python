@@ -161,6 +161,15 @@ namespace Python
     }
 
     // new list
+    class fpetest :
+        PythonExtensionModule
+    {
+        public fpetest()
+            :
+            base("fpetest", "fpetestmodule")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class zlib :
         PythonExtensionModule
