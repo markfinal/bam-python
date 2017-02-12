@@ -198,6 +198,9 @@ namespace Python
                 #endif
             }
 
+            // currently not buildable
+            //moduleList.Add(module.Include<_gdbm>(C.DynamicLibrary.Key, execDir, root));
+
             // ensure that modules are copied AFTER the platform independent modules
             foreach (var mod in moduleList)
             {

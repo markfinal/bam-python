@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
+    class _gdbm :
+        PythonExtensionModule
+    {
+        public _gdbm()
+            :
+            base("_gdbm", "_gdbmmodule")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class binascii :
         PythonExtensionModule
