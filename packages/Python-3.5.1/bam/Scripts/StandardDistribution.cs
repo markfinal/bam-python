@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<resource>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_posixsubprocess>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, execDir, root));
@@ -176,9 +177,6 @@ namespace Python
 
                 var termiosModule = module.Include<TermiosModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 termiosModule.DependsOn(platIndependentModules);
-
-                var resourceModule = module.Include<ResourceModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                resourceModule.DependsOn(platIndependentModules);
 
                 #if false
                 var cursesModule = module.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);

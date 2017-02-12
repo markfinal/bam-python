@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class resource :
+        PythonExtensionModule
+    {
+        public resource()
+            :
+            base("resource")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class _posixsubprocess :
         PythonExtensionModule
     {
@@ -733,15 +743,6 @@ namespace Python
         public TermiosModule()
             :
             base("termios")
-        {}
-    }
-
-    class ResourceModule :
-        PythonExtensionModule
-    {
-        public ResourceModule()
-            :
-            base("resource")
         {}
     }
 
