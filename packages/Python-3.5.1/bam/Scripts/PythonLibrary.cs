@@ -251,6 +251,9 @@ namespace Python
             {
                 // Windows builds includes many more modules builtin the core library
                 // see PC/config.c
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
@@ -271,9 +274,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/socketmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");

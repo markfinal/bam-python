@@ -64,6 +64,9 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_sha512>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<syslog>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
@@ -174,17 +177,8 @@ namespace Python
                 hashlibModule.DependsOn(platIndependentModules);
                 #endif
 
-                var sha256Module = module.Include<SHA256Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                sha256Module.DependsOn(platIndependentModules);
-
-                var sha512Module = module.Include<SHA512Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                sha512Module.DependsOn(platIndependentModules);
-
                 var md5Module = module.Include<MD5Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 md5Module.DependsOn(platIndependentModules);
-
-                var sha1Module = module.Include<SHA1Module>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                sha1Module.DependsOn(platIndependentModules);
 
                 var termiosModule = module.Include<TermiosModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 termiosModule.DependsOn(platIndependentModules);

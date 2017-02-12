@@ -161,6 +161,36 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _sha1 :
+        PythonExtensionModule
+    {
+        public _sha1()
+            :
+            base("_sha1", "sha1module")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _sha256 :
+        PythonExtensionModule
+    {
+        public _sha256()
+            :
+            base("_sha256", "sha256module")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _sha512 :
+        PythonExtensionModule
+    {
+        public _sha512()
+            :
+            base("_sha512", "sha512module")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // no tcl.h
     class _tkinter :
         PythonExtensionModule
@@ -681,39 +711,12 @@ namespace Python
     }
 #endif
 
-    class SHA256Module :
-        PythonExtensionModule
-    {
-        public SHA256Module()
-            :
-            base("_sha256", "sha256module")
-        {}
-    }
-
-    class SHA512Module :
-        PythonExtensionModule
-    {
-        public SHA512Module()
-            :
-            base("_sha512", "sha512module")
-        {}
-    }
-
     class MD5Module :
         PythonExtensionModule
     {
         public MD5Module()
             :
             base("_md5", "md5module")
-        {}
-    }
-
-    class SHA1Module :
-        PythonExtensionModule
-    {
-        public SHA1Module()
-            :
-            base("_sha1", "sha1module")
         {}
     }
 
