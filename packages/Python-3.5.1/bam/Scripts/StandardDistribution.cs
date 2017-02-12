@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, execDir, root));
@@ -154,9 +155,6 @@ namespace Python
 
                 var mmapModule = module.Include<MMapModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 mmapModule.DependsOn(platIndependentModules);
-
-                var audioopModule = module.Include<AudioOpModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                audioopModule.DependsOn(platIndependentModules);
 
                 var cryptModule = module.Include<CryptModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 cryptModule.DependsOn(platIndependentModules);

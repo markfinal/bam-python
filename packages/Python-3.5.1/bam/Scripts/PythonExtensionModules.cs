@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class audioop :
+        PythonExtensionModule
+    {
+        public audioop()
+            :
+            base("audioop")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _md5 :
         PythonExtensionModule
     {
@@ -652,15 +662,6 @@ namespace Python
         public MMapModule()
             :
             base("mmap", "mmapmodule")
-        {}
-    }
-
-    class AudioOpModule :
-        PythonExtensionModule
-    {
-        public AudioOpModule()
-            :
-            base("audioop")
         {}
     }
 
