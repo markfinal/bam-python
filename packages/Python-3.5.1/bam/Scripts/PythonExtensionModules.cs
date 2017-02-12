@@ -153,6 +153,7 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _multibytecodec :
         PythonExtensionModule
     {
@@ -162,6 +163,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_cn :
         PythonExtensionModule
     {
@@ -171,6 +173,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_hk :
         PythonExtensionModule
     {
@@ -180,6 +183,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_iso2022 :
         PythonExtensionModule
     {
@@ -189,6 +193,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_jp :
         PythonExtensionModule
     {
@@ -198,6 +203,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_kr :
         PythonExtensionModule
     {
@@ -207,6 +213,7 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_tw :
         PythonExtensionModule
     {

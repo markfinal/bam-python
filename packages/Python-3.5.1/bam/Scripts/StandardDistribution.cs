@@ -42,15 +42,8 @@ namespace Python
 
             var execDir = module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows) ? "DLLs" : "lib/python3.5/lib-dynload";
 
-            // extension modules
+            // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
-            moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_iso2022>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
 
             Publisher.CollatedDirectory platIndependentModules = null;
@@ -67,6 +60,15 @@ namespace Python
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
                 // extension modules
+                // new list
+                moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_iso2022>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
+
                 // old list
                 var structModule = module.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 structModule.DependsOn(platIndependentModules);
