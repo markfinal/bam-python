@@ -199,6 +199,7 @@ namespace Python
             }
 
             // currently not buildable
+            //moduleList.Add(module.Include<_tkinter>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_gdbm>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_dbm>(C.DynamicLibrary.Key, execDir, root));
 

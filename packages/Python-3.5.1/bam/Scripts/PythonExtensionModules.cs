@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // no tcl.h
+    class _tkinter :
+        PythonExtensionModule
+    {
+        public _tkinter()
+            :
+            base("_tkinter", new Bam.Core.StringArray("_tkinter", "tkappinit"))
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class syslog :
         PythonExtensionModule
