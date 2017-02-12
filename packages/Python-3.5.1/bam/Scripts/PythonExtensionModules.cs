@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _csv :
+        PythonExtensionModule
+    {
+        public _csv()
+            :
+            base("_csv")
+        { }
+    }
+
     class _socket :
         PythonExtensionModule
     {
@@ -773,15 +783,6 @@ namespace Python
         {}
     }
 
-
-    class CSVModule :
-        PythonExtensionModule
-    {
-        public CSVModule()
-            :
-            base("_csv")
-        {}
-    }
 
     // TODO: deprecated APIs called on OSX
 #if false
