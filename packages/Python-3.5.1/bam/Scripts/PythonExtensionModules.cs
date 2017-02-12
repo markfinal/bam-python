@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class binascii :
+        PythonExtensionModule
+    {
+        public binascii()
+            :
+            base("binascii")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class parser :
         PythonExtensionModule
     {

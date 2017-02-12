@@ -251,6 +251,8 @@ namespace Python
             {
                 // Windows builds includes many more modules builtin the core library
                 // see PC/config.c
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
                 builtinModuleSource["zlibmodule.c"].ForEach(item =>
@@ -260,7 +262,7 @@ namespace Python
                             compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
                         }));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
-
+                // old
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
@@ -268,7 +270,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
@@ -304,7 +305,6 @@ namespace Python
             }
 
             // TODO: review
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");

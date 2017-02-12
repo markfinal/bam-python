@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
