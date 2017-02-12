@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class parser :
+        PythonExtensionModule
+    {
+        public parser()
+            :
+            base("parser", "parsermodule")
+        { }
+    }
+
     class fpectl :
         PythonExtensionModule
     {
@@ -523,15 +533,6 @@ namespace Python
         public SelectModule()
             :
             base("select", "selectmodule")
-        {}
-    }
-
-    class ParserModule :
-        PythonExtensionModule
-    {
-        public ParserModule()
-            :
-            base("parser", "parsermodule")
         {}
     }
 

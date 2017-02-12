@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
@@ -142,9 +143,6 @@ namespace Python
 
                 var selectModule = module.Include<SelectModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 selectModule.DependsOn(platIndependentModules);
-
-                var parserModule = module.Include<ParserModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                parserModule.DependsOn(platIndependentModules);
 
                 var mmapModule = module.Include<MMapModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 mmapModule.DependsOn(platIndependentModules);
