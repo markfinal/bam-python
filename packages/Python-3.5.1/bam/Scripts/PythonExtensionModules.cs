@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class syslog :
+        PythonExtensionModule
+    {
+        public syslog()
+            :
+            base("syslog", "syslogmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class _curses :
         PythonExtensionModule
     {
@@ -592,15 +602,6 @@ namespace Python
         public MMapModule()
             :
             base("mmap", "mmapmodule")
-        {}
-    }
-
-    class SysLogModule :
-        PythonExtensionModule
-    {
-        public SysLogModule()
-            :
-            base("syslog", "syslogmodule")
         {}
     }
 

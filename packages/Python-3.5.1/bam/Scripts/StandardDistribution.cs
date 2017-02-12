@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<syslog>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, execDir, root));
@@ -149,9 +150,6 @@ namespace Python
 
                 var mmapModule = module.Include<MMapModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 mmapModule.DependsOn(platIndependentModules);
-
-                var syslogModule = module.Include<SysLogModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                syslogModule.DependsOn(platIndependentModules);
 
                 var audioopModule = module.Include<AudioOpModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 audioopModule.DependsOn(platIndependentModules);
