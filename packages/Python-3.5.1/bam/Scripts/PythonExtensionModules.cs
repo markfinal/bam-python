@@ -161,6 +161,26 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class _curses :
+        PythonExtensionModule
+    {
+        public _curses()
+            :
+            base("_curses", "_cursesmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class _curses_panel :
+        PythonExtensionModule
+    {
+        public _curses_panel()
+            :
+            base("_curses_panel")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class _dbm :
         PythonExtensionModule

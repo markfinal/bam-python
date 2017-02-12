@@ -64,6 +64,8 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
