@@ -74,6 +74,14 @@ namespace Python
         {}
 
         protected PythonExtensionModule(
+            string moduleName,
+            Bam.Core.StringArray sourceFiles,
+            Bam.Core.Module.PrivatePatchDelegate compilationPatch)
+            :
+            this(moduleName, sourceFiles, null, compilationPatch)
+        { }
+
+        protected PythonExtensionModule(
             string moduleName)
             :
             this(moduleName, new Bam.Core.StringArray(moduleName))
@@ -153,6 +161,29 @@ namespace Python
     }
 
     // new list
+    class pyexpat :
+        PythonExtensionModule
+    {
+        public pyexpat()
+            :
+            base("pyexpat",
+                 new Bam.Core.StringArray("expat/xmlparse", "expat/xmlrole", "expat/xmltok", "pyexpat"),
+                 settings =>
+                     {
+                         var compiler = settings as C.ICommonCompilerSettings;
+                         compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
+                         compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
+                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                         {
+                             compiler.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
+                             compiler.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
+                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\expat\xmlparse.c(1844) : warning C4244: 'return' : conversion from '__int64' to 'XML_Index', possible loss of data
+                         }
+                     })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _multibytecodec :
         PythonExtensionModule
