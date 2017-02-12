@@ -65,6 +65,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<mmap>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_csv>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_crypt>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<nis>(C.DynamicLibrary.Key, execDir, root));
@@ -159,9 +160,6 @@ namespace Python
 
                 var selectModule = module.Include<SelectModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 selectModule.DependsOn(platIndependentModules);
-
-                var mmapModule = module.Include<MMapModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                mmapModule.DependsOn(platIndependentModules);
 
                 #if false
                 var sslModule = module.Include<SSLModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);

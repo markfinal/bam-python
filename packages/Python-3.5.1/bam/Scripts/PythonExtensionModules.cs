@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class mmap :
+        PythonExtensionModule
+    {
+        public mmap()
+            :
+            base("mmap", "mmapmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _csv :
         PythonExtensionModule
     {
@@ -773,16 +783,6 @@ namespace Python
             base("select", "selectmodule")
         {}
     }
-
-    class MMapModule :
-        PythonExtensionModule
-    {
-        public MMapModule()
-            :
-            base("mmap", "mmapmodule")
-        {}
-    }
-
 
     // TODO: deprecated APIs called on OSX
 #if false
