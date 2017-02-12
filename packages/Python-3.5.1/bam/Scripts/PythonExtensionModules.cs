@@ -167,7 +167,24 @@ namespace Python
     {
         public zlib()
             :
-            base("zlib", "zlibmodule")
+            base("zlib",
+                 new Bam.Core.StringArray(
+                     "zlibmodule",
+                     "zlib/adler32",
+                     "zlib/compress",
+                     "zlib/crc32",
+                     "zlib/deflate",
+                     "zlib/gzclose",
+                     "zlib/gzlib",
+                     "zlib/gzread",
+                     "zlib/gzwrite",
+                     "zlib/infback",
+                     "zlib/inffast",
+                     "zlib/inflate",
+                     "zlib/inftrees",
+                     "zlib/trees",
+                     "zlib/uncompr",
+                     "zlib/zutil"))
         { }
     }
 
