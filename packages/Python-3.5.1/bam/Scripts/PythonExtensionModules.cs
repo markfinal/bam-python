@@ -161,6 +161,23 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not linkable on Windows
+    class _crypt :
+        PythonExtensionModule
+    {
+        public _crypt()
+            :
+            base("_crypt", "_cryptmodule", settings =>
+                {
+                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_cryptmodule.c(39) : warning C4013: 'crypt' undefined; assuming extern returning int
+                    }
+                })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class nis :
         PythonExtensionModule
@@ -705,14 +722,6 @@ namespace Python
         {}
     }
 
-    class CryptModule :
-        PythonExtensionModule
-    {
-        public CryptModule()
-            :
-            base("_crypt", "_cryptmodule")
-        {}
-    }
 
     class CSVModule :
         PythonExtensionModule
