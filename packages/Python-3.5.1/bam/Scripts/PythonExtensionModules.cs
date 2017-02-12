@@ -152,6 +152,80 @@ namespace Python
         }
     }
 
+    // new list
+    class _multibytecodec :
+        PythonExtensionModule
+    {
+        public _multibytecodec()
+            :
+            base("_multibytecodec", "cjkcodecs/multibytecodec")
+        { }
+    }
+
+    class _codecs_cn :
+        PythonExtensionModule
+    {
+        public _codecs_cn()
+            :
+            base("_codecs_cn", "cjkcodecs/_codecs_cn")
+        { }
+    }
+
+    class _codecs_hk :
+        PythonExtensionModule
+    {
+        public _codecs_hk()
+            :
+            base("_codecs_hk", "cjkcodecs/_codecs_hk")
+        { }
+    }
+
+    class _codecs_iso2022 :
+        PythonExtensionModule
+    {
+        public _codecs_iso2022()
+            :
+            base("_codecs_iso2022", "cjkcodecs/_codecs_iso2022")
+        { }
+    }
+
+    class _codecs_jp :
+        PythonExtensionModule
+    {
+        public _codecs_jp()
+            :
+            base("_codecs_jp", "cjkcodecs/_codecs_jp")
+        { }
+    }
+
+    class _codecs_kr :
+        PythonExtensionModule
+    {
+        public _codecs_kr()
+            :
+            base("_codecs_kr", "cjkcodecs/_codecs_kr")
+        { }
+    }
+
+    class _codecs_tw :
+        PythonExtensionModule
+    {
+        public _codecs_tw()
+            :
+            base("_codecs_tw", "cjkcodecs/_codecs_tw")
+        { }
+    }
+
+    class unicodedata :
+        PythonExtensionModule
+    {
+        public unicodedata()
+            :
+            base("unicodedata")
+        { }
+    }
+
+    // old list
     class StructModule :
         PythonExtensionModule
     {
@@ -302,15 +376,6 @@ namespace Python
         public LSProfModule()
             :
             base("_lsprof", new Bam.Core.StringArray("_lsprof", "rotatingtree"))
-        {}
-    }
-
-    class UnicodeDataModule :
-        PythonExtensionModule
-    {
-        public UnicodeDataModule()
-            :
-            base("unicodedata")
         {}
     }
 

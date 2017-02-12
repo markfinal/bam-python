@@ -40,22 +40,34 @@ namespace Python
             var pyLibCopy = module.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", root);
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
 
+            var execDir = module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows) ? "DLLs" : "lib/python3.5/lib-dynload";
+
+            // extension modules
+            var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_iso2022>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
+
+            Publisher.CollatedDirectory platIndependentModules = null;
             if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                var platIndependentModules = module.IncludeDirectory(pyLibDir, ".", root);
+                platIndependentModules = module.IncludeDirectory(pyLibDir, ".", root);
                 platIndependentModules.CopiedFilename = "lib";
-
-                var unicodeDataModule = module.Include<UnicodeDataModule>(C.DynamicLibrary.Key, "DLLs", root);
-                unicodeDataModule.DependsOn(platIndependentModules);
             }
             else
             {
-                var platIndependentModules = module.IncludeDirectory(pyLibDir, "lib", root);
+                platIndependentModules = module.IncludeDirectory(pyLibDir, "lib", root);
                 platIndependentModules.CopiedFilename = "python3.5";
 
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
                 // extension modules
+                // old list
                 var structModule = module.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 structModule.DependsOn(platIndependentModules);
 
@@ -106,9 +118,6 @@ namespace Python
 
                 var lsprofModule = module.Include<LSProfModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 lsprofModule.DependsOn(platIndependentModules);
-
-                var unicodeDataModule = module.Include<UnicodeDataModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                unicodeDataModule.DependsOn(platIndependentModules);
 
                 var opcodeModule = module.Include<OpCodeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 opcodeModule.DependsOn(platIndependentModules);
@@ -182,6 +191,12 @@ namespace Python
                 var cursesModule = module.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 cursesModule.DependsOn(platIndependentModules);
                 #endif
+            }
+
+            // ensure that modules are copied AFTER the platform independent modules
+            foreach (var mod in moduleList)
+            {
+                mod.DependsOn(platIndependentModules);
             }
         }
     }

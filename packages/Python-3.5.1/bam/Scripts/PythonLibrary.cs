@@ -295,7 +295,6 @@ namespace Python
 
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
