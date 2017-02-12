@@ -162,6 +162,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
+    class _dbm :
+        PythonExtensionModule
+    {
+        public _dbm()
+            :
+            base("_dbm", "_dbmmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class _gdbm :
         PythonExtensionModule
     {
