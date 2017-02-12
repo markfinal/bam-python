@@ -180,6 +180,10 @@ namespace Python
                              compiler.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
                              compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\expat\xmlparse.c(1844) : warning C4244: 'return' : conversion from '__int64' to 'XML_Index', possible loss of data
                          }
+                         else
+                         {
+                             compiler.PreprocessorDefines.Add("HAVE_MEMMOVE", "1");
+                         }
                      })
         { }
     }
