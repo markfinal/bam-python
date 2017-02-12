@@ -64,6 +64,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_posixsubprocess>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, execDir, root));
@@ -161,9 +162,6 @@ namespace Python
 
                 var csvModule = module.Include<CSVModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 csvModule.DependsOn(platIndependentModules);
-
-                var posixSubprocessModule = module.Include<PosixSubprocessModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                posixSubprocessModule.DependsOn(platIndependentModules);
 
                 var socketModule = module.Include<SocketModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 socketModule.DependsOn(platIndependentModules);

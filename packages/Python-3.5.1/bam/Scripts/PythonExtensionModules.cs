@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class _posixsubprocess :
+        PythonExtensionModule
+    {
+        public _posixsubprocess()
+            :
+            base("_posixsubprocess")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class audioop :
         PythonExtensionModule
@@ -680,15 +690,6 @@ namespace Python
         public CSVModule()
             :
             base("_csv")
-        {}
-    }
-
-    class PosixSubprocessModule :
-        PythonExtensionModule
-    {
-        public PosixSubprocessModule()
-            :
-            base("_posixsubprocess")
         {}
     }
 
