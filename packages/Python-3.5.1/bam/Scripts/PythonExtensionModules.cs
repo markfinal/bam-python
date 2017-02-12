@@ -167,7 +167,7 @@ namespace Python
     {
         public _curses()
             :
-            base("_curses", "_cursesmodule")
+            base("_curses", new Bam.Core.StringArray("_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null)
         { }
     }
 
@@ -177,7 +177,7 @@ namespace Python
     {
         public _curses_panel()
             :
-            base("_curses_panel")
+            base("_curses_panel", new Bam.Core.StringArray("_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null)
         { }
     }
 
