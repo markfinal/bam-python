@@ -161,6 +161,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class zlib :
+        PythonExtensionModule
+    {
+        public zlib()
+            :
+            base("zlib", "zlibmodule")
+        { }
+    }
+
     class pyexpat :
         PythonExtensionModule
     {

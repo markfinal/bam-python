@@ -62,6 +62,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, execDir, root));

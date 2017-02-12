@@ -251,6 +251,14 @@ namespace Python
             {
                 // Windows builds includes many more modules builtin the core library
                 // see PC/config.c
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
+                builtinModuleSource["zlibmodule.c"].ForEach(item =>
+                    item.PrivatePatch(settings =>
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
+                        }));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
 
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
@@ -307,8 +315,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
@@ -363,12 +369,6 @@ namespace Python
 
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
 
-            builtinModuleSource["zlibmodule.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
-                    }));
             headers.AddFiles("$(packagedir)/Modules/*.h");
             headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
             headers.AddFiles("$(packagedir)/Modules/zlib/*.h");
