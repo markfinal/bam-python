@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _random :
+        PythonExtensionModule
+    {
+        public _random()
+            :
+            base("_random", "_randommodule")
+        { }
+    }
+
     class _elementtree :
         PythonExtensionModule
     {
@@ -723,14 +733,6 @@ namespace Python
         {}
     }
 
-    class RandomModule :
-        PythonExtensionModule
-    {
-        public RandomModule()
-            :
-            base("_random", "_randommodule")
-        {}
-    }
 
     class AtexitModule :
         PythonExtensionModule
