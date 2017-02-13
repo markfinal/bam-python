@@ -105,6 +105,7 @@ namespace Python
                 moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
 
+#if false
                 // old list
                 var timeModule = module.Include<TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 timeModule.DependsOn(platIndependentModules);
@@ -145,6 +146,7 @@ namespace Python
                 var cursesModule = module.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 cursesModule.DependsOn(platIndependentModules);
                 #endif
+#endif
             }
 
             // currently not buildable

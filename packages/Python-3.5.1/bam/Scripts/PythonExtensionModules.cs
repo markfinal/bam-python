@@ -736,6 +736,7 @@ namespace Python
         { }
     }
 
+#if false
     // old list
     class TimeModule :
         PythonExtensionModule
@@ -851,4 +852,5 @@ namespace Python
     #endif
 
     // TODO: curses_panel
+#endif
 }
