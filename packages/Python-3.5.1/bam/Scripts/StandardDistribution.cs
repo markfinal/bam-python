@@ -68,6 +68,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_struct>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_random>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_pickle>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_datetime>(C.DynamicLibrary.Key, execDir, root));
@@ -102,9 +103,6 @@ namespace Python
                 moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
 
                 // old list
-                var structModule = module.Include<StructModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                structModule.DependsOn(platIndependentModules);
-
                 var arrayModule = module.Include<ArrayModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 arrayModule.DependsOn(platIndependentModules);
 

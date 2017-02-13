@@ -177,6 +177,15 @@ namespace Python
     }
 
     // new list
+    class _struct :
+        PythonExtensionModule
+    {
+        public _struct()
+            :
+            base("_struct")
+        { }
+    }
+
     class _testcapi :
         PythonExtensionModule
     {
@@ -697,15 +706,6 @@ namespace Python
     }
 
     // old list
-    class StructModule :
-        PythonExtensionModule
-    {
-        public StructModule()
-            :
-            base("_struct")
-        {}
-    }
-
     class ArrayModule :
         PythonExtensionModule
     {
