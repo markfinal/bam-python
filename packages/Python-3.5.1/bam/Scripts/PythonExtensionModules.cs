@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class array :
+        PythonExtensionModule
+    {
+        public array()
+            :
+            base("array", "arraymodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class cmath :
         PythonExtensionModule
     {
@@ -727,15 +737,6 @@ namespace Python
     }
 
     // old list
-    class ArrayModule :
-        PythonExtensionModule
-    {
-        public ArrayModule()
-            :
-            base("array", "arraymodule")
-        {}
-    }
-
     class TimeModule :
         PythonExtensionModule
     {
