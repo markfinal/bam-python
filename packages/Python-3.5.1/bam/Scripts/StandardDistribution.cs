@@ -66,7 +66,6 @@ namespace Python
 
                 // extension modules
                 // new list
-                moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<grp>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<mmap>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_csv>(C.DynamicLibrary.Key, execDir, root));
@@ -173,6 +172,7 @@ namespace Python
             }
 
             // currently not buildable
+            //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_ssl>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_tkinter>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_gdbm>(C.DynamicLibrary.Key, execDir, root));

@@ -177,7 +177,7 @@ namespace Python
     }
 
     // new list
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class spwd :
         PythonExtensionModule
     {
