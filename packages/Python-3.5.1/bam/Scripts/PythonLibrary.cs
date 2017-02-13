@@ -281,7 +281,6 @@ namespace Python
                 // old
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
@@ -303,6 +302,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");

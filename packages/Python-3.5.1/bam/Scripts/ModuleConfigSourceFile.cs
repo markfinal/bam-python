@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit_time(void);");
+            inittab.AppendLine("\t{\"time\", PyInit_time},");
+
             declarations.AppendLine("extern PyObject* PyInit__locale(void);");
             inittab.AppendLine("\t{\"_locale\", PyInit__locale},");
 
