@@ -303,6 +303,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
             traceMallocModule[0].PrivatePatch(settings =>
                 {
@@ -319,7 +320,6 @@ namespace Python
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");

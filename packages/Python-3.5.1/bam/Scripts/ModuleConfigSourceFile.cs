@@ -71,14 +71,17 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
-            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
-            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
+            declarations.AppendLine("extern PyObject* PyInit_faulthandler(void);");
+            inittab.AppendLine("\t{\"defaulthandler\", PyInit_faulthandler},");
+
+            declarations.AppendLine("extern PyObject* PyInit__tracemalloc(void);");
+            inittab.AppendLine("\t{\"_tracemalloc\", PyInit__tracemalloc},");
 
             declarations.AppendLine("extern PyObject* PyInit__symtable(void);");
             inittab.AppendLine("\t{\"_symtable\", PyInit__symtable},");
 
-            declarations.AppendLine("extern PyObject* PyInit__tracemalloc(void);");
-            inittab.AppendLine("\t{\"_tracemalloc\", PyInit__tracemalloc},");
+            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
+            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
 
             // old list
             declarations.AppendLine("extern PyObject* PyInit_posix(void);");
@@ -128,9 +131,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit_zipimport(void);");
             inittab.AppendLine("\t{\"zipimport\", PyInit_zipimport},");
-
-            declarations.AppendLine("extern PyObject* PyInit_faulthandler(void);");
-            inittab.AppendLine("\t{\"defaulthandler\", PyInit_faulthandler},");
 
             declarations.AppendLine("extern PyObject* PyInit__signal(void);");
             inittab.AppendLine("\t{\"_signal\", PyInit__signal},");
