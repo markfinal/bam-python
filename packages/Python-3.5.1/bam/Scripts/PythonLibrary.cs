@@ -302,6 +302,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
@@ -329,7 +330,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
 
             // TODO: review
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");

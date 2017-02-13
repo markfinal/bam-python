@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit_errno(void);");
+            inittab.AppendLine("\t{\"errno\", PyInit_errno},");
+
             declarations.AppendLine("extern PyObject* PyInit_pwd(void);");
             inittab.AppendLine("\t{\"pwd\", PyInit_pwd},");
 
@@ -125,9 +128,6 @@ namespace Python
             // old list
             declarations.AppendLine("extern PyObject* PyInit_posix(void);");
             inittab.AppendLine("\t{\"posix\", PyInit_posix},");
-
-            declarations.AppendLine("extern PyObject* PyInit_errno(void);");
-            inittab.AppendLine("\t{\"errno\", PyInit_errno},");
 
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_time(void);");
