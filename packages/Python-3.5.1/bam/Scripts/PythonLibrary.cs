@@ -303,6 +303,16 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
+            traceMallocModule[0].PrivatePatch(settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4359"); // Python-3.5.1\Modules\_tracemalloc.c(67): warning C4359: '<unnamed-tag>': Alignment specifier is less than actual alignment (8), and will be ignored
+                    }
+                });
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
 
@@ -326,16 +336,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
-            var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
-            traceMallocModule[0].PrivatePatch(settings =>
-                {
-                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != vcCompiler)
-                    {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.DisableWarnings.AddUnique("4359"); // Python-3.5.1\Modules\_tracemalloc.c(67): warning C4359: '<unnamed-tag>': Alignment specifier is less than actual alignment (8), and will be ignored
-                    }
-                });
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");

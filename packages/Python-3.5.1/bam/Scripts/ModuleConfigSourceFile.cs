@@ -77,6 +77,9 @@ namespace Python
             declarations.AppendLine("extern PyObject* PyInit__symtable(void);");
             inittab.AppendLine("\t{\"_symtable\", PyInit__symtable},");
 
+            declarations.AppendLine("extern PyObject* PyInit__tracemalloc(void);");
+            inittab.AppendLine("\t{\"_tracemalloc\", PyInit__tracemalloc},");
+
             // old list
             declarations.AppendLine("extern PyObject* PyInit_posix(void);");
             inittab.AppendLine("\t{\"posix\", PyInit_posix},");
@@ -128,9 +131,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit_faulthandler(void);");
             inittab.AppendLine("\t{\"defaulthandler\", PyInit_faulthandler},");
-
-            declarations.AppendLine("extern PyObject* PyInit__tracemalloc(void);");
-            inittab.AppendLine("\t{\"_tracemalloc\", PyInit__tracemalloc},");
 
             declarations.AppendLine("extern PyObject* PyInit__signal(void);");
             inittab.AppendLine("\t{\"_signal\", PyInit__signal},");
