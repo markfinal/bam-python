@@ -303,6 +303,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_io/*.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
@@ -331,7 +332,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");

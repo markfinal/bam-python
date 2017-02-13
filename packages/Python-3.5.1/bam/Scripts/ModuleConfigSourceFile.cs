@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit__locale(void);");
+            inittab.AppendLine("\t{\"_locale\", PyInit__locale},");
+
             declarations.AppendLine("extern PyObject* PyInit__io(void);");
             inittab.AppendLine("\t{\"_io\", PyInit__io},");
 
@@ -128,9 +131,6 @@ namespace Python
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_time(void);");
             //inittab.AppendLine("\t{\"time\", PyInit_time},");
-
-            declarations.AppendLine("extern PyObject* PyInit__locale(void);");
-            inittab.AppendLine("\t{\"_locale\", PyInit__locale},");
 
             declarations.AppendLine("extern PyObject* PyInit__signal(void);");
             inittab.AppendLine("\t{\"_signal\", PyInit__signal},");
