@@ -44,12 +44,12 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<select>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_socket>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
 
             Publisher.CollatedDirectory platIndependentModules = null;
             if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))

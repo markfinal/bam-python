@@ -177,6 +177,15 @@ namespace Python
     }
 
     // new list
+    class unicodedata :
+        PythonExtensionModule
+    {
+        public unicodedata()
+            :
+            base("unicodedata")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class fcntl :
         PythonExtensionModule
@@ -608,15 +617,6 @@ namespace Python
         public _codecs_tw()
             :
             base("_codecs_tw", "cjkcodecs/_codecs_tw")
-        { }
-    }
-
-    class unicodedata :
-        PythonExtensionModule
-    {
-        public unicodedata()
-            :
-            base("unicodedata")
         { }
     }
 
