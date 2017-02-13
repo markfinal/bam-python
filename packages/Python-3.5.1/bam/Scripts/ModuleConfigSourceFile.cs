@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit__operator(void);");
+            inittab.AppendLine("\t{\"_operator\", PyInit__operator},");
+
             declarations.AppendLine("extern PyObject* PyInit__collections(void);");
             inittab.AppendLine("\t{\"_collections\", PyInit__collections},");
 
@@ -126,9 +129,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__functools(void);");
             inittab.AppendLine("\t{\"_functools\", PyInit__functools},");
-
-            declarations.AppendLine("extern PyObject* PyInit__operator(void);");
-            inittab.AppendLine("\t{\"_operator\", PyInit__operator},");
 
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_time(void);");
