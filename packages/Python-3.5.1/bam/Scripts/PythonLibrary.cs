@@ -301,6 +301,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
@@ -333,7 +334,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
 
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
