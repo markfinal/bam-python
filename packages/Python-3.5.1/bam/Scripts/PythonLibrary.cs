@@ -329,10 +329,10 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4359"); // Python-3.5.1\Modules\_tracemalloc.c(67): warning C4359: '<unnamed-tag>': Alignment specifier is less than actual alignment (8), and will be ignored
                     }
                 });
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
 
             // TODO: review
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
 
