@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _heapq :
+        PythonExtensionModule
+    {
+        public _heapq()
+            :
+            base("_heapq", "_heapqmodule")
+        { }
+    }
+
     class unicodedata :
         PythonExtensionModule
     {
@@ -690,15 +700,6 @@ namespace Python
         public BisectModule()
             :
             base("_bisect", "_bisectmodule")
-        {}
-    }
-
-    class HeapqModule :
-        PythonExtensionModule
-    {
-        public HeapqModule()
-            :
-            base("_heapq", "_heapqmodule")
         {}
     }
 
