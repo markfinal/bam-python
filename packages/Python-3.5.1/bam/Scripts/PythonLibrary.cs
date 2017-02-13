@@ -303,6 +303,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
             traceMallocModule[0].PrivatePatch(settings =>
@@ -325,7 +326,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
