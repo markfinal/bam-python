@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
+            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
+
             declarations.AppendLine("extern PyObject* PyInit__functools(void);");
             inittab.AppendLine("\t{\"_functools\", PyInit__functools},");
 
@@ -109,9 +112,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__symtable(void);");
             inittab.AppendLine("\t{\"_symtable\", PyInit__symtable},");
-
-            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
-            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
 
             // old list
             declarations.AppendLine("extern PyObject* PyInit_posix(void);");

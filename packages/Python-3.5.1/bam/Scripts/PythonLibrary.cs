@@ -301,6 +301,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
@@ -323,7 +324,6 @@ namespace Python
                     }
                 });
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
 
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
