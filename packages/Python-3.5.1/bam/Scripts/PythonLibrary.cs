@@ -279,7 +279,6 @@ namespace Python
                         }));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
                 // old
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
@@ -302,6 +301,7 @@ namespace Python
             }
 
             // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
