@@ -177,6 +177,15 @@ namespace Python
     }
 
     // new list
+    class _testcapi :
+        PythonExtensionModule
+    {
+        public _testcapi()
+            :
+            base("_testcapi", "_testcapimodule")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _random :
         PythonExtensionModule
@@ -749,15 +758,6 @@ namespace Python
         public JsonModule()
             :
             base("_json")
-        {}
-    }
-
-    class TestCAPIModule :
-        PythonExtensionModule
-    {
-        public TestCAPIModule()
-            :
-            base("_testcapi", "_testcapimodule")
         {}
     }
 

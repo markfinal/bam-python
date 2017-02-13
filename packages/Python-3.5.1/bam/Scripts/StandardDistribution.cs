@@ -44,6 +44,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_testcapi>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_elementtree>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<select>(C.DynamicLibrary.Key, execDir, root));
@@ -121,9 +122,6 @@ namespace Python
 
                 var jsonModule = module.Include<JsonModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 jsonModule.DependsOn(platIndependentModules);
-
-                var testcapiModule = module.Include<TestCAPIModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                testcapiModule.DependsOn(platIndependentModules);
 
                 var testBufferModule = module.Include<TestBufferModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 testBufferModule.DependsOn(platIndependentModules);
