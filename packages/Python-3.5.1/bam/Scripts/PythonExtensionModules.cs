@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _datetime :
+        PythonExtensionModule
+    {
+        public _datetime()
+            :
+            base("_datetime", "_datetimemodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _bisect :
         PythonExtensionModule
     {
@@ -683,15 +693,6 @@ namespace Python
         public TimeModule()
             :
             base("time", "timemodule")
-        {}
-    }
-
-    class DateTimeModule :
-        PythonExtensionModule
-    {
-        public DateTimeModule()
-            :
-            base("_datetime", "_datetimemodule")
         {}
     }
 
