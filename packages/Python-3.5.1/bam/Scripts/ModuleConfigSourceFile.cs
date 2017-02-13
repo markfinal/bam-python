@@ -90,7 +90,7 @@ namespace Python
             inittab.AppendLine("\t{\"zipimport\", PyInit_zipimport},");
 
             declarations.AppendLine("extern PyObject* PyInit_faulthandler(void);");
-            inittab.AppendLine("\t{\"defaulthandler\", PyInit_faulthandler},");
+            inittab.AppendLine("\t{\"faulthandler\", PyInit_faulthandler},");
 
             declarations.AppendLine("extern PyObject* PyInit__tracemalloc(void);");
             inittab.AppendLine("\t{\"_tracemalloc\", PyInit__tracemalloc},");
