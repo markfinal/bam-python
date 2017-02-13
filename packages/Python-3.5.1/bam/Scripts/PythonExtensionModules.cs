@@ -177,6 +177,17 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class math :
+        PythonExtensionModule
+    {
+        public math()
+            :
+            base("math", new Bam.Core.StringArray("mathmodule", "_math"))
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _struct :
         PythonExtensionModule
     {
@@ -721,15 +732,6 @@ namespace Python
         public CMathModule()
             :
             base("cmath", new Bam.Core.StringArray("cmathmodule", "_math"))
-        {}
-    }
-
-    class MathModule :
-        PythonExtensionModule
-    {
-        public MathModule()
-            :
-            base("math", new Bam.Core.StringArray("mathmodule", "_math"))
         {}
     }
 

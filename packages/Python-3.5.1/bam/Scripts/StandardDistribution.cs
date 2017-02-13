@@ -68,6 +68,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<math>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_struct>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_random>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_pickle>(C.DynamicLibrary.Key, execDir, root));
@@ -108,9 +109,6 @@ namespace Python
 
                 var cmathModule = module.Include<CMathModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 cmathModule.DependsOn(platIndependentModules);
-
-                var mathModule = module.Include<MathModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                mathModule.DependsOn(platIndependentModules);
 
                 var timeModule = module.Include<TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 timeModule.DependsOn(platIndependentModules);
