@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit__io(void);");
+            inittab.AppendLine("\t{\"_io\", PyInit__io},");
+
             declarations.AppendLine("extern PyObject* PyInit_zipimport(void);");
             inittab.AppendLine("\t{\"zipimport\", PyInit_zipimport},");
 
@@ -128,9 +131,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__locale(void);");
             inittab.AppendLine("\t{\"_locale\", PyInit__locale},");
-
-            declarations.AppendLine("extern PyObject* PyInit__io(void);");
-            inittab.AppendLine("\t{\"_io\", PyInit__io},");
 
             declarations.AppendLine("extern PyObject* PyInit__signal(void);");
             inittab.AppendLine("\t{\"_signal\", PyInit__signal},");
