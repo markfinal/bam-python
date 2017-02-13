@@ -298,6 +298,7 @@ namespace Python
                 // and separate in the distribution
                 // note that you need to read Setup.dist backward, as some modules are mentioned twice
                 // and it is the 'topmost' that overrules
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
             }
 
             // common statically compiled extension modules
