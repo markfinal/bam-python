@@ -177,6 +177,23 @@ namespace Python
     }
 
     // new list
+    class _elementtree :
+        PythonExtensionModule
+    {
+        public _elementtree()
+            :
+            base("_elementtree",
+                 "_elementtree",
+                 settings =>
+                     {
+                         var compiler = settings as C.ICommonCompilerSettings;
+                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
+                         compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
+                     })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _pickle :
         PythonExtensionModule
