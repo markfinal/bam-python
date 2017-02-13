@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit_itertools(void);");
+            inittab.AppendLine("\t{\"itertools\", PyInit_itertools},");
+
             declarations.AppendLine("extern PyObject* PyInit_atexit(void);");
             inittab.AppendLine("\t{\"atexit\", PyInit_atexit},");
 
@@ -126,9 +129,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__collections(void);");
             inittab.AppendLine("\t{\"_collections\", PyInit__collections},");
-
-            declarations.AppendLine("extern PyObject* PyInit_itertools(void);");
-            inittab.AppendLine("\t{\"itertools\", PyInit_itertools},");
 
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_time(void);");
