@@ -70,6 +70,11 @@ namespace Python
             var declarations = new System.Text.StringBuilder();
             var inittab = new System.Text.StringBuilder();
 
+            // new list
+            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
+            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
+
+            // old list
             declarations.AppendLine("extern PyObject* PyInit_posix(void);");
             inittab.AppendLine("\t{\"posix\", PyInit_posix},");
 
@@ -85,9 +90,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__codecs(void);");
             inittab.AppendLine("\t{\"_codecs\", PyInit__codecs},");
-
-            declarations.AppendLine("extern PyObject* PyInit__weakref(void);");
-            inittab.AppendLine("\t{\"_weakref\", PyInit__weakref},");
 
             declarations.AppendLine("extern PyObject* PyInit__functools(void);");
             inittab.AppendLine("\t{\"_functools\", PyInit__functools},");

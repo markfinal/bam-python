@@ -302,6 +302,8 @@ namespace Python
                 // and it is the 'topmost' that overrules
             }
 
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
+
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
@@ -333,7 +335,6 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4359"); // Python-3.5.1\Modules\_tracemalloc.c(67): warning C4359: '<unnamed-tag>': Alignment specifier is less than actual alignment (8), and will be ignored
                     }
                 });
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
