@@ -66,6 +66,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<grp>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<mmap>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_csv>(C.DynamicLibrary.Key, execDir, root));

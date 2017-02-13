@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class spwd :
+        PythonExtensionModule
+    {
+        public spwd()
+            :
+            base("spwd", "spwdmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class grp :
         PythonExtensionModule
     {
@@ -782,14 +792,6 @@ namespace Python
     }
 
 #if false
-    class SPwdModule :
-        PythonExtensionModule
-    {
-        public SPwdModule()
-            :
-            base("spwd", "spwdmodule")
-        {}
-    }
 #endif
 
     // TODO: deprecated APIs called on OSX
