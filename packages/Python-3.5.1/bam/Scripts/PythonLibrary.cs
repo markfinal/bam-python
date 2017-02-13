@@ -298,6 +298,7 @@ namespace Python
                 // and separate in the distribution
                 // note that you need to read Setup.dist backward, as some modules are mentioned twice
                 // and it is the 'topmost' that overrules
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
             }
 
@@ -332,7 +333,6 @@ namespace Python
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
 
