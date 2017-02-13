@@ -251,6 +251,7 @@ namespace Python
             {
                 // Windows builds includes many more modules builtin the core library
                 // see PC/config.c
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
@@ -284,7 +285,6 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c"); // needs OpenSSL
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");

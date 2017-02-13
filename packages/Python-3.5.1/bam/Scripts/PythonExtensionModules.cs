@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _pickle :
+        PythonExtensionModule
+    {
+        public _pickle()
+            :
+            base("_pickle")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _datetime :
         PythonExtensionModule
     {
@@ -702,15 +712,6 @@ namespace Python
         public RandomModule()
             :
             base("_random", "_randommodule")
-        {}
-    }
-
-    class PickleModule :
-        PythonExtensionModule
-    {
-        public PickleModule()
-            :
-            base("_pickle")
         {}
     }
 

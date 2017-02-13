@@ -66,6 +66,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_pickle>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_datetime>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_bisect>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_heapq>(C.DynamicLibrary.Key, execDir, root));
@@ -115,9 +116,6 @@ namespace Python
 
                 var randomModule = module.Include<RandomModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 randomModule.DependsOn(platIndependentModules);
-
-                var pickleModule = module.Include<PickleModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                pickleModule.DependsOn(platIndependentModules);
 
                 var atexitModule = module.Include<AtexitModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 atexitModule.DependsOn(platIndependentModules);
