@@ -302,6 +302,8 @@ namespace Python
                 // and it is the 'topmost' that overrules
             }
 
+            // common statically compiled extension modules
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
 
             // TODO: review
@@ -312,7 +314,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
 
