@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _bisect :
+        PythonExtensionModule
+    {
+        public _bisect()
+            :
+            base("_bisect", "_bisectmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _heapq :
         PythonExtensionModule
     {
@@ -691,15 +701,6 @@ namespace Python
         public RandomModule()
             :
             base("_random", "_randommodule")
-        {}
-    }
-
-    class BisectModule :
-        PythonExtensionModule
-    {
-        public BisectModule()
-            :
-            base("_bisect", "_bisectmodule")
         {}
     }
 
