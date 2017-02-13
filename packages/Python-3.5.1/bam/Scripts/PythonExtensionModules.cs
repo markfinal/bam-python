@@ -177,6 +177,20 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    class fcntl :
+        PythonExtensionModule
+    {
+        public fcntl()
+            :
+            base("fcntl", "fcntlmodule", settings =>
+            {
+                var compiler = settings as C.ICOnlyCompilerSettings;
+                compiler.LanguageStandard = C.ELanguageStandard.C99;
+            })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class spwd :
         PythonExtensionModule
@@ -766,19 +780,6 @@ namespace Python
         public OpCodeModule()
             :
             base("_opcode")
-        {}
-    }
-
-    class FcntlModule :
-        PythonExtensionModule
-    {
-        public FcntlModule()
-            :
-            base("fcntl", "fcntlmodule", settings =>
-                    {
-                        var compiler = settings as C.ICOnlyCompilerSettings;
-                        compiler.LanguageStandard = C.ELanguageStandard.C99;
-                    })
         {}
     }
 
