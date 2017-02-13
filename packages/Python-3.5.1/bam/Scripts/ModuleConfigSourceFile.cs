@@ -71,6 +71,9 @@ namespace Python
             var inittab = new System.Text.StringBuilder();
 
             // new list
+            declarations.AppendLine("extern PyObject* PyInit__sre(void);");
+            inittab.AppendLine("\t{\"_sre\", PyInit__sre},");
+
             declarations.AppendLine("extern PyObject* PyInit__codecs(void);");
             inittab.AppendLine("\t{\"_codecs\", PyInit__codecs},");
 
@@ -126,9 +129,6 @@ namespace Python
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_pwd(void);");
             //inittab.AppendLine("\t{\"pwd\", PyInit_pwd},");
-
-            declarations.AppendLine("extern PyObject* PyInit__sre(void);");
-            inittab.AppendLine("\t{\"_sre\", PyInit__sre},");
 
             // TODO: should be builtin?
             //declarations.AppendLine("extern PyObject* PyInit_time(void);");
