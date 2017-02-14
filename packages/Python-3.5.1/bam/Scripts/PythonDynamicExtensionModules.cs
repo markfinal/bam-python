@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _signal :
+        PythonDynamicExtensionModule
+    {
+        public _signal()
+            :
+            base("_signal", "signalmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class array :
         PythonDynamicExtensionModule
     {
