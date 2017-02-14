@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _json :
+        PythonDynamicExtensionModule
+    {
+        public _json()
+            :
+            base("_json")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _thread :
         PythonDynamicExtensionModule
     {
@@ -758,15 +768,6 @@ namespace Python
 
 #if false
     // old list
-    class JsonModule :
-        PythonDynamicExtensionModule
-    {
-        public JsonModule()
-            :
-            base("_json")
-        {}
-    }
-
     class TestBufferModule :
         PythonDynamicExtensionModule
     {

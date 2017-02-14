@@ -251,6 +251,7 @@ namespace Python
             // see PC/config.c
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
@@ -284,7 +285,6 @@ namespace Python
                 // old
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
