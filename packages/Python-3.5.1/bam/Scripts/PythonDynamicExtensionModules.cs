@@ -758,25 +758,6 @@ namespace Python
 
 #if false
     // old list
-    class TimeModule :
-        PythonDynamicExtensionModule
-    {
-        public TimeModule()
-            :
-            base("time", "timemodule")
-        {}
-    }
-
-
-    class AtexitModule :
-        PythonDynamicExtensionModule
-    {
-        public AtexitModule()
-            :
-            base("atexit", "atexitmodule")
-        {}
-    }
-
     class JsonModule :
         PythonDynamicExtensionModule
     {
@@ -840,11 +821,7 @@ namespace Python
         {}
     }
 
-#if false
-#endif
-
     // TODO: deprecated APIs called on OSX
-#if false
     class HashLibModule :
         PythonDynamicExtensionModule
     {
@@ -853,24 +830,7 @@ namespace Python
             base("_hashlib", "_hashopenssl")
         {}
     }
-#endif
 
     // TODO sqlite3
-    // TODO dbm
-    // TODO gdbm
-
-    // TODO: needs a library
-    #if false
-    class CursesModule :
-        PythonDynamicExtensionModule
-    {
-        public CursesModule()
-            :
-            base("_curses", "_cursesmodule")
-        {}
-    }
-    #endif
-
-    // TODO: curses_panel
 #endif
 }
