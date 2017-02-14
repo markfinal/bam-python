@@ -627,7 +627,7 @@ namespace Python
         { }
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)] // not buildable on Windows or Linux (by default)
     class _curses :
         PythonDynamicExtensionModule
     {
@@ -637,7 +637,7 @@ namespace Python
         { }
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)] // not buildable on Windows or Linux (by default)
     class _curses_panel :
         PythonDynamicExtensionModule
     {

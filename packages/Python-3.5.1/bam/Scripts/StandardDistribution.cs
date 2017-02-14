@@ -99,8 +99,11 @@ namespace Python
                 moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_sha512>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<syslog>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
+                if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
+                    moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
+                }
                 moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
