@@ -436,7 +436,8 @@ namespace Python
             :
             base("select", "selectmodule", null, settings =>
                 {
-                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                    if (null != vcLinker)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ws2_32.lib");
@@ -472,7 +473,8 @@ namespace Python
             :
             base("_socket", "socketmodule", settings =>
                 {
-                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("_WINSOCK_DEPRECATED_NO_WARNINGS");
@@ -481,7 +483,8 @@ namespace Python
                 },
                 settings =>
                 {
-                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                    if (null != vcLinker)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ws2_32.lib");
@@ -508,7 +511,8 @@ namespace Python
             :
             base("_crypt", "_cryptmodule", settings =>
                 {
-                    if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_cryptmodule.c(39) : warning C4013: 'crypt' undefined; assuming extern returning int
@@ -759,7 +763,8 @@ namespace Python
                          compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
                          compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
-                         if (settings.Module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                         if (null != vcCompiler)
                          {
                              compiler.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
                              compiler.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
