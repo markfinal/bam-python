@@ -96,7 +96,7 @@ namespace Python
         protected PythonDynamicExtensionModule(
             string moduleName)
             :
-            this(moduleName, new Bam.Core.StringArray(moduleName))
+            this(moduleName, new Bam.Core.StringArray(System.String.Format("Modules/{0}", moduleName)))
         {}
 
         protected override void
@@ -119,7 +119,7 @@ namespace Python
             var source = this.CreateCSourceContainer();
             foreach (var basename in this.SourceFiles)
             {
-                source.AddFiles(System.String.Format("$(packagedir)/Modules/{0}.c", basename));
+                source.AddFiles(System.String.Format("$(packagedir)/{0}.c", basename));
             }
             source.PrivatePatch(settings =>
                 {
@@ -184,7 +184,7 @@ namespace Python
         public _sqlite()
             :
             base("_sqlite",
-                 "_sqlite/*",
+                 "Modules/_sqlite/*",
                 settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
@@ -199,7 +199,7 @@ namespace Python
     {
         public _hashlib()
             :
-            base("_hashlib", "_hashopenssl")
+            base("_hashlib", "Modules/_hashopenssl")
         { }
     }
 
@@ -219,7 +219,7 @@ namespace Python
     {
         public _lsprof()
             :
-            base("_lsprof", new Bam.Core.StringArray("_lsprof", "rotatingtree"))
+            base("_lsprof", new Bam.Core.StringArray("Modules/_lsprof", "Modules/rotatingtree"))
         { }
     }
 
@@ -266,7 +266,7 @@ namespace Python
     {
         public _thread()
             :
-            base("_thread", "_threadmodule")
+            base("_thread", "Modules/_threadmodule")
         { }
     }
 
@@ -276,7 +276,7 @@ namespace Python
     {
         public array()
             :
-            base("array", "arraymodule")
+            base("array", "Modules/arraymodule")
         { }
     }
 
@@ -286,7 +286,7 @@ namespace Python
     {
         public cmath()
             :
-            base("cmath", new Bam.Core.StringArray("cmathmodule", "_math"))
+            base("cmath", new Bam.Core.StringArray("Modules/cmathmodule", "Modules/_math"))
         { }
     }
 
@@ -296,7 +296,7 @@ namespace Python
     {
         public math()
             :
-            base("math", new Bam.Core.StringArray("mathmodule", "_math"))
+            base("math", new Bam.Core.StringArray("Modules/mathmodule", "Modules/_math"))
         { }
     }
 
@@ -315,7 +315,7 @@ namespace Python
     {
         public _testcapi()
             :
-            base("_testcapi", "_testcapimodule")
+            base("_testcapi", "Modules/_testcapimodule")
         { }
     }
 
@@ -325,7 +325,7 @@ namespace Python
     {
         public _random()
             :
-            base("_random", "_randommodule")
+            base("_random", "Modules/_randommodule")
         { }
     }
 
@@ -335,7 +335,7 @@ namespace Python
         public _elementtree()
             :
             base("_elementtree",
-                 "_elementtree",
+                 "Modules/_elementtree",
                  settings =>
                      {
                          var compiler = settings as C.ICommonCompilerSettings;
@@ -362,7 +362,7 @@ namespace Python
     {
         public _datetime()
             :
-            base("_datetime", "_datetimemodule")
+            base("_datetime", "Modules/_datetimemodule")
         { }
     }
 
@@ -372,7 +372,7 @@ namespace Python
     {
         public _bisect()
             :
-            base("_bisect", "_bisectmodule")
+            base("_bisect", "Modules/_bisectmodule")
         { }
     }
 
@@ -382,7 +382,7 @@ namespace Python
     {
         public _heapq()
             :
-            base("_heapq", "_heapqmodule")
+            base("_heapq", "Modules/_heapqmodule")
         { }
     }
 
@@ -401,7 +401,7 @@ namespace Python
     {
         public fcntl()
             :
-            base("fcntl", "fcntlmodule", settings =>
+            base("fcntl", "Modules/fcntlmodule", settings =>
             {
                 var compiler = settings as C.ICOnlyCompilerSettings;
                 compiler.LanguageStandard = C.ELanguageStandard.C99;
@@ -415,7 +415,7 @@ namespace Python
     {
         public spwd()
             :
-            base("spwd", "spwdmodule")
+            base("spwd", "Modules/spwdmodule")
         { }
     }
 
@@ -425,7 +425,7 @@ namespace Python
     {
         public grp()
             :
-            base("grp", "grpmodule")
+            base("grp", "Modules/grpmodule")
         { }
     }
 
@@ -434,7 +434,7 @@ namespace Python
     {
         public select()
             :
-            base("select", "selectmodule", null, settings =>
+            base("select", "Modules/selectmodule", null, settings =>
                 {
                     var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
                     if (null != vcLinker)
@@ -452,7 +452,7 @@ namespace Python
     {
         public mmap()
             :
-            base("mmap", "mmapmodule")
+            base("mmap", "Modules/mmapmodule")
         { }
     }
 
@@ -471,7 +471,7 @@ namespace Python
     {
         public _socket()
             :
-            base("_socket", "socketmodule", settings =>
+            base("_socket", "Modules/socketmodule", settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != vcCompiler)
@@ -509,7 +509,7 @@ namespace Python
     {
         public _crypt()
             :
-            base("_crypt", "_cryptmodule", settings =>
+            base("_crypt", "Modules/_cryptmodule", settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != vcCompiler)
@@ -527,7 +527,7 @@ namespace Python
     {
         public nis()
             :
-            base("nis", "nismodule")
+            base("nis", "Modules/nismodule")
         { }
     }
 
@@ -577,7 +577,7 @@ namespace Python
     {
         public _md5()
             :
-            base("_md5", "md5module")
+            base("_md5", "Modules/md5module")
         { }
     }
 
@@ -587,7 +587,7 @@ namespace Python
     {
         public _sha1()
             :
-            base("_sha1", "sha1module")
+            base("_sha1", "Modules/sha1module")
         { }
     }
 
@@ -597,7 +597,7 @@ namespace Python
     {
         public _sha256()
             :
-            base("_sha256", "sha256module")
+            base("_sha256", "Modules/sha256module")
         { }
     }
 
@@ -607,7 +607,7 @@ namespace Python
     {
         public _sha512()
             :
-            base("_sha512", "sha512module")
+            base("_sha512", "Modules/sha512module")
         { }
     }
 
@@ -617,7 +617,7 @@ namespace Python
     {
         public _tkinter()
             :
-            base("_tkinter", new Bam.Core.StringArray("_tkinter", "tkappinit"))
+            base("_tkinter", new Bam.Core.StringArray("Modules/_tkinter", "Modules/tkappinit"))
         { }
     }
 
@@ -627,7 +627,7 @@ namespace Python
     {
         public syslog()
             :
-            base("syslog", "syslogmodule")
+            base("syslog", "Modules/syslogmodule")
         { }
     }
 
@@ -637,7 +637,7 @@ namespace Python
     {
         public _curses()
             :
-            base("_curses", new Bam.Core.StringArray("_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null)
+            base("_curses", new Bam.Core.StringArray("Modules/_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null)
         { }
     }
 
@@ -647,7 +647,7 @@ namespace Python
     {
         public _curses_panel()
             :
-            base("_curses_panel", new Bam.Core.StringArray("_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null)
+            base("_curses_panel", new Bam.Core.StringArray("Modules/_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null)
         { }
     }
 
@@ -657,7 +657,7 @@ namespace Python
     {
         public _dbm()
             :
-            base("_dbm", "_dbmmodule")
+            base("_dbm", "Modules/_dbmmodule")
         { }
     }
 
@@ -667,7 +667,7 @@ namespace Python
     {
         public _gdbm()
             :
-            base("_gdbm", "_gdbmmodule")
+            base("_gdbm", "Modules/_gdbmmodule")
         { }
     }
 
@@ -687,7 +687,7 @@ namespace Python
     {
         public parser()
             :
-            base("parser", "parsermodule")
+            base("parser", "Modules/parsermodule")
         { }
     }
 
@@ -696,7 +696,7 @@ namespace Python
     {
         public fpectl()
             :
-            base("fpectl", "fpectlmodule")
+            base("fpectl", "Modules/fpectlmodule")
         { }
     }
 
@@ -707,7 +707,7 @@ namespace Python
             :
             base(
                 "fpetest",
-                "fpetestmodule",
+                "Modules/fpetestmodule",
                 settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -731,22 +731,22 @@ namespace Python
             :
             base("zlib",
                  new Bam.Core.StringArray(
-                     "zlibmodule",
-                     "zlib/adler32",
-                     "zlib/compress",
-                     "zlib/crc32",
-                     "zlib/deflate",
-                     "zlib/gzclose",
-                     "zlib/gzlib",
-                     "zlib/gzread",
-                     "zlib/gzwrite",
-                     "zlib/infback",
-                     "zlib/inffast",
-                     "zlib/inflate",
-                     "zlib/inftrees",
-                     "zlib/trees",
-                     "zlib/uncompr",
-                     "zlib/zutil"))
+                     "Modules/zlibmodule",
+                     "Modules/zlib/adler32",
+                     "Modules/zlib/compress",
+                     "Modules/zlib/crc32",
+                     "Modules/zlib/deflate",
+                     "Modules/zlib/gzclose",
+                     "Modules/zlib/gzlib",
+                     "Modules/zlib/gzread",
+                     "Modules/zlib/gzwrite",
+                     "Modules/zlib/infback",
+                     "Modules/zlib/inffast",
+                     "Modules/zlib/inflate",
+                     "Modules/zlib/inftrees",
+                     "Modules/zlib/trees",
+                     "Modules/zlib/uncompr",
+                     "Modules/zlib/zutil"))
         { }
     }
 
@@ -756,7 +756,7 @@ namespace Python
         public pyexpat()
             :
             base("pyexpat",
-                 new Bam.Core.StringArray("expat/xmlparse", "expat/xmlrole", "expat/xmltok", "pyexpat"),
+                 new Bam.Core.StringArray("Modules/expat/xmlparse", "Modules/expat/xmlrole", "Modules/expat/xmltok", "Modules/pyexpat"),
                  settings =>
                      {
                          var compiler = settings as C.ICommonCompilerSettings;
@@ -784,7 +784,7 @@ namespace Python
     {
         public _multibytecodec()
             :
-            base("_multibytecodec", "cjkcodecs/multibytecodec")
+            base("_multibytecodec", "Modules/cjkcodecs/multibytecodec")
         { }
     }
 
@@ -794,7 +794,7 @@ namespace Python
     {
         public _codecs_cn()
             :
-            base("_codecs_cn", "cjkcodecs/_codecs_cn")
+            base("_codecs_cn", "Modules/cjkcodecs/_codecs_cn")
         { }
     }
 
@@ -804,7 +804,7 @@ namespace Python
     {
         public _codecs_hk()
             :
-            base("_codecs_hk", "cjkcodecs/_codecs_hk")
+            base("_codecs_hk", "Modules/cjkcodecs/_codecs_hk")
         { }
     }
 
@@ -814,7 +814,7 @@ namespace Python
     {
         public _codecs_iso2022()
             :
-            base("_codecs_iso2022", "cjkcodecs/_codecs_iso2022")
+            base("_codecs_iso2022", "Modules/cjkcodecs/_codecs_iso2022")
         { }
     }
 
@@ -824,7 +824,7 @@ namespace Python
     {
         public _codecs_jp()
             :
-            base("_codecs_jp", "cjkcodecs/_codecs_jp")
+            base("_codecs_jp", "Modules/cjkcodecs/_codecs_jp")
         { }
     }
 
@@ -834,7 +834,7 @@ namespace Python
     {
         public _codecs_kr()
             :
-            base("_codecs_kr", "cjkcodecs/_codecs_kr")
+            base("_codecs_kr", "Modules/cjkcodecs/_codecs_kr")
         { }
     }
 
@@ -844,7 +844,7 @@ namespace Python
     {
         public _codecs_tw()
             :
-            base("_codecs_tw", "cjkcodecs/_codecs_tw")
+            base("_codecs_tw", "Modules/cjkcodecs/_codecs_tw")
         { }
     }
 
