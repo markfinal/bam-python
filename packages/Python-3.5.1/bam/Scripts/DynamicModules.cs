@@ -346,7 +346,7 @@ namespace Python
         { }
     }
 
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSLL
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
     class _ssl :
         DynamicExtensionModule
     {
