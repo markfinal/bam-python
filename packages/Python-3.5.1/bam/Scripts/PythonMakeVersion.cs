@@ -30,7 +30,7 @@
 using Bam.Core;
 namespace Python
 {
-    [Bam.Core.ModuleGroup("Thirdparty/Python")]
+    [Bam.Core.ModuleGroup("Thirdparty/Python/BuildUtilities")]
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Windows)]
     [C.Thirdparty]
     class PythonMakeVersion :
