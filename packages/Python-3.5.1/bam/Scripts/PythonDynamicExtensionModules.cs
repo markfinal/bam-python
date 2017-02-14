@@ -177,6 +177,22 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires sqlite
+    class _sqlite :
+        PythonDynamicExtensionModule
+    {
+        public _sqlite()
+            :
+            base("_sqlite",
+                 "_sqlite/*",
+                settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("MODULE_NAME", "\"sqlite3\"");
+                    })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
     class _hashlib :
         PythonDynamicExtensionModule
@@ -822,10 +838,4 @@ namespace Python
             base("xxsubtype")
         { }
     }
-
-#if false
-    // TODO: deprecated APIs called on OSX
-
-    // TODO sqlite3
-#endif
 }

@@ -121,6 +121,7 @@ namespace Python
             }
 
             // currently not buildable
+            //moduleList.Add(module.Include<_sqlite>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_hashlib>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_ssl>(C.DynamicLibrary.Key, execDir, root));
