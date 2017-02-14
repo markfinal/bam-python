@@ -30,6 +30,7 @@
 using Bam.Core;
 namespace ExtensionModuleTest1
 {
+    [Bam.Core.ModuleGroup("ExtensionModuleTest1")]
     class CustomModule :
         Python.DynamicExtensionModule
     {
