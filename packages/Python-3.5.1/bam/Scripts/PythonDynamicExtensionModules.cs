@@ -177,6 +177,15 @@ namespace Python
     }
 
     // new list
+    class _testbuffer :
+        PythonDynamicExtensionModule
+    {
+        public _testbuffer()
+            :
+            base("_testbuffer")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _json :
         PythonDynamicExtensionModule
@@ -768,14 +777,6 @@ namespace Python
 
 #if false
     // old list
-    class TestBufferModule :
-        PythonDynamicExtensionModule
-    {
-        public TestBufferModule()
-            :
-            base("_testbuffer")
-        {}
-    }
 
     class TestImportMultipleModule :
         PythonDynamicExtensionModule

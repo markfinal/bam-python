@@ -44,6 +44,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_testbuffer>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_testcapi>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_elementtree>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
@@ -110,18 +111,6 @@ namespace Python
 
 #if false
                 // old list
-                var timeModule = module.Include<TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                timeModule.DependsOn(platIndependentModules);
-
-                var atexitModule = module.Include<AtexitModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                atexitModule.DependsOn(platIndependentModules);
-
-                var jsonModule = module.Include<JsonModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                jsonModule.DependsOn(platIndependentModules);
-
-                var testBufferModule = module.Include<TestBufferModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                testBufferModule.DependsOn(platIndependentModules);
-
                 var testImportMultipleModule = module.Include<TestImportMultipleModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 testImportMultipleModule.DependsOn(platIndependentModules);
 
@@ -137,18 +126,8 @@ namespace Python
                 var pwdModule = module.Include<PwdModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 pwdModule.DependsOn(platIndependentModules);
 
-                #if false
-                var sslModule = module.Include<SSLModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                sslModule.DependsOn(platIndependentModules);
-
                 var hashlibModule = module.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 hashlibModule.DependsOn(platIndependentModules);
-                #endif
-
-                #if false
-                var cursesModule = module.Include<CursesModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                cursesModule.DependsOn(platIndependentModules);
-                #endif
 #endif
             }
 
