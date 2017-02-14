@@ -701,7 +701,21 @@ namespace Python
     {
         public fpetest()
             :
-            base("fpetest", "fpetestmodule")
+            base(
+                "fpetest",
+                "fpetestmodule",
+                settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            if (settings.Module.BuildEnvironment.Configuration != EConfiguration.Debug)
+                            {
+                                var compiler = settings as C.ICommonCompilerSettings;
+                                compiler.DisableWarnings.AddUnique("4723"); // python-3.5.1\modules\fpetestmodule.c(162) : warning C4723: potential divide by 0
+                            }
+                        }
+                    })
         { }
     }
 
