@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _lsprof :
+        PythonDynamicExtensionModule
+    {
+        public _lsprof()
+            :
+            base("_lsprof", new Bam.Core.StringArray("_lsprof", "rotatingtree"))
+        { }
+    }
+
     class _testmultiphase :
         PythonDynamicExtensionModule
     {
@@ -796,14 +806,6 @@ namespace Python
 #if false
     // old list
 
-    class LSProfModule :
-        PythonDynamicExtensionModule
-    {
-        public LSProfModule()
-            :
-            base("_lsprof", new Bam.Core.StringArray("_lsprof", "rotatingtree"))
-        {}
-    }
 
     class OpCodeModule :
         PythonDynamicExtensionModule

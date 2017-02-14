@@ -251,10 +251,13 @@ namespace Python
             // see PC/config.c
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c"); // part of _lsprof
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c"); // part of cmath
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
@@ -283,16 +286,9 @@ namespace Python
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
 
                 // old
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c"); // needs OpenSSL
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testbuffer.c");
-                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_testcapimodule.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testimportmultiple.c");
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/_testmultiphase.c");
             }
             else
             {
