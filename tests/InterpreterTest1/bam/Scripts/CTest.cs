@@ -110,9 +110,6 @@ namespace InterpreterTest1
                 var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", app);
                 platIndependentModules.CopiedFilename = "python3.5";
                 this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", app);
-
-                var timeModule = this.Include<Python.TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", app);
-                timeModule.DependsOn(platIndependentModules);
             }
         }
     }
