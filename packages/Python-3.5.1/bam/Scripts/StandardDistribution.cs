@@ -115,15 +115,13 @@ namespace Python
 
 #if false
                 // old list
-                var pwdModule = module.Include<PwdModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                pwdModule.DependsOn(platIndependentModules);
-
                 var hashlibModule = module.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 hashlibModule.DependsOn(platIndependentModules);
 #endif
             }
 
             // currently not buildable
+            //moduleList.Add(module.Include<_hashlib>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_ssl>(C.DynamicLibrary.Key, execDir, root));
             //moduleList.Add(module.Include<_tkinter>(C.DynamicLibrary.Key, execDir, root));

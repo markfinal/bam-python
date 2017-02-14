@@ -177,6 +177,16 @@ namespace Python
     }
 
     // new list
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
+    class _hashlib :
+        PythonDynamicExtensionModule
+    {
+        public _hashlib()
+            :
+            base("_hashlib", "_hashopenssl")
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _opcode :
         PythonDynamicExtensionModule
@@ -814,25 +824,7 @@ namespace Python
     }
 
 #if false
-    // old list
-    class PwdModule :
-        PythonDynamicExtensionModule
-    {
-        public PwdModule()
-            :
-            base("pwd", "pwdmodule")
-        {}
-    }
-
     // TODO: deprecated APIs called on OSX
-    class HashLibModule :
-        PythonDynamicExtensionModule
-    {
-        public HashLibModule()
-            :
-            base("_hashlib", "_hashopenssl")
-        {}
-    }
 
     // TODO sqlite3
 #endif
