@@ -32,7 +32,7 @@ namespace Python
 {
     static class StandardDistribution
     {
-        public static void
+        public static Publisher.CollatedDirectory
         Publish(
             Publisher.Collation module,
             Publisher.CollatedFile root)
@@ -130,6 +130,8 @@ namespace Python
             {
                 mod.DependsOn(platIndependentModules);
             }
+
+            return platIndependentModules;
         }
     }
 }

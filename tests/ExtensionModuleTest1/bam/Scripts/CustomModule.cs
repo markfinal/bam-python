@@ -49,8 +49,10 @@ namespace ExtensionModuleTest1
             base.Init(parent);
 
             var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            Python.StandardDistribution.Publish(this, app);
-            this.Include<CustomModule>(C.Plugin.Key, ".", app); // TODO: is there a better place than next to the shell?
+            var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
+
+            var custommodule = this.Include<CustomModule>(C.Plugin.Key, ".", app); // TODO: is there a better place than next to the shell?
+            custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
         }
     }
 }
