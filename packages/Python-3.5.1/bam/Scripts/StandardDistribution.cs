@@ -104,6 +104,7 @@ namespace Python
                 moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<xxsubtype>(C.DynamicLibrary.Key, execDir, root));
 
 #if false
                 // old list

@@ -736,6 +736,16 @@ namespace Python
         { }
     }
 
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class xxsubtype :
+        PythonDynamicExtensionModule
+    {
+        public xxsubtype()
+            :
+            base("xxsubtype")
+        { }
+    }
+
 #if false
     // old list
     class TimeModule :

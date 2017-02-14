@@ -278,6 +278,8 @@ namespace Python
                             compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
                         }));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
+
                 // old
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c");
                 //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
@@ -334,7 +336,6 @@ namespace Python
 
             // TODO: review
             builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
