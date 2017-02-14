@@ -176,7 +176,6 @@ namespace Python
         }
     }
 
-    // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires sqlite
     class _sqlite :
         DynamicExtensionModule

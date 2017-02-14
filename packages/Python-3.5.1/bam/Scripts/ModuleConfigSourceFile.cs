@@ -70,7 +70,6 @@ namespace Python
             var declarations = new System.Text.StringBuilder();
             var inittab = new System.Text.StringBuilder();
 
-            // new list
             declarations.AppendLine("extern PyObject* PyInit__signal(void);"); // required by library calls
             inittab.AppendLine("\t{\"_signal\", PyInit__signal},");
 
@@ -130,12 +129,6 @@ namespace Python
 
             declarations.AppendLine("extern PyObject* PyInit__symtable(void);");
             inittab.AppendLine("\t{\"_symtable\", PyInit__symtable},");
-
-            // old list
-
-            // TODO: should be builtin?
-            //declarations.AppendLine("extern PyObject* PyInit_time(void);");
-            //inittab.AppendLine("\t{\"time\", PyInit_time},");
 
             configText = configText.Replace("/* -- ADDMODULE MARKER 1 -- */",
                 declarations.ToString());

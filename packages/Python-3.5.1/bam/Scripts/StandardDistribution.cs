@@ -70,7 +70,6 @@ namespace Python
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
                 // extension modules
-                // new list
                 moduleList.Add(module.Include<_opcode>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_lsprof>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_json>(C.DynamicLibrary.Key, execDir, root));
@@ -115,12 +114,6 @@ namespace Python
                 moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<xxsubtype>(C.DynamicLibrary.Key, execDir, root));
-
-#if false
-                // old list
-                var hashlibModule = module.Include<HashLibModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                hashlibModule.DependsOn(platIndependentModules);
-#endif
             }
 
             // currently not buildable
