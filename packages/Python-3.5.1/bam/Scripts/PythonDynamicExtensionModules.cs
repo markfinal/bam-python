@@ -31,7 +31,7 @@ using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python/DynamicModules")]
-    class PythonDynamicExtensionModule :
+    class DynamicExtensionModule :
         C.Plugin
     {
         private string ModuleName;
@@ -40,7 +40,7 @@ namespace Python
         private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
         private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles,
             Bam.Core.StringArray libraries,
@@ -54,21 +54,21 @@ namespace Python
             this.LinkerPatch = linkerPatch;
         }
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles)
             :
             this(moduleName, sourceFiles, null, null, null)
         {}
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             string sourceFile)
             :
             this(moduleName, new Bam.Core.StringArray(sourceFile))
         {}
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             string sourceFile,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch)
@@ -76,7 +76,7 @@ namespace Python
             this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, null)
         {}
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             string sourceFile,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch,
@@ -85,7 +85,7 @@ namespace Python
             this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, linkerPatch)
         { }
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch)
@@ -93,7 +93,7 @@ namespace Python
             this(moduleName, sourceFiles, null, compilationPatch, null)
         { }
 
-        protected PythonDynamicExtensionModule(
+        protected DynamicExtensionModule(
             string moduleName)
             :
             this(moduleName, new Bam.Core.StringArray(System.String.Format("Modules/{0}", moduleName)))
@@ -179,7 +179,7 @@ namespace Python
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires sqlite
     class _sqlite :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _sqlite()
             :
@@ -195,7 +195,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
     class _hashlib :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _hashlib()
             :
@@ -205,7 +205,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _opcode :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _opcode()
             :
@@ -215,7 +215,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _lsprof :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _lsprof()
             :
@@ -224,7 +224,7 @@ namespace Python
     }
 
     class _testmultiphase :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _testmultiphase()
             :
@@ -233,7 +233,7 @@ namespace Python
     }
 
     class _testimportmultiple :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _testimportmultiple()
             :
@@ -242,7 +242,7 @@ namespace Python
     }
 
     class _testbuffer :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _testbuffer()
             :
@@ -252,7 +252,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _json :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _json()
             :
@@ -262,7 +262,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _thread :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _thread()
             :
@@ -272,7 +272,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class array :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public array()
             :
@@ -282,7 +282,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class cmath :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public cmath()
             :
@@ -292,7 +292,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class math :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public math()
             :
@@ -302,7 +302,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _struct :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _struct()
             :
@@ -311,7 +311,7 @@ namespace Python
     }
 
     class _testcapi :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _testcapi()
             :
@@ -321,7 +321,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _random :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _random()
             :
@@ -330,7 +330,7 @@ namespace Python
     }
 
     class _elementtree :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _elementtree()
             :
@@ -348,7 +348,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _pickle :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _pickle()
             :
@@ -358,7 +358,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _datetime :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _datetime()
             :
@@ -368,7 +368,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _bisect :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _bisect()
             :
@@ -378,7 +378,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _heapq :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _heapq()
             :
@@ -387,7 +387,7 @@ namespace Python
     }
 
     class unicodedata :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public unicodedata()
             :
@@ -397,7 +397,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class fcntl :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public fcntl()
             :
@@ -411,7 +411,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class spwd :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public spwd()
             :
@@ -421,7 +421,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class grp :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public grp()
             :
@@ -430,7 +430,7 @@ namespace Python
     }
 
     class select :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public select()
             :
@@ -448,7 +448,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class mmap :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public mmap()
             :
@@ -458,7 +458,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _csv :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _csv()
             :
@@ -467,7 +467,7 @@ namespace Python
     }
 
     class _socket :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _socket()
             :
@@ -495,7 +495,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSLL
     class _ssl :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _ssl()
             :
@@ -505,7 +505,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not linkable on Windows
     class _crypt :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _crypt()
             :
@@ -523,7 +523,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class nis :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public nis()
             :
@@ -533,7 +533,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class termios :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public termios()
             :
@@ -543,7 +543,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class resource :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public resource()
             :
@@ -553,7 +553,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class _posixsubprocess :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _posixsubprocess()
             :
@@ -563,7 +563,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class audioop :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public audioop()
             :
@@ -573,7 +573,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _md5 :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _md5()
             :
@@ -583,7 +583,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _sha1 :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _sha1()
             :
@@ -593,7 +593,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _sha256 :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _sha256()
             :
@@ -603,7 +603,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _sha512 :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _sha512()
             :
@@ -613,7 +613,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // no tcl.h
     class _tkinter :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _tkinter()
             :
@@ -623,7 +623,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not buildable on Windows
     class syslog :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public syslog()
             :
@@ -633,7 +633,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)] // not buildable on Windows or Linux (by default)
     class _curses :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _curses()
             :
@@ -643,7 +643,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)] // not buildable on Windows or Linux (by default)
     class _curses_panel :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _curses_panel()
             :
@@ -653,7 +653,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class _dbm :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _dbm()
             :
@@ -663,7 +663,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)]
     class _gdbm :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _gdbm()
             :
@@ -673,7 +673,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class binascii :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public binascii()
             :
@@ -683,7 +683,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class parser :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public parser()
             :
@@ -692,7 +692,7 @@ namespace Python
     }
 
     class fpectl :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public fpectl()
             :
@@ -701,7 +701,7 @@ namespace Python
     }
 
     class fpetest :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public fpetest()
             :
@@ -725,7 +725,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class zlib :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public zlib()
             :
@@ -751,7 +751,7 @@ namespace Python
     }
 
     class pyexpat :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public pyexpat()
             :
@@ -780,7 +780,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _multibytecodec :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _multibytecodec()
             :
@@ -790,7 +790,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_cn :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_cn()
             :
@@ -800,7 +800,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_hk :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_hk()
             :
@@ -810,7 +810,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_iso2022 :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_iso2022()
             :
@@ -820,7 +820,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_jp :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_jp()
             :
@@ -830,7 +830,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_kr :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_kr()
             :
@@ -840,7 +840,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _codecs_tw :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public _codecs_tw()
             :
@@ -850,7 +850,7 @@ namespace Python
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class xxsubtype :
-        PythonDynamicExtensionModule
+        DynamicExtensionModule
     {
         public xxsubtype()
             :
