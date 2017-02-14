@@ -30,7 +30,7 @@
 using Bam.Core;
 namespace Python
 {
-    [Bam.Core.ModuleGroup("Thirdparty/Python/Module")]
+    [Bam.Core.ModuleGroup("Thirdparty/Python/DynamicModules")]
     class PythonDynamicExtensionModule :
         C.Plugin
     {
