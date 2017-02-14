@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _opcode :
+        PythonDynamicExtensionModule
+    {
+        public _opcode()
+            :
+            base("_opcode")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class _lsprof :
         PythonDynamicExtensionModule
     {
@@ -805,17 +815,6 @@ namespace Python
 
 #if false
     // old list
-
-
-    class OpCodeModule :
-        PythonDynamicExtensionModule
-    {
-        public OpCodeModule()
-            :
-            base("_opcode")
-        {}
-    }
-
     class PwdModule :
         PythonDynamicExtensionModule
     {

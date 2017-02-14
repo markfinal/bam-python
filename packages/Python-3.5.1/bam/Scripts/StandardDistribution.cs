@@ -71,6 +71,7 @@ namespace Python
 
                 // extension modules
                 // new list
+                moduleList.Add(module.Include<_opcode>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_lsprof>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_json>(C.DynamicLibrary.Key, execDir, root));
                 moduleList.Add(module.Include<_thread>(C.DynamicLibrary.Key, execDir, root));
@@ -114,12 +115,6 @@ namespace Python
 
 #if false
                 // old list
-                var lsprofModule = module.Include<LSProfModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                lsprofModule.DependsOn(platIndependentModules);
-
-                var opcodeModule = module.Include<OpCodeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                opcodeModule.DependsOn(platIndependentModules);
-
                 var pwdModule = module.Include<PwdModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 pwdModule.DependsOn(platIndependentModules);
 
