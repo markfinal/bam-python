@@ -178,6 +178,16 @@ namespace Python
 
     // new list
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class _thread :
+        PythonDynamicExtensionModule
+    {
+        public _thread()
+            :
+            base("_thread", "_threadmodule")
+        { }
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
     class array :
         PythonDynamicExtensionModule
     {

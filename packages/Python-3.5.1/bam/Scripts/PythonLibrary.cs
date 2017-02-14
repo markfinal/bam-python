@@ -251,6 +251,7 @@ namespace Python
             // see PC/config.c
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
@@ -336,7 +337,6 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
 
             // TODO: review
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
