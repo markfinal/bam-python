@@ -52,7 +52,7 @@ namespace ExtensionModuleTest1
             var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
 
-            var custommodule = this.Include<CustomModule>(C.Plugin.Key, ".", app); // TODO: is there a better place than next to the shell?
+            var custommodule = this.Include<CustomModule>(C.Plugin.Key, Python.StandardDistribution.ModuleDirectory, app);
             custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
         }
     }

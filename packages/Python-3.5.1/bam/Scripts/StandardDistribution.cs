@@ -32,6 +32,20 @@ namespace Python
 {
     static class StandardDistribution
     {
+        public readonly static string ModuleDirectory;
+
+        static StandardDistribution()
+        {
+            if (Bam.Core.OSUtilities.IsWindowsHosting)
+            {
+                ModuleDirectory = "DLLs";
+            }
+            else
+            {
+                ModuleDirectory = "lib/python3.5/lib-dynload";
+            }
+        }
+
         public static Publisher.CollatedDirectory
         Publish(
             Publisher.Collation module,
@@ -40,21 +54,19 @@ namespace Python
             var pyLibCopy = module.Include<PythonLibrary>(C.DynamicLibrary.Key, ".", root);
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
 
-            var execDir = module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows) ? "DLLs" : "lib/python3.5/lib-dynload";
-
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
-            moduleList.Add(module.Include<_testmultiphase>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_testimportmultiple>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_testbuffer>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_testcapi>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_elementtree>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<select>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<_socket>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, execDir, root));
-            moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, execDir, root));
+            moduleList.Add(module.Include<_testmultiphase>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<_testimportmultiple>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<_testbuffer>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<_testcapi>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<_elementtree>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<unicodedata>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<select>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<_socket>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<fpectl>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<fpetest>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            moduleList.Add(module.Include<pyexpat>(C.DynamicLibrary.Key, ModuleDirectory, root));
 
             Publisher.CollatedDirectory platIndependentModules = null;
             if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -70,60 +82,60 @@ namespace Python
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
                 // extension modules
-                moduleList.Add(module.Include<_opcode>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_lsprof>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_json>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_thread>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<array>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<cmath>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<math>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_struct>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_random>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_pickle>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_datetime>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_bisect>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_heapq>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<fcntl>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<grp>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<mmap>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_csv>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_crypt>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<nis>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<termios>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<resource>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_posixsubprocess>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_sha512>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<syslog>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<_opcode>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_lsprof>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_json>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_thread>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<array>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<cmath>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<math>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_struct>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_random>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_pickle>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_datetime>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_bisect>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_heapq>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<fcntl>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<grp>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<mmap>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_csv>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_crypt>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<nis>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<termios>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<resource>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_posixsubprocess>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<audioop>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_md5>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_sha1>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_sha256>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_sha512>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<syslog>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
-                    moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, execDir, root));
-                    moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, execDir, root));
+                    moduleList.Add(module.Include<_curses>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                    moduleList.Add(module.Include<_curses_panel>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 }
-                moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_iso2022>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, execDir, root));
-                moduleList.Add(module.Include<xxsubtype>(C.DynamicLibrary.Key, execDir, root));
+                moduleList.Add(module.Include<binascii>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<parser>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<zlib>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_multibytecodec>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_cn>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_hk>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_iso2022>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_jp>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<xxsubtype>(C.DynamicLibrary.Key, ModuleDirectory, root));
             }
 
             // currently not buildable
-            //moduleList.Add(module.Include<_sqlite>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<_hashlib>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<_ssl>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<_tkinter>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<_gdbm>(C.DynamicLibrary.Key, execDir, root));
-            //moduleList.Add(module.Include<_dbm>(C.DynamicLibrary.Key, execDir, root));
+            //moduleList.Add(module.Include<_sqlite>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<_hashlib>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<_ssl>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<_tkinter>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<_gdbm>(C.DynamicLibrary.Key, ModuleDirectory, root));
+            //moduleList.Add(module.Include<_dbm>(C.DynamicLibrary.Key, ModuleDirectory, root));
 
             // ensure that modules are copied AFTER the platform independent modules
             foreach (var mod in moduleList)
