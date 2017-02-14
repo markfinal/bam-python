@@ -44,6 +44,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_testimportmultiple>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_testbuffer>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_testcapi>(C.DynamicLibrary.Key, execDir, root));
             moduleList.Add(module.Include<_elementtree>(C.DynamicLibrary.Key, execDir, root));
@@ -111,9 +112,6 @@ namespace Python
 
 #if false
                 // old list
-                var testImportMultipleModule = module.Include<TestImportMultipleModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
-                testImportMultipleModule.DependsOn(platIndependentModules);
-
                 var testMultiPhaseModule = module.Include<TestMultiPhaseModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", root);
                 testMultiPhaseModule.DependsOn(platIndependentModules);
 

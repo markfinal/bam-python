@@ -177,6 +177,15 @@ namespace Python
     }
 
     // new list
+    class _testimportmultiple :
+        PythonDynamicExtensionModule
+    {
+        public _testimportmultiple()
+            :
+            base("_testimportmultiple")
+        { }
+    }
+
     class _testbuffer :
         PythonDynamicExtensionModule
     {
@@ -777,15 +786,6 @@ namespace Python
 
 #if false
     // old list
-
-    class TestImportMultipleModule :
-        PythonDynamicExtensionModule
-    {
-        public TestImportMultipleModule()
-            :
-            base("_testimportmultiple")
-        {}
-    }
 
     class TestMultiPhaseModule :
         PythonDynamicExtensionModule
