@@ -147,6 +147,7 @@ namespace Python
                     contents.AppendLine("#define HAVE_ROUND");
                     contents.AppendLine("#define HAVE_HYPOT");
                 }
+                contents.AppendLine("#define WITH_DOC_STRINGS"); // or there is no documentation
                 return contents.ToString();
             }
         }
