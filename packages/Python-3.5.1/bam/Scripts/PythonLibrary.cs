@@ -298,12 +298,12 @@ namespace Python
                 // and separate in the distribution
                 // note that you need to read Setup.dist backward, as some modules are mentioned twice
                 // and it is the 'topmost' that overrules
-                builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c");
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
             }
 
             // common statically compiled extension modules
             builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
+            builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c"); // implements nt module on Windows
             builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
