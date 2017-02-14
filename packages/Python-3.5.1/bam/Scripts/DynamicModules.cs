@@ -46,14 +46,43 @@ namespace Python
         { }
     }
 
+#if !PYTHON_WITH_OPENSSL
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
+#endif
     class _hashlib :
         DynamicExtensionModule
     {
         public _hashlib()
             :
-            base("_hashlib", "Modules/_hashopenssl")
+            base(
+                "_hashlib",
+                "Modules/_hashopenssl",
+                null,
+                settings =>
+                {
+                    var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                    if (null != vcLinker)
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        //linker.Libraries.AddUnique("Crypt32.lib");
+                        linker.Libraries.AddUnique("User32.lib");
+                        linker.Libraries.AddUnique("Advapi32.lib");
+                        //linker.Libraries.AddUnique("Ws2_32.lib");
+                        linker.Libraries.AddUnique("Gdi32.lib");
+                    }
+                })
         { }
+
+#if PYTHON_WITH_OPENSSL
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            this.CompileAndLinkAgainst<openssl.OpenSSL>(this.moduleSourceModules);
+        }
+#endif
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
@@ -346,14 +375,52 @@ namespace Python
         { }
     }
 
+#if !PYTHON_WITH_OPENSSL
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires OpenSSL
+#endif
     class _ssl :
         DynamicExtensionModule
     {
         public _ssl()
             :
-            base("_ssl")
+            base(
+                "_ssl",
+                "Modules/_ssl",
+                settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ssl.c(2496): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
+                            compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ssl.c(3630): warning C4267: 'function': conversion from 'size_t' to 'long', possible loss of data
+                        }
+                    },
+                settings =>
+                    {
+                        var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                        if (null != vcLinker)
+                        {
+                            var linker = settings as C.ICommonLinkerSettings;
+                            linker.Libraries.AddUnique("Crypt32.lib");
+                            linker.Libraries.AddUnique("User32.lib");
+                            linker.Libraries.AddUnique("Advapi32.lib");
+                            linker.Libraries.AddUnique("Ws2_32.lib");
+                            linker.Libraries.AddUnique("Gdi32.lib");
+                        }
+                    })
         { }
+
+#if PYTHON_WITH_OPENSSL
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            this.CompileAndLinkAgainst<openssl.OpenSSL>(this.moduleSourceModules);
+        }
+#endif
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // not linkable on Windows

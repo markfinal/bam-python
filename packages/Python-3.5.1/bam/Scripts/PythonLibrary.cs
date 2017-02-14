@@ -285,10 +285,6 @@ namespace Python
                         }));
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
-
-                // old
-                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_hashopenssl.c"); // needs OpenSSL
-                //builtinModuleSource.AddFiles("$(packagedir)/Modules/_ssl.c"); // needs OpenSSL
             }
             else
             {

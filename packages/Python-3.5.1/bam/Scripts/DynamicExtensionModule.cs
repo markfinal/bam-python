@@ -39,6 +39,7 @@ namespace Python
         private Bam.Core.StringArray Libraries;
         private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
         private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
+        protected C.CObjectFileCollection moduleSourceModules;
 
         protected DynamicExtensionModule(
             string moduleName,
@@ -116,12 +117,12 @@ namespace Python
             }
             this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
 
-            var source = this.CreateCSourceContainer();
+            this.moduleSourceModules = this.CreateCSourceContainer();
             foreach (var basename in this.SourceFiles)
             {
-                source.AddFiles(System.String.Format("$(packagedir)/{0}.c", basename));
+                this.moduleSourceModules.AddFiles(System.String.Format("$(packagedir)/{0}.c", basename));
             }
-            source.PrivatePatch(settings =>
+            this.moduleSourceModules.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
@@ -153,10 +154,10 @@ namespace Python
                 });
             if (null != this.CompilationPatch)
             {
-                source.PrivatePatch(this.CompilationPatch);
+                this.moduleSourceModules.PrivatePatch(this.CompilationPatch);
             }
 
-            this.CompileAndLinkAgainst<PythonLibrary>(source);
+            this.CompileAndLinkAgainst<PythonLibrary>(this.moduleSourceModules);
 
             if (this.Libraries != null)
             {
