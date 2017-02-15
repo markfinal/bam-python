@@ -54,6 +54,32 @@ namespace Python
             get
             {
                 var contents = new System.Text.StringBuilder();
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    contents.AppendLine("CC = clang");
+                    contents.AppendLine("CXX = clang++");
+                    contents.AppendLine("OPT = ");
+                    contents.AppendLine("CFLAGS = ");
+                    contents.AppendLine("CCSHARED = ");
+                    contents.AppendLine("LDSHARED = ");
+                    contents.AppendLine("SHLIB_SUFFIX = .so");
+                    contents.AppendLine("AR = ar");
+                    contents.AppendLine("ARFLAGS = rc");
+                    contents.AppendLine("EXT_SUFFIX = .so");
+                }
+                else
+                {
+                    contents.AppendLine("CC = gcc");
+                    contents.AppendLine("CXX = g++");
+                    contents.AppendLine("OPT = ");
+                    contents.AppendLine("CFLAGS = ");
+                    contents.AppendLine("CCSHARED = -fPIC");
+                    contents.AppendLine("LDSHARED = ");
+                    contents.AppendLine("SHLIB_SUFFIX = .so");
+                    contents.AppendLine("AR = ar");
+                    contents.AppendLine("ARFLAGS = rc");
+                    contents.AppendLine("EXT_SUFFIX = .so");
+                }
                 return contents.ToString();
             }
         }
