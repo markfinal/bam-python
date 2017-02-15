@@ -83,6 +83,10 @@ namespace Python
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
                 // extension modules
+                if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    moduleList.Add(module.Include<_scproxy>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                }
                 moduleList.Add(module.Include<_opcode>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 moduleList.Add(module.Include<_lsprof>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 moduleList.Add(module.Include<_json>(C.DynamicLibrary.Key, ModuleDirectory, root));

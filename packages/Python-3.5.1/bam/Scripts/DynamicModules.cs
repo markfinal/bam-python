@@ -825,4 +825,34 @@ namespace Python
             "Modules/_ctypes/libffi_msvc/win64.asm")
         { }
     }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)]
+    class _scproxy :
+        DynamicExtensionModule
+    {
+        public _scproxy()
+            :
+            base(
+            "_scproxy",
+            new Bam.Core.StringArray("Modules/_scproxy"),
+            settings =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("tautological-pointer-compare"); // Python-3.5.1/Modules/_scproxy.c:74:10: error: comparison of address of 'kSCPropNetProxiesExcludeSimpleHostnames' not equal to a null pointer is always true [-Werror,-Wtautological-pointer-compare]
+                    }
+                },
+            settings =>
+                {
+                    var osxLinker = settings as C.ICommonLinkerSettingsOSX;
+                    if (null != osxLinker)
+                    {
+                        osxLinker.Frameworks.AddUnique("SystemConfiguration");
+                        osxLinker.Frameworks.AddUnique("CoreFoundation");
+                    }
+                })
+        {}
+    }
 }
