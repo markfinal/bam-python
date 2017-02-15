@@ -45,7 +45,7 @@ namespace Python
         {
             get
             {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/MakeFile");
+                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/Makefile");
             }
         }
 
