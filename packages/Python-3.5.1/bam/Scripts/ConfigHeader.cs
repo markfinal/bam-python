@@ -151,6 +151,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_UNAME"); // available on *nix style OSs, exposes os.uname()
                 contents.AppendLine("#define HAVE_SYS_UTSNAME_H"); // required for uname
                 contents.AppendLine("#define HAVE_STRFTIME"); // required for time.strftime
+                contents.AppendLine("#define HAVE_READLINK 1"); // required for os.readlink
                 return contents.ToString();
             }
         }
