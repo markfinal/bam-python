@@ -82,6 +82,9 @@ namespace Python
 
                 module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.5", root);
 
+                module.Include<PyConfigHeader>(PyConfigHeader.Key, "include/python3.5", root); // needed by distutils
+                module.Include<PyMakeFile>(PyMakeFile.Key, "lib/python3.5/config-3.5", root); // needed by distutils
+
                 // extension modules
                 if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
