@@ -148,6 +148,8 @@ namespace Python
                     contents.AppendLine("#define HAVE_HYPOT");
                 }
                 contents.AppendLine("#define WITH_DOC_STRINGS"); // or there is no documentation
+                contents.AppendLine("#define HAVE_UNAME"); // available on *nix style OSs, exposes os.uname()
+                contents.AppendLine("#define HAVE_SYS_UTSNAME_H"); // required for uname
                 return contents.ToString();
             }
         }
