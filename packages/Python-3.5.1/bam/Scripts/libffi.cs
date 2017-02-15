@@ -155,17 +155,30 @@ namespace Python
             base.Init(parent);
 
             var source = this.CreateCSourceContainer("$(packagedir)/Modules/_ctypes/libffi/src/*.c");
+            source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+            source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi.c");
 
             source.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
+                    compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                    compiler.DisableWarnings.AddUnique("empty-body"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                    compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
 
                     var cOnly = settings as C.ICOnlyCompilerSettings;
                     cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
 
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     gccCompiler.PositionIndependentCode = true; // since it's being included into a dynamic library
+                    gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi/src/x86/ffi.c:867:0: error: ISO C forbids an empty translation unit [-Werror=pedantic]
+                });
+
+            var asmSource = this.CreateAssemblerSourceContainer("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
+            asmSource.PrivatePatch(settings =>
+                {
+                    var assembler = settings as C.ICommonAssemblerSettings;
+                    assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
                 });
 
             var copyheaders = Bam.Core.Graph.Instance.FindReferencedModule<CopyNonPublicHeadersToPublic>();
@@ -179,6 +192,8 @@ namespace Python
             var ffiConfig = Bam.Core.Graph.Instance.FindReferencedModule<libfficonfig>();
             source.UsePublicPatches(ffiConfig);
             source.DependsOn(ffiConfig);
+            asmSource.UsePublicPatches(ffiConfig);
+            asmSource.DependsOn(ffiConfig);
         }
     }
 }
