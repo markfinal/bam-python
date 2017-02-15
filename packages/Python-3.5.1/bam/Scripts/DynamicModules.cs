@@ -561,7 +561,7 @@ namespace Python
     {
         public _curses()
             :
-            base("_curses", new Bam.Core.StringArray("Modules/_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null, null)
+            base("_curses", new Bam.Core.StringArray("Modules/_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null, null, null)
         { }
     }
 
@@ -571,7 +571,7 @@ namespace Python
     {
         public _curses_panel()
             :
-            base("_curses_panel", new Bam.Core.StringArray("Modules/_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null, null)
+            base("_curses_panel", new Bam.Core.StringArray("Modules/_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null, null, null)
         { }
     }
 
@@ -799,6 +799,10 @@ namespace Python
 #if BAM_HOST_WIN64
                 ,"Modules/_ctypes/libffi_msvc/ffi"
                 ,"Modules/_ctypes/libffi_msvc/prep_cif"
+#elif BAM_HOST_OSX64
+                ,"Modules/_ctypes/libffi_osx/ffi"
+                ,"Modules/_ctypes/libffi_osx/x86/x86-ffi64"
+                ,"Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin"
 #endif
                 ),
             null,
@@ -811,6 +815,22 @@ namespace Python
                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                         compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        compiler.PreprocessorDefines.Add("MACOSX");
+                        var cOnly = settings as C.ICOnlyCompilerSettings;
+                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for 'inline'
+                    }
+                    var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
+                    if (null != clangAssembler)
+                    {
+                        var assembler = settings as C.ICommonAssemblerSettings;
+                        assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        assembler.PreprocessorDefines.Add("MACOSX");
+                    }
                 },
             settings =>
                 {
@@ -822,7 +842,28 @@ namespace Python
                         linker.Libraries.AddUnique("OleAut32.lib");
                     }
                 },
-            "Modules/_ctypes/libffi_msvc/win64.asm")
+#if BAM_HOST_WIN64
+            new Bam.Core.StringArray("Modules/_ctypes/libffi_msvc/win64.asm"),
+            null
+#elif BAM_HOST_OSX64
+            new Bam.Core.StringArray(
+                "Modules/_ctypes/libffi_osx/x86/darwin64.S",
+                "Modules/_ctypes/libffi_osx/x86/x86-darwin.S"),
+            settings =>
+            {
+                var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
+                if (null != clangAssembler)
+                {
+                    var assembler = settings as C.ICommonAssemblerSettings;
+                    assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                    assembler.PreprocessorDefines.Add("MACOSX");
+                }
+            }
+#else
+            null,
+            null
+#endif
+            )
         { }
     }
 

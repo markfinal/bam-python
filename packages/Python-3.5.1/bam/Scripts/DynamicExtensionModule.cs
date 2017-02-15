@@ -40,6 +40,7 @@ namespace Python
         private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
         private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
         private Bam.Core.StringArray AssemblerFiles;
+        private Bam.Core.Module.PrivatePatchDelegate AssemblerPatch;
 
         protected C.CObjectFileCollection moduleSourceModules;
 
@@ -49,21 +50,23 @@ namespace Python
             Bam.Core.StringArray libraries,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch,
             Bam.Core.Module.PrivatePatchDelegate linkerPatch,
-            string assemblerFile)
+            Bam.Core.StringArray assemblerFiles,
+            Bam.Core.Module.PrivatePatchDelegate assemberPatch)
         {
             this.ModuleName = moduleName;
             this.SourceFiles = sourceFiles;
             this.Libraries = libraries;
             this.CompilationPatch = compilationPatch;
             this.LinkerPatch = linkerPatch;
-            this.AssemblerFiles = (null != assemblerFile) ? new Bam.Core.StringArray(assemblerFile) : null;
+            this.AssemblerFiles = (null != assemblerFiles) ? assemblerFiles : null;
+            this.AssemblerPatch = assemberPatch;
         }
 
         protected DynamicExtensionModule(
             string moduleName,
             Bam.Core.StringArray sourceFiles)
             :
-            this(moduleName, sourceFiles, null, null, null, null)
+            this(moduleName, sourceFiles, null, null, null, null, null)
         {}
 
         protected DynamicExtensionModule(
@@ -79,7 +82,7 @@ namespace Python
             Bam.Core.Module.PrivatePatchDelegate compilationPatch,
             Bam.Core.Module.PrivatePatchDelegate linkerPatch)
             :
-            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, linkerPatch, null)
+            this(moduleName, new Bam.Core.StringArray(sourceFile), null, compilationPatch, linkerPatch, null, null)
         { }
 
         protected DynamicExtensionModule(
@@ -87,7 +90,7 @@ namespace Python
             Bam.Core.StringArray sourceFiles,
             Bam.Core.Module.PrivatePatchDelegate compilationPatch)
             :
-            this(moduleName, sourceFiles, null, compilationPatch, null, null)
+            this(moduleName, sourceFiles, null, compilationPatch, null, null, null)
         { }
 
         protected DynamicExtensionModule(
@@ -96,7 +99,7 @@ namespace Python
             Bam.Core.Module.PrivatePatchDelegate compilationPatch,
             Bam.Core.Module.PrivatePatchDelegate linkerPatch)
             :
-            this(moduleName, sourceFiles, null, compilationPatch, linkerPatch, null)
+            this(moduleName, sourceFiles, null, compilationPatch, linkerPatch, null, null)
         { }
 
         protected DynamicExtensionModule(
@@ -168,6 +171,10 @@ namespace Python
                 foreach (var leafname in this.AssemblerFiles)
                 {
                     assemblerSource.AddFiles(System.String.Format("$(packagedir)/{0}", leafname));
+                }
+                if (null != this.AssemblerPatch)
+                {
+                    assemblerSource.PrivatePatch(this.AssemblerPatch);
                 }
             }
 
