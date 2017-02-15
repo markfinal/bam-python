@@ -31,35 +31,6 @@ using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    class PyMakeFile :
-        C.ProceduralHeaderFile
-    {
-        protected override void
-        Init(
-            Bam.Core.Module parent)
-        {
-            base.Init(parent);
-        }
-
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/MakeFile");
-            }
-        }
-
-        protected override string Contents
-        {
-            get
-            {
-                var contents = new System.Text.StringBuilder();
-                return contents.ToString();
-            }
-        }
-    }
-
-    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PyConfigHeader :
         C.ProceduralHeaderFile
     {
