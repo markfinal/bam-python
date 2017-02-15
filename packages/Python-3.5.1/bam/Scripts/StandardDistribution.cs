@@ -56,6 +56,7 @@ namespace Python
 
             // dynamic library extension modules common to all platforms
             var moduleList = new Bam.Core.Array<Bam.Core.Module>();
+            moduleList.Add(module.Include<_ctypes>(C.DynamicLibrary.Key, ModuleDirectory, root));
             moduleList.Add(module.Include<_testmultiphase>(C.DynamicLibrary.Key, ModuleDirectory, root));
             moduleList.Add(module.Include<_testimportmultiple>(C.DynamicLibrary.Key, ModuleDirectory, root));
             moduleList.Add(module.Include<_testbuffer>(C.DynamicLibrary.Key, ModuleDirectory, root));

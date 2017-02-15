@@ -37,8 +37,8 @@ namespace Python
         public _sqlite()
             :
             base("_sqlite",
-                 "Modules/_sqlite/*",
-                settings =>
+                 new Bam.Core.StringArray("Modules/_sqlite/*"),
+                 settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("MODULE_NAME", "\"sqlite3\"");
@@ -217,7 +217,7 @@ namespace Python
         public _elementtree()
             :
             base("_elementtree",
-                 "Modules/_elementtree",
+                 new Bam.Core.StringArray("Modules/_elementtree"),
                  settings =>
                      {
                          var compiler = settings as C.ICommonCompilerSettings;
@@ -283,11 +283,13 @@ namespace Python
     {
         public fcntl()
             :
-            base("fcntl", "Modules/fcntlmodule", settings =>
-            {
-                var compiler = settings as C.ICOnlyCompilerSettings;
-                compiler.LanguageStandard = C.ELanguageStandard.C99;
-            })
+            base("fcntl",
+            new Bam.Core.StringArray("Modules/fcntlmodule"),
+            settings =>
+                {
+                    var compiler = settings as C.ICOnlyCompilerSettings;
+                    compiler.LanguageStandard = C.ELanguageStandard.C99;
+                })
         { }
     }
 
@@ -429,7 +431,9 @@ namespace Python
     {
         public _crypt()
             :
-            base("_crypt", "Modules/_cryptmodule", settings =>
+            base("_crypt",
+            new Bam.Core.StringArray("Modules/_cryptmodule"),
+            settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != vcCompiler)
@@ -557,7 +561,7 @@ namespace Python
     {
         public _curses()
             :
-            base("_curses", new Bam.Core.StringArray("Modules/_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null)
+            base("_curses", new Bam.Core.StringArray("Modules/_cursesmodule"), new Bam.Core.StringArray("-lncurses"), null, null, null)
         { }
     }
 
@@ -567,7 +571,7 @@ namespace Python
     {
         public _curses_panel()
             :
-            base("_curses_panel", new Bam.Core.StringArray("Modules/_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null)
+            base("_curses_panel", new Bam.Core.StringArray("Modules/_curses_panel"), new Bam.Core.StringArray("-lncurses", "-lpanel"), null, null, null)
         { }
     }
 
@@ -627,7 +631,7 @@ namespace Python
             :
             base(
                 "fpetest",
-                "Modules/fpetestmodule",
+                new Bam.Core.StringArray("Modules/fpetestmodule"),
                 settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -775,6 +779,50 @@ namespace Python
         public xxsubtype()
             :
             base("xxsubtype")
+        { }
+    }
+
+    class _ctypes :
+        DynamicExtensionModule
+    {
+        public _ctypes()
+            :
+            base(
+            "_ctypes",
+            new Bam.Core.StringArray(
+                "Modules/_ctypes/_ctypes",
+                "Modules/_ctypes/callbacks",
+                "Modules/_ctypes/callproc",
+                "Modules/_ctypes/cfield",
+                "Modules/_ctypes/malloc_closure",
+                "Modules/_ctypes/stgdict"
+#if BAM_HOST_WIN64
+                ,"Modules/_ctypes/libffi_msvc/ffi"
+                ,"Modules/_ctypes/libffi_msvc/prep_cif"
+#endif
+                ),
+            null,
+            settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
+                        compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
+                    }
+                },
+            settings =>
+                {
+                    var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                    if (null != vcLinker)
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        linker.Libraries.AddUnique("Ole32.lib");
+                        linker.Libraries.AddUnique("OleAut32.lib");
+                    }
+                },
+            "Modules/_ctypes/libffi_msvc/win64.asm")
         { }
     }
 }
