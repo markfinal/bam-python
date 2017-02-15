@@ -150,6 +150,7 @@ namespace Python
                 contents.AppendLine("#define WITH_DOC_STRINGS"); // or there is no documentation
                 contents.AppendLine("#define HAVE_UNAME"); // available on *nix style OSs, exposes os.uname()
                 contents.AppendLine("#define HAVE_SYS_UTSNAME_H"); // required for uname
+                contents.AppendLine("#define HAVE_STRFTIME"); // required for time.strftime
                 return contents.ToString();
             }
         }
