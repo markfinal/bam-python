@@ -865,6 +865,17 @@ namespace Python
 #endif
             )
         { }
+
+#if BAM_HOST_LINUX64
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init (parent);
+
+            this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
+        }
+#endif
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)]
