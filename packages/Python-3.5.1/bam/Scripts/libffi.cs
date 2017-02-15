@@ -165,6 +165,10 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
                     compiler.DisableWarnings.AddUnique("empty-body"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
                     compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                    if (this.BuildEnvironment.Configuration != Bam.Core.EConfiguration.Debug)
+                    {
+                        compiler.DisableWarnings.AddUnique("unused-result"); // Python-3.5.1/Modules/_ctypes/libffi/src/closures.c:460:17: error: ignoring return value of 'ftruncate', declared with attribute warn_unused_result [-Werror=unused-result]
+                    }
 
                     var cOnly = settings as C.ICOnlyCompilerSettings;
                     cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
