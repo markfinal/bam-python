@@ -30,6 +30,42 @@
 using Bam.Core;
 namespace Python
 {
+    class _multiprocessing :
+        DynamicExtensionModule
+    {
+        public _multiprocessing()
+            :
+            base("_multiprocessing",
+            new Bam.Core.StringArray("Modules/_multiprocessing/multiprocessing"
+#if BAM_HOST_WIN64 || BAM_HOST_LINUX64
+                ,"Modules/_multiprocessing/semaphore"
+#endif
+            ),
+#if BAM_HOST_WIN64 || BAM_HOST_LINUX64
+            null,
+#else
+            settings =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("POSIX_SEMAPHORES_NOT_ENABLED"); // macOS does not support semaphores
+                    }
+                },
+#endif
+            settings =>
+                {
+                    var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
+                    if (null != vcLinker)
+                    {
+                        var linker = settings as C.ICommonLinkerSettings;
+                        linker.Libraries.AddUnique("Ws2_32.lib");
+                    }
+                })
+        { }
+    }
+
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires sqlite
     class _sqlite :
         DynamicExtensionModule
