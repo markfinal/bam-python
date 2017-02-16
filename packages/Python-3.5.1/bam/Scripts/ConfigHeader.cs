@@ -153,6 +153,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_STRFTIME"); // required for time.strftime
                 contents.AppendLine("#define HAVE_READLINK 1"); // required for os.readlink
                 contents.AppendLine("#define HAVE_GETPEERNAME 1"); // required for SSLSocket.getpeername()
+                contents.AppendLine("#define HAVE_SYMLINK 1"); // required for os.symlink
                 return contents.ToString();
             }
         }
