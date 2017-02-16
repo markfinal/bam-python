@@ -16,6 +16,7 @@ If OpenSSL exists in your top-level package dependencies (of which Python is alr
 
 If sqlite exists in your top-level package dependencies (of which Python is already one), then add the following define to your top-level package definition file, to build and publish `_sqlite3` extension module:
 * `PYTHON_WITH_SQLITE`
+
 Note that the build of Sqlite must not define `SQLITE_OMIT_DEPRECATED`.
 
 Test packages exist for
