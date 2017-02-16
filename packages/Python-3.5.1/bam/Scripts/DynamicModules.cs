@@ -41,11 +41,17 @@ namespace Python
                 ,"Modules/_multiprocessing/semaphore"
 #endif
             ),
-#if BAM_HOST_WIN64 || BAM_HOST_LINUX64
+#if BAM_HOST_WIN64
             null,
 #else
             settings =>
                 {
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("HAVE_SEM_OPEN");
+                    }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
