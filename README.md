@@ -6,8 +6,13 @@ This repository only contains the Bam build scripts for Python:
 
 Download the [Python source](https://www.python.org/downloads/) and extract into the appropriate package directory in order to use it.
 
-Builds have been tested on Windows, Linux and OSX.
+Builds have been tested on Windows, Linux and macOS.
 
-Not all module are built on Linux and OSX.
+All extension modules should be built on all platforms.
+The exceptions are `_ssl`, `_hashlib` and `_sqlite`, which require external libraries (OpenSSL and Sqlite). If OpenSSL exists in your top-level package (of which Python is already a dependency), then add the following define to your top-level package definition file, to build and publish `_ssl` and `_hashlib` extension modules:
+* `PYTHON_WITH_OPENSSL`
 
-A test package is also present to exercise a built interpreter core on all platforms.
+Test packages exist for
+* Exercising an interpreter core
+* Building a shell, and publishing a standard Python module distribution
+* Building a custom extension module, and including it in a Python distribution
