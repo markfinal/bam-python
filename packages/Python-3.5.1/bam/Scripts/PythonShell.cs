@@ -96,6 +96,12 @@ namespace Python
                     gccLinker.CanUseOrigin = true;
                     gccLinker.RPath.AddUnique("$ORIGIN");
                 }
+                var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
+                if (null != clangLinker)
+                {
+                    // standard distribution path
+                    clangLinker.RPath.AddUnique("@executable_path/lib/python3.5/lib-dynload");
+                }
             });
         }
     }
