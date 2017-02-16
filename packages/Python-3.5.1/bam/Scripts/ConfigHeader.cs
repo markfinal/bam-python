@@ -154,6 +154,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_READLINK 1"); // required for os.readlink
                 contents.AppendLine("#define HAVE_GETPEERNAME 1"); // required for SSLSocket.getpeername()
                 contents.AppendLine("#define HAVE_SYMLINK 1"); // required for os.symlink
+                contents.AppendLine("#define HAVE_TZNAME 1"); // required for time.timezone
                 return contents.ToString();
             }
         }
