@@ -91,6 +91,15 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_sqlite\statement.c(334): warning C4013: 'sqlite3_transfer_bindings' undefined; assuming extern returning int
                         }
+                    },
+                 settings =>
+                    {
+                        var gccLinker = settings as GccCommon.ICommonLinkerSettings;
+                        if (null != gccLinker)
+                        {
+                            gccLinker.CanUseOrigin = true;
+                            gccLinker.RPath.AddUnique("$ORIGIN");
+                        }
                     })
         { }
 
