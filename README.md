@@ -9,8 +9,14 @@ Download the [Python source](https://www.python.org/downloads/) and extract into
 Builds have been tested on Windows, Linux and macOS.
 
 All extension modules should be built on all platforms.
-The exceptions are `_ssl`, `_hashlib` and `_sqlite`, which require external libraries (OpenSSL and Sqlite). If OpenSSL exists in your top-level package (of which Python is already a dependency), then add the following define to your top-level package definition file, to build and publish `_ssl` and `_hashlib` extension modules:
+The exceptions are `_ssl`, `_hashlib` and `_sqlite3`, which require external libraries (OpenSSL and Sqlite).
+
+If OpenSSL exists in your top-level package dependencies (of which Python is already one), then add the following define to your top-level package definition file, to build and publish `_ssl` and `_hashlib` extension modules:
 * `PYTHON_WITH_OPENSSL`
+
+If sqlite exists in your top-level package dependencies (of which Python is already one), then add the following define to your top-level package definition file, to build and publish `_sqlite3` extension module:
+* `PYTHON_WITH_SQLITE`
+Note that the build of Sqlite must not define `SQLITE_OMIT_DEPRECATED`.
 
 Test packages exist for
 * Exercising an interpreter core
