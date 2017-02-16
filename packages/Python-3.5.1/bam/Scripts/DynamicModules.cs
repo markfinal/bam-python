@@ -72,20 +72,38 @@ namespace Python
         { }
     }
 
+#if !PYTHON_WITH_SQLITE
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Invalid)] // requires sqlite
-    class _sqlite :
+#endif
+    class _sqlite3 :
         DynamicExtensionModule
     {
-        public _sqlite()
+        public _sqlite3()
             :
-            base("_sqlite",
+            base("_sqlite3",
                  new Bam.Core.StringArray("Modules/_sqlite/*"),
                  settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("MODULE_NAME", "\"sqlite3\"");
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_sqlite\statement.c(334): warning C4013: 'sqlite3_transfer_bindings' undefined; assuming extern returning int
+                        }
                     })
         { }
+
+#if PYTHON_WITH_SQLITE
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            this.CompileAndLinkAgainst<sqlite.SqliteShared>(this.moduleSourceModules);
+        }
+#endif
     }
 
 #if !PYTHON_WITH_OPENSSL
