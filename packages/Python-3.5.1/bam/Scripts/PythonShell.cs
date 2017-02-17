@@ -32,7 +32,8 @@ namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PythonShell :
-        C.ConsoleApplication
+        C.ConsoleApplication,
+        Bam.Core.ICommandLineTool
     {
         protected override void
         Init(
@@ -103,6 +104,57 @@ namespace Python
                     clangLinker.RPath.AddUnique("@executable_path/lib/python3.5/lib-dynload");
                 }
             });
+        }
+
+        public Bam.Core.Settings
+        CreateDefaultSettings<T>(
+            T module) where T : Bam.Core.Module
+        {
+            return new PyDocSettings(this); // TODO: currently, only pydoc is support, but this should be more generic, or not have any settings at all
+        }
+
+        public System.Collections.Generic.Dictionary<string, Bam.Core.TokenizedStringArray> EnvironmentVariables
+        {
+            get;
+            private set;
+        }
+
+        public Bam.Core.StringArray InheritedEnvironmentVariables
+        {
+            get;
+            private set;
+        }
+
+        public Bam.Core.TokenizedString Executable
+        {
+            get
+            {
+                return this.GeneratedPaths[C.ConsoleApplication.Key];
+            }
+        }
+
+        public Bam.Core.TokenizedStringArray InitialArguments
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public Bam.Core.TokenizedStringArray TerminatingArguments
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public string UseResponseFileOption
+        {
+            get
+            {
+                return null;
+            }
         }
     }
 
