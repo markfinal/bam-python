@@ -111,7 +111,9 @@ namespace ExtensionModuleTest2
             base.Init(parent);
 
             this.StripBinariesFrom<CustomModuleRuntime, CustomModuleDebugSymbols>();
-            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, "pyapidocs");
+
+            var runtime = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>();
+            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, "pyapidocs", runtime.InitialReference);
         }
     }
 }
