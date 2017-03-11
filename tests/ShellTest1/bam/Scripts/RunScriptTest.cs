@@ -30,19 +30,6 @@
 using Bam.Core;
 namespace ShellTest1
 {
-    sealed class Test :
-        C.ConsoleApplication
-    {
-        protected override void
-        Init(
-            Bam.Core.Module parent)
-        {
-            base.Init(parent);
-
-            this.RequiredToExist<Python.PythonShell>();
-        }
-    }
-
     sealed class TestRuntime :
         Publisher.Collation
     {
@@ -67,9 +54,6 @@ namespace ShellTest1
                 var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", pyShellCopy);
                 platIndependentModules.CopiedFilename = "python3.5";
                 this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", pyShellCopy);
-
-                var timeModule = this.Include<Python.TimeModule>(C.DynamicLibrary.Key, "lib/python3.5/lib-dynload", pyShellCopy);
-                timeModule.DependsOn(platIndependentModules);
             }
         }
     }
