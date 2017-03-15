@@ -40,21 +40,8 @@ namespace ShellTest1
             base.Init(parent);
 
             var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var pyLibCopy = this.Include<Python.PythonLibrary>(C.DynamicLibrary.Key, ".", pyShellCopy);
-            var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
+            Python.StandardDistribution.Publish(this, pyShellCopy);
             this.IncludeFile("$(packagedir)/data/helloworld.py", ".", pyShellCopy);
-
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, ".", pyShellCopy);
-                platIndependentModules.CopiedFilename = "lib";
-            }
-            else
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", pyShellCopy);
-                platIndependentModules.CopiedFilename = "python3.5";
-                this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", pyShellCopy);
-            }
         }
     }
 }
