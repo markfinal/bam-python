@@ -453,7 +453,11 @@ namespace Python
                 builtinModuleSource.DependsOn(pyConfigHeader);
                 // TODO: end of function
 
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+#else
                 if (!pyConfigHeader.PyDEBUG)
+#endif
                 {
                     parserSource.PrivatePatch(NotPyDEBUGPatch);
                     objectSource.PrivatePatch(NotPyDEBUGPatch);

@@ -30,23 +30,73 @@
 using Bam.Core;
 namespace Python
 {
-    [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    class PyConfigHeader :
-        C.ProceduralHeaderFile
+#if BAM_FEATURE_MODULE_CONFIGURATION
+    interface IConfigurePython :
+        Bam.Core.IModuleConfiguration
     {
+        bool PyDEBUG
+        {
+            get;
+        }
+    }
+
+    sealed class ConfigurePython :
+        IConfigurePython
+    {
+        public ConfigurePython(
+            Bam.Core.Environment buildEnvironment)
+        {
+            this.PyDEBUG = false;
+        }
+
         public bool PyDEBUG
         {
             get;
             set;
         }
+    }
+#endif
+
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
+    class PyConfigHeader :
+        C.ProceduralHeaderFile
+#if BAM_FEATURE_MODULE_CONFIGURATION
+        , Bam.Core.IHasModuleConfiguration
+#endif
+    {
+#if BAM_FEATURE_MODULE_CONFIGURATION
+        System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
+        {
+            get
+            {
+                return typeof(IConfigurePython);
+            }
+        }
+
+        System.Type IHasModuleConfiguration.WriteableClassType
+        {
+            get
+            {
+                return typeof(ConfigurePython);
+            }
+        }
+#else
+        public bool PyDEBUG
+        {
+            get;
+            set;
+        }
+#endif
 
         protected override void
         Init(
             Bam.Core.Module parent)
         {
             base.Init(parent);
+#if !BAM_FEATURE_MODULE_CONFIGURATION
             // TODO: can this be exposed on a command line option?
             this.PyDEBUG = false; // set to true to enable Py_DEBUG
+#endif
         }
 
         protected override TokenizedString OutputPath
@@ -62,7 +112,11 @@ namespace Python
             get
             {
                 var contents = new System.Text.StringBuilder();
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                if ((this.Configuration as IConfigurePython).PyDEBUG)
+#else
                 if (this.PyDEBUG)
+#endif
                 {
                     contents.AppendLine("#define Py_DEBUG");
                 }
