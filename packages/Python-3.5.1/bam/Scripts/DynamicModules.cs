@@ -741,6 +741,27 @@ namespace Python
                      "Modules/zlib/uncompr",
                      "Modules/zlib/zutil"))
         { }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            this.moduleSourceModules.PrivatePatch(settings =>
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        if (this.moduleSourceModules.Compiler.IsAtLeast(700))
+                        {
+                            compiler.DisableWarnings.AddUnique("shift-negative-value"); // Python-3.5.1/Modules/zlib/inflate.c:1507:61: error: shifting a negative signed value is undefined [-Werror,-Wshift-negative-value]
+                        }
+                    }
+                });
+        }
     }
 
     class pyexpat :
