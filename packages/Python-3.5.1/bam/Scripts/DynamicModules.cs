@@ -761,6 +761,13 @@ namespace Python
                         }
                     }
                 });
+
+            this.moduleSourceModules["zlibmodule"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/zlib"));
+                    }));
         }
     }
 
