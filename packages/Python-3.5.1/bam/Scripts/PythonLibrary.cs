@@ -72,9 +72,9 @@ namespace Python
             var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
             if (null != clangCompiler)
             {
-                clangCompiler.AllWarnings = false;
-                clangCompiler.ExtraWarnings = false;
-                clangCompiler.Pedantic = false;
+                clangCompiler.AllWarnings = true;
+                clangCompiler.ExtraWarnings = true;
+                clangCompiler.Pedantic = true;
             }
         }
 
@@ -147,6 +147,12 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pyport.h:58:27: error: ISO C90 does not support 'long long' [-Werror=long-long]
                         }
+
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pytime.h:20:9: error: 'long long' is an extension when C99 mode is not enabled [-Werror,-Wlong-long]
+                        }
                     }
                 });
 
@@ -159,16 +165,23 @@ namespace Python
             parserSource["grammar.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
+                            var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Parser\grammar.c(83): warning C4244: '=': conversion from 'int' to 'short', possible loss of data
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
                         {
+                            var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Parser/grammar.c:107:16: error: format '%p' expects argument of type 'void *', but argument 2 has type 'struct labellist *' [-Werror=format=]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.5.1/Parser/grammar.c:106:41: error: format specifies type 'void *' but the argument has type 'labellist *' [-Werror,-Wformat-pedantic]
                         }
                     }));
 
@@ -180,6 +193,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Parser/metagrammar.c:15:5: error: missing initializer for field 's_lower' of 'state' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Parser/metagrammar.c:15:17: error: missing field 's_lower' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -211,6 +230,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Parser/tokenizer.c:351:15: error: unused parameter 'set_readline' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Parser/tokenizer.c:351:15: error: unused parameter 'set_readline' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
@@ -232,6 +257,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/abstract.c:806:24: error: unused parameter 'op_name' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/abstract.c:806:24: error: unused parameter 'op_name' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["boolobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -248,6 +279,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/boolobject.c:43:24: error: unused parameter 'type' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/boolobject.c:172:1: error: missing initializer for field 'tp_free' of 'PyTypeObject' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/boolobject.c:43:24: error: unused parameter 'type' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/boolobject.c:129:1: error: missing field 'nb_matrix_multiply' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             objectSource["bytearrayobject.c"].ForEach(item =>
@@ -269,6 +307,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/bytearrayobject.c:78:60: error: unused parameter 'view' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:107:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:524:1: error: string length '512' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/bytearrayobject.c:78:60: error: unused parameter 'view' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:107:32: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:525:1: error: string literal of length 512 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
             objectSource["bytesobject.c"].ForEach(item =>
@@ -292,6 +338,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:65:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:323:23: error: unused parameter 'null' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:65:32: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:323:23: error: unused parameter 'null' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["bytes_methods.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -312,6 +365,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/capsule.c:322:1: error: missing initializer for field 'tp_traverse' of 'PyTypeObject' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/capsule.c:322:1: error: missing field 'tp_traverse' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
             objectSource["cellobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -328,6 +387,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/cellobject.c:144:5: error: missing initializer for field 'doc' of 'PyGetSetDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/cellobject.c:132:43: error: unused parameter 'closure' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/cellobject.c:144:54: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/cellobject.c:132:43: error: unused parameter 'closure' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["classobject.c"].ForEach(item =>
@@ -347,6 +413,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/classobject.c:94:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/classobject.c:117:42: error: unused parameter 'context' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/classobject.c:94:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/classobject.c:117:42: error: unused parameter 'context' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["codeobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -364,6 +437,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/codeobject.c:209:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/codeobject.c:277:24: error: unused parameter 'type' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/codeobject.c:209:73: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/codeobject.c:277:24: error: unused parameter 'type' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["complexobject.c"].ForEach(item =>
@@ -383,6 +463,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/complexobject.c:747:5: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/complexobject.c:498:29: error: unused parameter 'v' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/complexobject.c:747:84: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/complexobject.c:498:29: error: unused parameter 'v' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("extended-offsetof"); // Python-3.5.1/Objects/complexobject.c:754:24: error: using extended field designator is an extension [-Werror,-Wextended-offsetof]
+                        }
                     }));
             objectSource["descrobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -401,6 +489,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/descrobject.c:418:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/descrobject.c:122:65: error: unused parameter 'type' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/descrobject.c:1575:1: error: string length '759' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/descrobject.c:418:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/descrobject.c:122:65: error: unused parameter 'type' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/descrobject.c:1576:1: error: string literal of length 759 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
             objectSource["dictobject.c"].ForEach(item =>
@@ -422,6 +518,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/dictobject.c:2649:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/dictobject.c:2698:40: error: unused parameter 'args' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/dictobject.c:2649:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/dictobject.c:2698:40: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["enumobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -431,6 +534,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/enumobject.c:174:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/enumobject.c:174:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             objectSource["exceptions.c"].ForEach(item =>
@@ -449,6 +558,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/exceptions.c:180:4: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/exceptions.c:32:65: error: unused parameter 'kwds' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/exceptions.c:180:66: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/exceptions.c:32:65: error: unused parameter 'kwds' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["fileobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -466,6 +582,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/fileobject.c:462:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/fileobject.c:29:35: error: unused parameter 'name' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/fileobject.c:462:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/fileobject.c:29:35: error: unused parameter 'name' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["floatobject.c"].ForEach(item =>
@@ -486,6 +609,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/floatobject.c:1447:47: error: unused parameter 'unused' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("implicit-function-declaration"); // Python-3.5.1/Objects/floatobject.c:970:5: error: implicit declaration of function 'round' [-Werror=implicit-function-declaration]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/floatobject.c:62:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/floatobject.c:1447:47: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["frameobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -502,6 +632,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/frameobject.c:13:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/frameobject.c:22:41: error: unused parameter 'closure' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/frameobject.c:13:67: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/frameobject.c:22:41: error: unused parameter 'closure' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["funcobject.c"].ForEach(item =>
@@ -522,6 +659,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/funcobject.c:467:24: error: unused parameter 'type' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/funcobject.c:806:1: error: string length '665' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/funcobject.c:238:25: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/funcobject.c:467:24: error: unused parameter 'type' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/funcobject.c:807:1: error: string literal of length 665 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             objectSource["genobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -541,6 +686,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/genobject.c:566:6: error: missing initializer for field 'closure' of 'PyGetSetDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/genobject.c:281:39: error: unused parameter 'args' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/genobject.c:566:40: error: missing field 'closure' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/genobject.c:281:39: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["iterobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -550,6 +702,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/iterobject.c:133:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/iterobject.c:133:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             objectSource["listobject.c"].ForEach(item =>
@@ -567,6 +725,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/listobject.c:2383:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/listobject.c:2881:44: error: unused parameter 'unused' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/listobject.c:2383:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/listobject.c:2881:44: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["longobject.c"].ForEach(item =>
@@ -587,6 +752,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/longobject.c:4979:1: error: string length '792' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/longobject.c:5116:5: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/longobject.c:5116:76: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/longobject.c:4638:25: error: unused parameter 'v' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/longobject.c:4980:1: error: string literal of length 792 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             objectSource["memoryobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -604,6 +777,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/memoryobject.c:947:26: error: unused parameter 'subtype' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/memoryobject.c:159:1: error: missing initializer for field 'tp_richcompare' of 'PyTypeObject' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/memoryobject.c:159:1: error: missing field 'tp_richcompare' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/memoryobject.c:947:26: error: unused parameter 'subtype' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["methodobject.c"].ForEach(item =>
@@ -623,6 +803,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/methodobject.c:190:56: error: unused parameter 'closure' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/methodobject.c:186:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             gccCompiler.Pedantic = false; // Python-3.5.1/Objects/methodobject.c:327:25: error: ISO C forbids conversion of function pointer to object pointer type [-Werror=pedantic]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/methodobject.c:186:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/methodobject.c:190:56: error: unused parameter 'closure' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["moduleobject.c"].ForEach(item =>
@@ -644,6 +831,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/moduleobject.c:19:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
                             gccCompiler.Pedantic = false; // Python-3.5.1/Objects/moduleobject.c:242:20: error: ISO C forbids assignment between function pointer and 'void *' [-Werror=pedantic]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/moduleobject.c:19:71: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/moduleobject.c:705:38: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                            clangCompiler.Pedantic = false; // Python-3.5.1/Objects/moduleobject.c:242:20: error: assigning to 'PyObject *(*)(PyObject *, PyModuleDef *)' (aka 'struct _object *(*)(struct _object *, struct PyModuleDef *)') from 'void *' converts between void pointer and function pointer [-Werror,-Wpedantic]
+                        }
                     }));
             objectSource["namespaceobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -660,6 +855,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/namespaceobject.c:22:45: error: unused parameter 'args' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/namespaceobject.c:14:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/namespaceobject.c:14:75: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/namespaceobject.c:22:45: error: unused parameter 'args' [-Werror,-Wunused-parameter]
                         }
                     }));
             objectSource["object.c"].ForEach(item =>
@@ -679,6 +881,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/object.c:1205:63: error: unused parameter 'context' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/object.c:1426:1: error: missing initializer for field 'nb_matrix_multiply' of 'PyNumberMethods' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/object.c:1426:1: error: missing field 'nb_matrix_multiply' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/object.c:1205:63: error: unused parameter 'context' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.5.1/Objects/object.c:370:38: error: format specifies type 'void *' but the argument has type 'PyObject *' (aka 'struct _object *') [-Werror,-Wformat-pedantic]
+                        }
                     }));
             objectSource["obmalloc.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -696,16 +906,28 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/obmalloc.c:54:24: error: unused parameter 'ctx' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Objects/obmalloc.c:2155:19: error: ISO C90 does not support the 'z' gnu_printf length modifier [-Werror=format=]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/obmalloc.c:54:24: error: unused parameter 'ctx' [-Werror,-Wunused-parameter]
+                        }
                     }));
             objectSource["odictobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICOnlyCompilerSettings;
-                        compiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
+                        var cCompiler = settings as C.ICOnlyCompilerSettings;
+                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
                         {
                             gccCompiler.Pedantic = false; // Python-3.5.1/Objects/odictobject.c:1492:2: error: ISO C does not allow extra ';' outside of a function [-Werror=pedantic]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("extra-semi"); // Python-3.5.1/Objects/odictobject.c:1492:2: error: extra ';' outside of a function [-Werror,-Wextra-semi]
                         }
                     }));
             objectSource["structseq.c"].ForEach(item =>
@@ -722,6 +944,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/structseq.c:279:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/structseq.c:279:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             objectSource["tupleobject.c"].ForEach(item =>
@@ -750,6 +978,12 @@ namespace Python
                         {
                             gccCompiler.Pedantic = false; // Python-3.5.1/Objects/typeobject.c:5105:20: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("extended-offsetof"); // Python-3.5.1/Objects/typeslots.inc:4:1: error: using extended field designator is an extension [-Werror,-Wextended-offsetof]
+                        }
                     }));
             objectSource["unicodeobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -772,6 +1006,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/unicodeobject.c.h:5:1: error: string length '569' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Objects/stringlib/asciilib.h:7:34: error: 'asciilib_parse_args_finds_unicode' defined but not used [-Werror=unused-function]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/unicodeobject.c.h:6:1: error: string literal of length 569 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                            compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Objects/stringlib/find.h:134:1: error: unused function 'asciilib_parse_args_finds_unicode' [-Werror,-Wunused-function]
                         }
                     }));
             headers.AddFiles("$(packagedir)/Objects/*.h");
@@ -825,6 +1066,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/Python-ast.c:560:43: error: unused parameter 'unused' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/Python-ast.c:585:5: error: missing initializer for field 'doc' of 'PyGetSetDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/ast.c:1034:37: error: unused parameter 'c' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["_warnings.c"].ForEach(item =>
@@ -846,6 +1093,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/_warnings.c:759:25: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/_warnings.c:1034:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/_warnings.c:759:25: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/_warnings.c:1034:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
 
             pythonSource["bltinmodule.c"].ForEach(item =>
@@ -865,6 +1119,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/clinic/bltinmodule.c.h:131:1: error: string length '801' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/bltinmodule.c:53:35: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/bltinmodule.c:510:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/bltinmodule.c:53:35: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/clinic/bltinmodule.c.h:132:1: error: string literal of length 801 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/bltinmodule.c:510:26: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -888,6 +1150,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/ceval.c:217:31: error: unused parameter 'self' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/ceval.c:217:31: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["codecs.c"].ForEach(item =>
@@ -909,6 +1177,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/codecs.c:1379:42: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/codecs.c:1499:13: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/codecs.c:1379:42: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/codecs.c:1499:13: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -932,6 +1207,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/compile.c:793:38: error: unused parameter 'c' [-Werror=unused-parameter]
                             gccCompiler.Pedantic = false; // Python-3.5.1/Python/compile.c:97:33: error: comma at end of enumerator list [-Werror=pedantic]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/compile.c:793:38: error: unused parameter 'c' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("c99-extensions"); // Python-3.5.1/Python/compile.c:97:33: error: commas at the end of enumerator lists are a C99-specific feature [-Werror,-Wc99-extensions]
                         }
                     }));
 
@@ -992,6 +1274,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/formatter_unicode.c:426:49: error: unused parameter 'number' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/formatter_unicode.c:426:49: error: unused parameter 'number' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["getargs.c"].ForEach(item =>
@@ -1019,6 +1307,7 @@ namespace Python
                         if (null != clangCompiler)
                         {
                             clangCompiler.Visibility = ClangCommon.EVisibility.Default;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/getargs.c:146:23: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -1045,6 +1334,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/graminit.c:18:5: error: missing initializer for field 's_lower' of 'state' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/graminit.c:18:17: error: missing field 's_lower' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
 
             pythonSource["import.c"].ForEach(item =>
@@ -1063,6 +1358,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/import.c:245:34: error: unused parameter 'module' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/import.c:2091:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/import.c:245:34: error: unused parameter 'module' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/import.c:2091:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -1085,6 +1387,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/marshal.c:1639:1: error: string length '524' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/marshal.c:1765:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/marshal.c:892:24: error: unused parameter 'flag' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/marshal.c:1640:1: error: string literal of length 524 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/marshal.c:1765:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
 
             pythonSource["peephole.c"].ForEach(item =>
@@ -1103,6 +1413,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/peephole.c:354:61: error: unused parameter 'names' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/peephole.c:354:61: error: unused parameter 'names' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["pyfpe.c"].ForEach(item =>
@@ -1120,6 +1436,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/pyfpe.c:20:19: error: unused parameter 'dummy' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/pyfpe.c:20:19: error: unused parameter 'dummy' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["pyhash.c"].ForEach(item =>
@@ -1130,6 +1452,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Python/pyhash.c:275:11: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Python/pyhash.c:275:11: error: comparison of integers of different signs: 'Py_uhash_t' (aka 'unsigned long') and 'int' [-Werror,-Wsign-compare]
                         }
                     }));
 
@@ -1143,6 +1471,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4210"); // Python-3.5.1\Python\pylifecycle.c(291): warning C4210: nonstandard extension used: function given file scope
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Python\pylifecycle.c(907): warning C4456: declaration of 'loader' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\python\pylifecycle.c(305) : warning C4706: assignment within conditional expression
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Python/pylifecycle.c:181:1: error: unused function 'get_codec_name' [-Werror,-Wunused-function]
                         }
                     }));
 
@@ -1166,6 +1500,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Python\Python-ast.c(4338): warning C4456: declaration of 'value' hides previous local declaration
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/Python-ast.c:560:43: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/Python-ast.c:581:10: error: missing field 'ml_meth' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
 
             pythonSource["pythonrun.c"].ForEach(item =>
@@ -1182,6 +1523,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/pythonrun.c:266:38: error: unused parameter 'filename' [-Werror=unused-parameter]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/pythonrun.c:266:38: error: unused parameter 'filename' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -1201,6 +1548,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("tautological-constant-out-of-range-compare"); // numbers out of range of comparison
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/pytime.c:562:56: error: unused parameter 'raise' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -1212,6 +1560,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/random.c:193:1: error: missing initializer for field 'st_dev' of 'struct <anonymous>' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/random.c:193:24: error: missing field 'st_dev' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -1233,6 +1587,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/symtable.c:110:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/symtable.c:931:48: error: unused parameter 'ast' [-Werror=unused-parameter]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/symtable.c:110:49: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/symtable.c:931:48: error: unused parameter 'ast' [-Werror,-Wunused-parameter]
+                        }
                     }));
 
             pythonSource["sysmodule.c"].ForEach(item =>
@@ -1252,6 +1613,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/sysmodule.c:1124:1: error: string length '742' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/sysmodule.c:1287:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/sysmodule.c:163:27: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/sysmodule.c:1125:1: error: string literal of length 742 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/sysmodule.c:1287:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        }
                     }));
 
             pythonSource["thread.c"].ForEach(item =>
@@ -1263,6 +1632,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // python-3.5.1\python\thread_nt.h(296): warning C4100: 'intr_flag': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4189"); // python-3.5.1\python\thread_nt.h(218): warning C4189: 'e': local variable is initialized but not referenced
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/thread.c:375:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
 
@@ -1281,6 +1656,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/traceback.c:30:27: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/traceback.c:37:4: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/traceback.c:37:48: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/traceback.c:30:27: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -1303,6 +1685,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/main.c:49:1: error: string length '525' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Modules/main.c:738:21: error: ISO C90 does not support the '%ls' gnu_printf format [-Werror=format=]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/main.c:49:24: error: string literal of length 525 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
             builtinModuleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
@@ -1694,6 +2082,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/pwdmodule.c:108:27: error: unused parameter 'module' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/pwdmodule.c:205:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/pwdmodule.c:23:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/pwdmodule.c:108:27: error: unused parameter 'module' [-Werror,-Wunused-parameter]
+                        }
                     });
             }
 
@@ -1719,6 +2114,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/signalmodule.c:1145:1: error: string length '1461' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         gccCompiler.Pedantic = false; // Python-3.5.1/Modules/signalmodule.c:1222:45: error: ISO C forbids conversion of function pointer to object pointer type [-Werror=pedantic]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/signalmodule.c:1141:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/signalmodule.c:178:38: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/signalmodule.c:1146:1: error: string literal of length 1461 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                    }
                 });
             var gcmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
             gcmodule.First().PrivatePatch(settings =>
@@ -1737,6 +2140,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/gcmodule.c:370:34: error: unused parameter 'data' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/gcmodule.c:1484:1: error: string length '875' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/gcmodule.c:1520:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/gcmodule.c:370:34: error: unused parameter 'data' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/gcmodule.c:1485:1: error: string literal of length 875 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/gcmodule.c:1520:21: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
             var posixmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c"); // implements nt module on Windows
@@ -1767,6 +2178,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/clinic/posixmodule.c.h:5:1: error: string length '783' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/posixmodule.c:1281:1: error: 'fildes_converter' defined but not used [-Werror=unused-function]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/posixmodule.c:1928:28: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/posixmodule.c:1775:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("implicit-function-declaration"); // Python-3.5.1/Modules/posixmodule.c:4644:12: error: implicit declaration of function 'utime' [-Werror,-Wimplicit-function-declaration]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/clinic/posixmodule.c.h:6:1: error: string literal of length 783 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/posixmodule.c:1281:1: error: unused function 'fildes_converter' [-Werror,-Wunused-function]
+                    }
                 });
             var errnomodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
             errnomodule.First().PrivatePatch(settings =>
@@ -1776,6 +2197,12 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/errnomodule.c:44:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/errnomodule.c:44:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
             var _sre = builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
@@ -1795,6 +2222,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sre.c:281:36: error: unused parameter 'module' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sre.c:2672:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sre.c:281:36: error: unused parameter 'module' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sre.c:2672:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             var _codecsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
             _codecsmodule.First().PrivatePatch(settings =>
@@ -1812,6 +2246,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_codecsmodule.c:67:31: error: unused parameter 'module' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/clinic/_codecsmodule.c.h:160:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_codecsmodule.c:67:31: error: unused parameter 'module' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/clinic/_codecsmodule.c.h:160:33: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             var _weakref = builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
             _weakref.First().PrivatePatch(settings =>
@@ -1827,6 +2268,12 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_weakref.c:25:44: error: unused parameter 'module' [-Werror=unused-parameter]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_weakref.c:25:44: error: unused parameter 'module' [-Werror,-Wunused-parameter]
                     }
                 });
             var _functoolsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
@@ -1846,6 +2293,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_functoolsmodule.c:263:46: error: unused parameter 'unused' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_functoolsmodule.c:209:5: error: missing initializer for field 'doc' of 'PyGetSetDef' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_functoolsmodule.c:263:46: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_functoolsmodule.c:205:10: error: missing field 'type' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             var _operator = builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
             _operator.First().PrivatePatch(settings =>
@@ -1863,6 +2317,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_operator.c:40:53: error: unused parameter 's' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_operator.c:398:5: error: missing initializer for field 'ml_flags' of 'struct PyMethodDef' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_operator.c:68:1: error: unused parameter 's' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_operator.c:398:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             var _collectionsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
             _collectionsmodule.First().PrivatePatch(settings =>
@@ -1879,6 +2340,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_collectionsmodule.c:166:41: error: unused parameter 'args' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_collectionsmodule.c:1476:6: error: missing initializer for field 'closure' of 'PyGetSetDef' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_collectionsmodule.c:166:41: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_collectionsmodule.c:1476:52: error: missing field 'closure' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
             var itertoolsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
@@ -1899,6 +2367,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/itertoolsmodule.c:244:28: error: unused parameter 'type' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/itertoolsmodule.c:2281:1: error: string length '731' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/itertoolsmodule.c:244:28: error: unused parameter 'type' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/itertoolsmodule.c:181:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/itertoolsmodule.c:2282:1: error: string literal of length 731 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                    }
                 });
             var atexitmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
             atexitmodule.First().PrivatePatch(settings =>
@@ -1918,6 +2394,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/atexitmodule.c:300:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/atexitmodule.c:186:32: error: unused parameter 'self' [-Werror=unused-parameter]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/atexitmodule.c:186:32: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/atexitmodule.c:300:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             var _stat = builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
             _stat.First().PrivatePatch(settings =>
@@ -1935,6 +2418,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_stat.c:268:31: error: unused parameter 'self' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_stat.c:425:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_stat.c:429:1: error: string length '1479' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_stat.c:277:1: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_stat.c:425:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_stat.c:430:1: error: string literal of length 1479 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                     }
                 });
             var timemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
@@ -1954,6 +2445,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/timemodule.c:697:1: error: string length '969' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/timemodule.c:1278:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/timemodule.c:38:21: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/timemodule.c:257:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/timemodule.c:698:1: error: string literal of length 969 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                    }
                 });
             var _localemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
             _localemodule.First().PrivatePatch(settings =>
@@ -1970,6 +2469,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_localemodule.c:90:30: error: unused parameter 'self' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_localemodule.c:605:3: error: missing initializer for field 'ml_flags' of 'struct PyMethodDef' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_localemodule.c:90:30: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_localemodule.c:605:14: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
 
@@ -1995,6 +2501,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/bufferedio.c:153:1: error: string length '599' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/bufferedio.c.h:20:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/bufferedio.c:147:43: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/bufferedio.c.h:20:35: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/bufferedio.c:154:5: error: string literal of length 599 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             _io["bytesio.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -2011,6 +2525,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/bytesio.c:928:43: error: unused parameter 'args' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/bytesio.c.h:277:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/bytesio.c:928:43: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/bytesio.c.h:277:35: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             _io["fileio.c"].ForEach(item =>
@@ -2034,6 +2555,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/fileio.c.h:155:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/fileio.c.h:26:1: error: string length '832' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/fileio.c:183:42: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/clinic/fileio.c.h:155:35: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/fileio.c.h:27:1: error: string literal of length 832 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             _io["iobase.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -2052,6 +2581,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/iobase.c:756:5: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/iobase.c:41:1: error: string length '1241' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/iobase.c:108:23: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/iobase.c:756:59: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/iobase.c:42:5: error: string literal of length 1241 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             _io["stringio.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -2068,6 +2605,13 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/stringio.c:659:44: error: unused parameter 'args' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/stringio.c:1027:5: error: missing initializer for field 'ml_doc' of 'struct PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/stringio.c:659:44: error: unused parameter 'args' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/stringio.c:1027:65: error: missing field 'ml_doc' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             _io["textio.c"].ForEach(item =>
@@ -2091,6 +2635,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/textio.c:162:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/textio.c.h:112:1: error: string length '1469' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/textio.c:76:29: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/textio.c:162:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/textio.c.h:113:1: error: string literal of length 1469 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        }
                     }));
             _io["_iomodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -2109,6 +2661,14 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/_iomodule.c:230:28: error: unused parameter 'module' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/_iomodule.c:56:1: error: string length '1473' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/_iomodule.c:616:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_io/_iomodule.c:230:28: error: unused parameter 'module' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_io/_iomodule.c:616:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/_iomodule.c.h:6:1: error: string literal of length 6353 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
 
@@ -2130,6 +2690,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/zipimport.c:743:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/zipimport.c:1445:1: error: string length '591' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/zipimport.c:1355:43: error: unused parameter 'ispackage' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/zipimport.c:743:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/zipimport.c:1446:1: error: string literal of length 591 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                    }
                 });
             var faulthandler = builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
             faulthandler.First().PrivatePatch(settings =>
@@ -2148,6 +2716,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/faulthandler.c:251:42: error: unused parameter 'self' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/faulthandler.c:58:1: error: missing initializer for field 'interp' of 'struct <anonymous>' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/faulthandler.c:251:42: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/faulthandler.c:58:32: error: missing field 'interp' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
             var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
@@ -2169,6 +2744,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_tracemalloc.c:719:64: error: unused parameter 'user_data' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_tracemalloc.c:1340:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                     }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_tracemalloc.c:719:64: error: unused parameter 'user_data' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_tracemalloc.c:1340:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                    }
                 });
             builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
@@ -2186,6 +2768,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/symtablemodule.c:8:29: error: unused parameter 'self' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/symtablemodule.c:48:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                    }
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/symtablemodule.c:8:29: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/symtablemodule.c:48:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
 
