@@ -41,11 +41,19 @@ namespace Python
                 ,"Modules/_multiprocessing/semaphore"
 #endif
             ),
-#if BAM_HOST_WIN64
-            null,
-#else
             settings =>
                 {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_multiprocessing\multiprocessing.c(54): warning C4100: 'self': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_multiprocessing\multiprocessing.c(175): warning C4127: conditional expression is constant
+                        compiler.DisableWarnings.AddUnique("4189"); // Python-3.5.1\Modules\_multiprocessing\multiprocessing.c(158): warning C4189: 'value': local variable is initialized but not referenced
+                        compiler.DisableWarnings.AddUnique("4057"); // Python-3.5.1\Modules\_multiprocessing\semaphore.c(528): warning C4057: 'function': 'long *' differs in indirection to slightly different base types from 'int *'
+                        compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\_multiprocessing\semaphore.c(120) : warning C4701: potentially uninitialized local variable 'sigint_event' used
+                        compiler.DisableWarnings.AddUnique("4703"); // python-3.5.1\modules\_multiprocessing\semaphore.c(120) : warning C4703: potentially uninitialized local pointer variable 'sigint_event' used
+                    }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
                     {
@@ -59,7 +67,6 @@ namespace Python
                         compiler.PreprocessorDefines.Add("POSIX_SEMAPHORES_NOT_ENABLED"); // macOS does not support semaphores
                     }
                 },
-#endif
             settings =>
                 {
                     var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
@@ -179,7 +186,20 @@ namespace Python
     {
         public _testmultiphase()
             :
-            base("_testmultiphase")
+            base(
+                "_testmultiphase",
+                "Modules/_testmultiphase",
+                settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_testmultiphase.c(30): warning C4100: 'self': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_testmultiphase.c(84): warning C4152: nonstandard extension, function/data pointer conversion in expression
+                    }
+                },
+                null)
         { }
     }
 
@@ -197,7 +217,20 @@ namespace Python
     {
         public _testbuffer()
             :
-            base("_testbuffer")
+            base(
+                "_testbuffer",
+                "Modules/_testbuffer",
+                settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_testbuffer.c(208): warning C4100: 'kwds': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_testbuffer.c(2643): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
+                    }
+                },
+                null)
         { }
     }
 
@@ -266,7 +299,23 @@ namespace Python
     {
         public _testcapi()
             :
-            base("_testcapi", "Modules/_testcapimodule")
+            base(
+                "_testcapi",
+                "Modules/_testcapimodule",
+                settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_testcapimodule.c(58): warning C4127: conditional expression is constant
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_testcapimodule.c(52): warning C4100: 'self': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_testcapimodule.c(255): warning C4232: nonstandard extension used: 'tp_dealloc': address of dllimport'PyObject_Free' is not static, identity not guaranteed
+                        compiler.DisableWarnings.AddUnique("4221"); // Python-3.5.1\Modules\_testcapimodule.c(2504): warning C4221: nonstandard extension used: 'buf': cannot be initialized using address of automatic variable 'data'
+                        compiler.DisableWarnings.AddUnique("4204"); // Python-3.5.1\Modules\_testcapimodule.c(2504): warning C4204: nonstandard extension used: non-constant aggregate initializer
+                    }
+                },
+                null)
         { }
     }
 
@@ -293,6 +342,16 @@ namespace Python
                          compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
                          compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
+
+                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                         if (null != vcCompiler)
+                         {
+                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_elementtree.c(315): warning C4100: 'kwds': unreferenced formal parameter
+                             compiler.DisableWarnings.AddUnique("4457"); // Python-3.5.1\Modules\_elementtree.c(1680): warning C4457: declaration of 'item' hides function parameter
+                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\_elementtree.c(1729): warning C4456: declaration of 'cur' hides previous local declaration
+                             compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_elementtree.c(2187): warning C4232: nonstandard extension used: 'tp_iter': address of dllimport 'PyObject_SelfIter' is not static, identity not guaranteed
+                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_elementtree.c(1749) : warning C4706: assignment within conditional expression
+                         }
                      })
         { }
     }
@@ -342,7 +401,22 @@ namespace Python
     {
         public unicodedata()
             :
-            base("unicodedata")
+            base(
+            "unicodedata",
+            new Bam.Core.StringArray("Modules/unicodedata"),
+            settings =>
+            {
+                var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                if (null != vcCompiler)
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\unicodedata.c(175): warning C4100: 'self': unreferenced formal parameter
+                    compiler.DisableWarnings.AddUnique("4459"); // Python-3.5.1\Modules\unicodedata.c(639): warning C4459: declaration of 'index1' hides global declaration
+                    compiler.DisableWarnings.AddUnique("4459"); // Python-3.5.1\Modules\unicodedata.c(639): warning C4459: declaration of 'index1' hides global declaration
+                    compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\unicodedata.c(145) : warning C4701: potentially uninitialized local variable 'rc' used
+                    compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\unicodedata.c(1273): warning C4232: nonstandard extension used: 'tp_dealloc': address of dllimport 'PyObject_Free' is not static, identity not guaranteed
+                }
+            })
         { }
     }
 
@@ -387,7 +461,20 @@ namespace Python
     {
         public select()
             :
-            base("select", "Modules/selectmodule", null, settings =>
+            base("select",
+            "Modules/selectmodule",
+            settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\selectmodule.c(179): warning C4100: 'self': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\selectmodule.c(260) : warning C4701: potentially uninitialized local variable 'timeout' used
+                        compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\selectmodule.c(98) : warning C4706: assignment within conditional expression
+                    }
+                },
+            settings =>
                 {
                     var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
                     if (null != vcLinker)
@@ -431,7 +518,11 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("_WINSOCK_DEPRECATED_NO_WARNINGS");
-                        compiler.DisableWarnings.AddUnique("4244");
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\socketmodule.c(1134): warning C4100: 'proto': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4245"); // Python-3.5.1\Modules\socketmodule.c(1388): warning C4245: '=': conversion from 'int' to 'std::size_t', signed/unsigned mismatch
+                        compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\socketmodule.c(1597): warning C4244: '=': conversion from 'int' to 'ADDRESS_FAMILY', possible loss of data
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\socketmodule.c(2241): warning C4127: conditional expression is constant
+                        compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\socketmodule.c(4356): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
                     }
                 },
                 settings =>
@@ -689,7 +780,17 @@ namespace Python
     {
         public fpectl()
             :
-            base("fpectl", "Modules/fpectlmodule")
+            base("fpectl",
+            new Bam.Core.StringArray("Modules/fpectlmodule"),
+            settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\fpectlmodule.c(100): warning C4100: 'args': unreferenced formal parameter
+                    }
+                })
         { }
     }
 
@@ -706,9 +807,10 @@ namespace Python
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\fpetestmodule.c(62): warning C4100: 'args': unreferenced formal parameter
                             if (settings.Module.BuildEnvironment.Configuration != EConfiguration.Debug)
                             {
-                                var compiler = settings as C.ICommonCompilerSettings;
                                 compiler.DisableWarnings.AddUnique("4723"); // python-3.5.1\modules\fpetestmodule.c(162) : warning C4723: potential divide by 0
                             }
                         }
@@ -789,7 +891,13 @@ namespace Python
                          {
                              compiler.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
                              compiler.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
+                             compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\pyexpat.c(18): warning C4232: nonstandard extension used: 'malloc_fcn': address of dllimport 'PyObject_Malloc' is not static, identity not guaranteed
+                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\expat\xmlparse.c(4916): warning C4100: 'nextPtr': unreferenced formal parameter
                              compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\expat\xmlparse.c(1844) : warning C4244: 'return' : conversion from '__int64' to 'XML_Index', possible loss of data
+                             compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\pyexpat.c(1362): warning C4152: nonstandard extension, function/data pointer conversion in expression
+                             compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\pyexpat.c(1917): warning C4054: 'type cast': from function pointer 'void (__cdecl *)(void *,const XML_Char *,const XML_Char **)' to data pointer 'xmlhandler'
+                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\expat\xmlparse.c(1731): warning C4456: declaration of 'keep' hides previous local declaration
+                             compiler.DisableWarnings.AddUnique("4127"); // python-3.5.1\modules\expat\xmltok_impl.c(310): warning C4127: conditional expression is constant
                          }
                          else
                          {
@@ -910,6 +1018,17 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(155): warning C4100: 'kw': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(603): warning C4054: 'type cast': from function pointer 'FARPROC' to data pointer 'void *'
+                        compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(3324): warning C4152: nonstandard extension, function/data pointer conversion in expression
+                        compiler.DisableWarnings.AddUnique("4457"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(4437): warning C4457: declaration of 'item' hides function parameter
+                        compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_ctypes\_ctypes.c(3505) : warning C4706: assignment within conditional expression
+                        compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\_ctypes\callbacks.c(239) : warning C4701: potentially uninitialized local variable 'space' used
+                        compiler.DisableWarnings.AddUnique("4703"); // python-3.5.1\modules\_ctypes\callbacks.c(239) : warning C4703: potentially uninitialized local pointer variable 'space' used
+                        compiler.DisableWarnings.AddUnique("4055"); // Python-3.5.1\Modules\_ctypes\callproc.c(1395): warning C4055: 'type cast': from data pointer 'void *' to function pointer 'PPROC'
+                        compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\cfield.c(1009): warning C4244: 'function': conversion from 'long double' to 'double', possible loss of data
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_ctypes\cfield.c(1599): warning C4127: conditional expression is constant
+                        compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\_ctypes\stgdict.c(492): warning C4456: declaration of 'len' hides previous local declaration
                         compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;

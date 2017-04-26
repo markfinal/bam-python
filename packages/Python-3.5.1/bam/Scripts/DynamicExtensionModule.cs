@@ -142,8 +142,7 @@ namespace Python
                     var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != visualcCompiler)
                     {
-                        // warnings are present over warning level 3
-                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
+                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
