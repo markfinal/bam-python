@@ -61,6 +61,18 @@ namespace Python
             if (null != visualcCompiler)
             {
                 visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
+
+                // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                    (settings.Module as C.ObjectFile).Compiler;
+                if (compilerUsed.IsAtLeast(19))
+                {
+                }
+                else
+                {
+                    compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                }
             }
             var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
             if (null != gccCompiler)

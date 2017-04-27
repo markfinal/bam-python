@@ -197,6 +197,17 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_testmultiphase.c(30): warning C4100: 'self': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_testmultiphase.c(84): warning C4152: nonstandard extension, function/data pointer conversion in expression
+                        // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(19))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                        }
                     }
                 },
                 null)
@@ -228,6 +239,17 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_testbuffer.c(208): warning C4100: 'kwds': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_testbuffer.c(2643): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
+                        // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(19))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                        }
                     }
                 },
                 null)
@@ -351,6 +373,17 @@ namespace Python
                              compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\_elementtree.c(1729): warning C4456: declaration of 'cur' hides previous local declaration
                              compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_elementtree.c(2187): warning C4232: nonstandard extension used: 'tp_iter': address of dllimport 'PyObject_SelfIter' is not static, identity not guaranteed
                              compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_elementtree.c(1749) : warning C4706: assignment within conditional expression
+                             // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                             var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                 (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                 (settings.Module as C.ObjectFile).Compiler;
+                             if (compilerUsed.IsAtLeast(19))
+                             {
+                             }
+                             else
+                             {
+                                 compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                             }
                          }
                      })
         { }
@@ -415,6 +448,17 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("4459"); // Python-3.5.1\Modules\unicodedata.c(639): warning C4459: declaration of 'index1' hides global declaration
                     compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\unicodedata.c(145) : warning C4701: potentially uninitialized local variable 'rc' used
                     compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\unicodedata.c(1273): warning C4232: nonstandard extension used: 'tp_dealloc': address of dllimport 'PyObject_Free' is not static, identity not guaranteed
+                    // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                    var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                        (settings.Module as C.ObjectFile).Compiler;
+                    if (compilerUsed.IsAtLeast(19))
+                    {
+                    }
+                    else
+                    {
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                    }
                 }
             })
         { }
@@ -472,6 +516,17 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\selectmodule.c(179): warning C4100: 'self': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\selectmodule.c(260) : warning C4701: potentially uninitialized local variable 'timeout' used
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\selectmodule.c(98) : warning C4706: assignment within conditional expression
+                        // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(19))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
+                        }
                     }
                 },
             settings =>
