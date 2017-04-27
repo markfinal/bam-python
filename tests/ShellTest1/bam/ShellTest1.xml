@@ -5,10 +5,14 @@
     <Package name="Clang" version="Xcode8" default="true" />
     <Package name="Gcc" version="4.8" default="true" />
     <Package name="Python" version="3.5.1" />
+    <Package name="VisualC" version="10.0" />
+    <Package name="VisualC" version="11.0" />
+    <Package name="VisualC" version="12.0" />
     <Package name="VisualC" version="14.0" default="true" />
+    <Package name="VisualC" version="15.0" />
   </Dependents>
   <BamAssemblies>
-    <BamAssembly name="Bam.Core" major="1" minor="0" patch="1" />
+    <BamAssembly name="Bam.Core" major="1" minor="1" patch="1" />
   </BamAssemblies>
   <DotNetAssemblies>
     <DotNetAssembly name="System" requiredTargetFramework="4.0.30319" />

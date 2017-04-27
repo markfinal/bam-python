@@ -250,6 +250,13 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                         }
+                        if (compilerUsed.IsAtLeast(18))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\_testbuffer.c(1450) : warning C4306: 'type cast' : conversion from 'int' to 'PyObject *' of greater size
+                        }
                     }
                 },
                 null)
@@ -578,6 +585,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\socketmodule.c(1597): warning C4244: '=': conversion from 'int' to 'ADDRESS_FAMILY', possible loss of data
                         compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\socketmodule.c(2241): warning C4127: conditional expression is constant
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\socketmodule.c(4356): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(19))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4996"); // Python-3.5.1\Modules\socketmodule.c(6081) : warning C4996: 'GetVersion': was declared deprecated
+                        }
                     }
                 },
                 settings =>

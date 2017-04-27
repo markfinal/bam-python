@@ -1483,6 +1483,16 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4210"); // Python-3.5.1\Python\pylifecycle.c(291): warning C4210: nonstandard extension used: function given file scope
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Python\pylifecycle.c(907): warning C4456: declaration of 'loader' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\python\pylifecycle.c(305) : warning C4706: assignment within conditional expression
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(18))
+                            {
+                            }
+                            else
+                            {
+                                compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Python\pylifecycle.c(1540) : warning C4306: 'type cast' : conversion from 'int' to 'void (__cdecl *)(int)' of greater size
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -1860,6 +1870,16 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\mmapmodule.c(145): warning C4100: 'unused': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4057"); // Python-3.5.1\Modules\mmapmodule.c(514): warning C4057: 'function': 'PLONG' differs in indirection to slightly different base types from 'DWORD *'
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(18))
+                            {
+                            }
+                            else
+                            {
+                                compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\mmapmodule.c(1335) : warning C4306: 'type cast' : conversion from 'int' to 'HANDLE' of greater size
+                            }
                         }
                     });
                 var _csv = builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
@@ -2062,6 +2082,17 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // various
                             compiler.DisableWarnings.AddUnique("4127"); // various
                             compiler.DisableWarnings.AddUnique("4244"); // various
+                            // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(18))
+                            {
+                            }
+                            else
+                            {
+                                compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\cjkcodecs\multibytecodec.c(72) : warning C4306: 'type cast' : conversion from 'int' to 'PyObject *' of greater size
+                            }
                         }
                     });
 
@@ -2116,6 +2147,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\signalmodule.c(1222): warning C4054: 'type cast': from function pointer '_crt_signal_t' to data pointer 'void *'
                         compiler.DisableWarnings.AddUnique("4057"); // Python-3.5.1\Modules\signalmodule.c(258): warning C4057: 'function': 'const char *' differs in indirection to slightly different base types from 'unsigned char *'
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\signalmodule.c(1570) : warning C4706: assignment within conditional expression
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(18))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\signalmodule.c(434) : warning C4306: 'type cast' : conversion from 'int' to 'void (__cdecl *)(int)' of greater size
+                        }
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2179,6 +2220,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\posixmodule.c(5136) : warning C4701: potentially uninitialized local variable 'argc' used
                         compiler.DisableWarnings.AddUnique("4703"); // python-3.5.1\modules\posixmodule.c(4863) : warning C4703: potentially uninitialized local pointer variable 'hFile' used
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\posixmodule.c(7023) : warning C4706: assignment within conditional expression
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(18))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\posixmodule.c(10628) : warning C4306: 'type cast' : conversion from 'int' to 'HINSTANCE' of greatersize
+                        }
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2721,6 +2772,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\faulthandler.c(251): warning C4100: 'self': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4702"); // python-3.5.1\modules\faulthandler.c(934) : warning C4702: unreachable code
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\faulthandler.c(1103) : warning C4706: assignment within conditional expression
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(18))
+                        {
+                        }
+                        else
+                        {
+                            compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\faulthandler.c(412) : warning C4306: 'type cast' : conversion from 'int' to 'void (__cdecl *)(int)' of greater size
+                        }
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2902,6 +2963,16 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\winreg.c(118): warning C4100: 'ob': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\PC\winreg.c(729): warning C4456: declaration of 'len' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4057"); // Python-3.5.1\PC\winreg.c(1392): warning C4057: 'function': 'PLONG' differs in indirection to slightly different base types from 'DWORD *'
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(18))
+                            {
+                            }
+                            else
+                            {
+                                compiler.DisableWarnings.AddUnique("4305"); // Python-3.5.1\PC\winreg.c(885) : warning C4305: 'type cast' : truncation from 'void *' to 'DWORD'
+                            }
                         }
                     });
                 var invalid_parameter_handle = pcSource.AddFiles("$(packagedir)/PC/invalid_parameter_handler.c"); // required by VS2015+
