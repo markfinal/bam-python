@@ -1102,6 +1102,11 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_ctypes\cfield.c(1599): warning C4127: conditional expression is constant
                         compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\_ctypes\stgdict.c(492): warning C4456: declaration of 'len' hides previous local declaration
                         compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
+                        var module = settings.Module as C.CModule;
+                        if (module.BitDepth == C.EBit.ThirtyTwo)
+                        {
+                            compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\Modules\_ctypes\cfield.c(1447): warning C4389: '!=': signed/unsigned mismatch
+                        }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
@@ -1131,6 +1136,7 @@ namespace Python
                     }
                 },
 #if BAM_HOST_WIN64
+            // TODO: actually only if the TARGET is 64-bit
             new Bam.Core.StringArray("Modules/_ctypes/libffi_msvc/win64.asm"),
             null
 #elif BAM_HOST_OSX64

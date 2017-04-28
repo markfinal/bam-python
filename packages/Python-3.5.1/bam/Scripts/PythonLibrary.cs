@@ -755,6 +755,11 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Objects\longobject.c(4638): warning C4100: 'context': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Objects\longobject.c(2166): warning C4456: declaration of 'i' hides previous local declaration
+
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Objects\longobject.c(2666): warning C4244: '+=': conversion from 'const int' to 'digit', possible loss of data
+                            }
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -2865,6 +2870,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_winapi.c(371): warning C4100: 'module': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4204"); // Python-3.5.1\Modules\_winapi.c(1238): warning C4204: nonstandard extension used: non-constant aggregate initializer
                             compiler.DisableWarnings.AddUnique("4702"); // python-3.5.1\modules\_winapi.c(954) : warning C4702: unreachable code
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\Modules\_winapi.c(231): warning C4389: '!=': signed/unsigned mismatch
+                            }
                         }
                     });
                 var msvcrtmodule = builtinModuleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
