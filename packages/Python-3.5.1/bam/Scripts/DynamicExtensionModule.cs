@@ -147,9 +147,9 @@ namespace Python
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
                     {
-                        gccCompiler.AllWarnings = false;
-                        gccCompiler.ExtraWarnings = false;
-                        gccCompiler.Pedantic = false;
+                        gccCompiler.AllWarnings = true;
+                        gccCompiler.ExtraWarnings = true;
+                        gccCompiler.Pedantic = true;
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
