@@ -154,9 +154,9 @@ namespace Python
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
-                        clangCompiler.AllWarnings = false;
-                        clangCompiler.ExtraWarnings = false;
-                        clangCompiler.Pedantic = false;
+                        clangCompiler.AllWarnings = true;
+                        clangCompiler.ExtraWarnings = true;
+                        clangCompiler.Pedantic = true;
                     }
                 });
             if (null != this.CompilationPatch)
