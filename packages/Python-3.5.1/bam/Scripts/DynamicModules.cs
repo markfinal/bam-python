@@ -103,6 +103,13 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_sqlite\statement.c(334): warning C4013: 'sqlite3_transfer_bindings' undefined; assuming extern returning int
                         }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sqlite/cache.c:256:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sqlite/cache.c:57:73: error: unused parameter 'kwargs' [-Werror,-Wunused-parameter]
+                            compiler.DisableWarnings.AddUnique("implicit-function-declaration"); // Python-3.5.1/Modules/_sqlite/statement.c:334:19: error: implicit declaration of function 'sqlite3_transfer_bindings' [-Werror,-Wimplicit-function-declaration]
+                        }
                     },
                  settings =>
                     {
@@ -138,7 +145,16 @@ namespace Python
             base(
                 "_hashlib",
                 "Modules/_hashopenssl",
-                null,
+                settings =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_hashopenssl.c:215:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_hashopenssl.c:122:37: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
+                    }
+                },
                 settings =>
                 {
                     var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
@@ -1082,6 +1098,14 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ssl.c(2496): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ssl.c(3630): warning C4267: 'function': conversion from 'size_t' to 'long', possible loss of data
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ssl_data.h:8:12: error: missing field 'code' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ssl.c:381:49: error: unused parameter 'filename' [-Werror,-Wunused-parameter]
+                            clangCompiler.Pedantic = false; // Python-3.5.1/Modules/_ssl.c:298:17: error: initializing 'void *' with an expression of type 'PyObject *(PyOSErrorObject *)' (aka 'struct _object *(PyOSErrorObject *)') converts between void pointer and function pointer [-Werror,-Wpedantic]
                         }
                     },
                 settings =>
