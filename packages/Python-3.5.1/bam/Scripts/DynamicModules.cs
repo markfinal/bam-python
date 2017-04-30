@@ -101,7 +101,10 @@ namespace Python
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
-                            compiler.DisableWarnings.AddUnique("4013"); // Python-3.5.1\Modules\_sqlite\statement.c(334): warning C4013: 'sqlite3_transfer_bindings' undefined; assuming extern returning int
+                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_sqlite\cache.c(57): warning C4100: 'kwargs': unreferenced formal parameter
+                            compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_sqlite\module.c(358) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4702"); // python-3.5.1\modules\_sqlite\statement.c(475) : warning C4702: unreachable code
+                            compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_sqlite\util.c(161): warning C4127: conditional expression is constant
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -153,6 +156,12 @@ namespace Python
                 "Modules/_hashopenssl",
                 settings =>
                 {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_hashopenssl.c(122): warning C4100: 'unused': unreferenced formal parameter
+                    }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
@@ -1109,8 +1118,11 @@ namespace Python
                         if (null != vcCompiler)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4100"); // python-3.5.1\modules\clinic/_ssl.c.h(17): warning C4100: '_unused_ignored': unreferenced formal parameter
+                            compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_ssl.c(298): warning C4152: nonstandard extension, function/data pointer conversion in expression
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ssl.c(2496): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ssl.c(3630): warning C4267: 'function': conversion from 'size_t' to 'long', possible loss of data
+                            compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_ssl.c(4192) : warning C4706: assignment within conditional expression
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
