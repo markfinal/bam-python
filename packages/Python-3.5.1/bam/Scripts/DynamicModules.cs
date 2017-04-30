@@ -110,6 +110,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sqlite/cache.c:57:73: error: unused parameter 'kwargs' [-Werror,-Wunused-parameter]
                             compiler.DisableWarnings.AddUnique("implicit-function-declaration"); // Python-3.5.1/Modules/_sqlite/statement.c:334:19: error: implicit declaration of function 'sqlite3_transfer_bindings' [-Werror,-Wimplicit-function-declaration]
                         }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sqlite/cache.c:256:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sqlite/cache.c:57:73: error: unused parameter 'kwargs' [-Werror=unused-parameter]
+                        }
                     },
                  settings =>
                     {
@@ -153,6 +159,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_hashopenssl.c:215:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_hashopenssl.c:122:37: error: unused parameter 'unused' [-Werror,-Wunused-parameter]
+                    }
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_hashopenssl.c:215:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_hashopenssl.c:122:37: error: unused parameter 'unused' [-Werror=unused-parameter]
                     }
                 },
                 settings =>
@@ -1106,6 +1119,15 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ssl_data.h:8:12: error: missing field 'code' initializer [-Werror,-Wmissing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ssl.c:381:49: error: unused parameter 'filename' [-Werror,-Wunused-parameter]
                             clangCompiler.Pedantic = false; // Python-3.5.1/Modules/_ssl.c:298:17: error: initializing 'void *' with an expression of type 'PyObject *(PyOSErrorObject *)' (aka 'struct _object *(PyOSErrorObject *)') converts between void pointer and function pointer [-Werror,-Wpedantic]
+                        }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/clinic/_ssl.c.h:210:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ssl.c:381:49: error: unused parameter 'filename' [-Werror=unused-parameter]
+                            compiler.DisableWarnings.AddUnique("type-limits"); // Python-3.5.1/Include/pymem.h:93:6: error: comparison is always false due to limited range of data type [-Werror=type-limits]
+                            gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ssl.c:298:5: error: ISO C forbids initialization between function pointer and 'void *' [-Werror=pedantic]
                         }
                     },
                 settings =>
