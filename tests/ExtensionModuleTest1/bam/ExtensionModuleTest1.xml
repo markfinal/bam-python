@@ -2,10 +2,25 @@
 <PackageDefinition xsi:schemaLocation="http://www.buildamation.com ./Schema/BamPackageDefinitionV1.xsd" name="ExtensionModuleTest1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildamation.com">
   <Description>Creating a custom extension module</Description>
   <Dependents>
+    <Package name="C" />
+    <Package name="Clang" version="Xcode6" />
+    <Package name="Clang" version="Xcode8" default="true" />
+    <Package name="Gcc" version="4.8" default="true" />
+    <Package name="Gcc" version="5.4" />
+    <Package name="MakeFileBuilder" />
+    <Package name="NativeBuilder" />
+    <Package name="Publisher" />
     <Package name="Python" version="3.5.1" />
+    <Package name="VisualC" version="10.0" />
+    <Package name="VisualC" version="11.0" />
+    <Package name="VisualC" version="12.0" />
+    <Package name="VisualC" version="14.0" default="true" />
+    <Package name="VisualC" version="15.0" />
+    <Package name="VSSolutionBuilder" />
+    <Package name="XcodeBuilder" />
   </Dependents>
   <BamAssemblies>
-    <BamAssembly name="Bam.Core" major="1" minor="0" patch="4" />
+    <BamAssembly name="Bam.Core" major="1" minor="1" patch="1" />
   </BamAssemblies>
   <DotNetAssemblies>
     <DotNetAssembly name="System" requiredTargetFramework="4.0.30319" />

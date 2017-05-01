@@ -4,7 +4,7 @@ PyDoc_STRVAR(custommodule_docstring,
     "This is an example custom module.");
 
 static PyMethodDef custommodule_functions[] = {
-    { NULL, NULL } /* sentinel */
+    { NULL, NULL, 0, NULL } /* sentinel */
 };
 
 static struct PyModuleDef custommodule = {

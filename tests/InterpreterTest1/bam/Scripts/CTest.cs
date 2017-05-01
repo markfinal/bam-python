@@ -42,30 +42,31 @@ namespace InterpreterTest1
             var source = this.CreateCSourceContainer("$(packagedir)/source/*.c");
             source.PrivatePatch(settings =>
                 {
+#if false
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;
                     if (null != winCompiler)
                     {
                         winCompiler.CharacterSet = C.ECharacterSet.Unicode;
                     }
+                #endif
                     var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != visualcCompiler)
                     {
-                        // warnings in pyhash.h and pytime.h
-                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
+                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
                     {
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
-                        gccCompiler.Pedantic = false;
+                        gccCompiler.Pedantic = true;
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
                         clangCompiler.AllWarnings = true;
                         clangCompiler.ExtraWarnings = true;
-                        clangCompiler.Pedantic = false;
+                        clangCompiler.Pedantic = true;
                     }
                 });
 
