@@ -1047,6 +1047,12 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\dynload_win.c(191): warning C4100: 'fp': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4057"); // Python\dynload_win.c(148): warning C4057: 'function': 'const char *' differs in indirection to slightly different base types from 'unsigned char *'
+
+                            if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebug ||
+                                vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL)
+                            {
+                                compiler.DisableWarnings.AddUnique("4389"); // python-3.5.1\python\thread_nt.h(203): warning C4389: '==': signed/unsigned mismatch
+                            }
                         }
                     });
             }
@@ -1659,6 +1665,11 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // python-3.5.1\python\thread_nt.h(296): warning C4100: 'intr_flag': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4189"); // python-3.5.1\python\thread_nt.h(218): warning C4189: 'e': local variable is initialized but not referenced
+                            if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebug ||
+                                vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL)
+                            {
+                                compiler.DisableWarnings.AddUnique("4389"); // python-3.5.1\python\thread_nt.h(203): warning C4389: '==': signed/unsigned mismatch
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -2887,6 +2898,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4311"); // Python-3.5.1\PC\msvcrtmodule.c(391): warning C4311: 'type cast': pointer truncation from '_HFILE' to 'long'
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\msvcrtmodule.c(81): warning C4100: 'module': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\PC\msvcrtmodule.c(329): warning C4244: 'function': conversion from 'int' to 'wchar_t', possible loss of data
+                            if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebug ||
+                                vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL)
+                            {
+                                compiler.DisableWarnings.AddUnique("4310"); // Python-3.5.1\PC\msvcrtmodule.c(538): warning C4310: cast truncates constant value
+                            }
                         }
                     });
             }
@@ -2972,6 +2988,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\winreg.c(118): warning C4100: 'ob': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\PC\winreg.c(729): warning C4456: declaration of 'len' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4057"); // Python-3.5.1\PC\winreg.c(1392): warning C4057: 'function': 'PLONG' differs in indirection to slightly different base types from 'DWORD *'
+                            if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebug ||
+                                vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL)
+                            {
+                                compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\PC\winreg.c(578): warning C4389: '==': signed/unsigned mismatch
+                            }
                             var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                                 (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                                 (settings.Module as C.ObjectFile).Compiler;
