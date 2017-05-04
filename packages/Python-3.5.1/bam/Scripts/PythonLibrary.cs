@@ -117,6 +117,17 @@ namespace Python
             }
         }
 
+        private void
+        WinNotUnicodePatch(
+            Bam.Core.Settings settings)
+        {
+            var winCompiler = settings as C.ICommonCompilerSettingsWin;
+            if (null != winCompiler)
+            {
+                winCompiler.CharacterSet = C.ECharacterSet.NotSet;
+            }
+        }
+
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -1990,6 +2001,7 @@ namespace Python
 
                 // TODO: use an external zlib?
                 var zlib = this.CreateCSourceContainer("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
+                zlib.PrivatePatch(this.WinNotUnicodePatch);
                 zlib.PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
