@@ -52,6 +52,8 @@ namespace Python
             var compiler = settings as C.ICommonCompilerSettings;
             compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
             compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+            var cCompiler = settings as C.ICOnlyCompilerSettings;
+            cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
             var winCompiler = settings as C.ICommonCompilerSettingsWin;
             if (null != winCompiler)
             {
@@ -169,12 +171,6 @@ namespace Python
                         if (null != gccCompiler)
                         {
                             compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pyport.h:58:27: error: ISO C90 does not support 'long long' [-Werror=long-long]
-                        }
-
-                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                        if (null != clangCompiler)
-                        {
-                            compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pytime.h:20:9: error: 'long long' is an extension when C99 mode is not enabled [-Werror,-Wlong-long]
                         }
                     }
                 });
@@ -343,8 +339,6 @@ namespace Python
             objectSource["bytesobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var cCompiler = settings as C.ICOnlyCompilerSettings;
-                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
@@ -944,8 +938,6 @@ namespace Python
             objectSource["odictobject.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var cCompiler = settings as C.ICOnlyCompilerSettings;
-                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
                         {
@@ -1111,8 +1103,6 @@ namespace Python
             pythonSource["_warnings.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var cCompiler = settings as C.ICOnlyCompilerSettings;
-                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // because of C++ style comments
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
@@ -1247,7 +1237,6 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/compile.c:793:38: error: unused parameter 'c' [-Werror,-Wunused-parameter]
-                            compiler.DisableWarnings.AddUnique("c99-extensions"); // Python-3.5.1/Python/compile.c:97:33: error: commas at the end of enumerator lists are a C99-specific feature [-Werror,-Wc99-extensions]
                         }
                     }));
 

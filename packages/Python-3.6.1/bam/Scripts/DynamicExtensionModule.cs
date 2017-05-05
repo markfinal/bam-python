@@ -134,6 +134,8 @@ namespace Python
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+                    var cCompiler = settings as C.ICOnlyCompilerSettings;
+                    cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;
                     if (null != winCompiler)
                     {

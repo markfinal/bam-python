@@ -593,7 +593,6 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_testcapimodule.c:52:23: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_testcapimodule.c:294:1: error: missing field 'tp_free' initializer [-Werror,-Wmissing-field-initializers]
-                        compiler.DisableWarnings.AddUnique("c99-extensions"); // Python-3.5.1/Modules/_testcapimodule.c:2505:9: error: initializer for aggregate is not a compile-time constant [-Werror,-Wc99-extensions]
                         compiler.DisableWarnings.AddUnique("extended-offsetof"); // Python-3.5.1/Modules/_testcapimodule.c:3738:24: error: using extended field designator is an extension [-Werror,-Wextended-offsetof]
                     }
                 })
@@ -861,9 +860,6 @@ namespace Python
             new Bam.Core.StringArray("Modules/fcntlmodule"),
             settings =>
                 {
-                    var cCompiler = settings as C.ICOnlyCompilerSettings;
-                    cCompiler.LanguageStandard = C.ELanguageStandard.C99; // Python-3.5.1/Modules/fcntlmodule.c:255:9: error: expected expression before '/' token
-
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
                     {
@@ -2151,8 +2147,6 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         compiler.PreprocessorDefines.Add("MACOSX");
-                        var cOnly = settings as C.ICOnlyCompilerSettings;
-                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for 'inline'
                         compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:155:47: error: unused parameter 'args' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:210:1: error: missing field 'tp_is_gc' initializer [-Werror,-Wmissing-field-initializers]
