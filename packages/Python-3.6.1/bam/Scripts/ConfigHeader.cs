@@ -175,7 +175,7 @@ namespace Python
                 contents.AppendLine("#define PyMODINIT_FUNC extern __attribute__ ((visibility(\"default\"))) PyObject*");
                 contents.AppendLine("#endif");
                 contents.AppendLine("#define HAVE_DYNAMIC_LOADING");
-                contents.AppendLine("#define SOABI \"cpython-35\"");
+                contents.AppendLine("#define SOABI \"cpython-36\"");
                 contents.AppendLine("#define HAVE_DLFCN_H");
                 contents.AppendLine("#define HAVE_DLOPEN");
                 contents.AppendLine("#define HAVE_GETADDRINFO"); // for socket extension module

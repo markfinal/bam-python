@@ -112,7 +112,7 @@ namespace Python
                 }
                 else
                 {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35_d");
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python36_d");
                 }
             }
         }
@@ -136,14 +136,14 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35");
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python36");
             }
             else
             {
                 this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
             }
             this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("3");
-            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
+            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("6");
             this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
