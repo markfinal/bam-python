@@ -177,6 +177,7 @@ namespace Python
                 contents.AppendLine("#define SOABI \"cpython-36\"");
                 contents.AppendLine("#define HAVE_DLFCN_H");
                 contents.AppendLine("#define HAVE_DLOPEN");
+                contents.AppendLine("#define HAVE_DECL_RTLD_LAZY 1");
                 contents.AppendLine("#define HAVE_GETADDRINFO"); // for socket extension module
                 contents.AppendLine("#define HAVE_ADDRINFO"); // for socket extension module
                 contents.AppendLine("#define HAVE_SOCKADDR_STORAGE"); // for socket extension module
