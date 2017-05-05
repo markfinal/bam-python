@@ -259,6 +259,16 @@ namespace Python
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
+            objectSource.PrivatePatch(settings =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Objects/stringlib/find.h:46:1: error: unused function 'stringlib_find_slice' [-Werror,-Wunused-function]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Objects/stringlib/find.h:46:61: error: unused parameter 'str_len' [-Werror,-Wunused-parameter]
+                    }
+                });
 
             objectSource["abstract.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -371,6 +381,12 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Objects\bytes_methods.c(297): warning C4244: '=': conversion from 'int' to 'char', possible loss of data
+                        }
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Objects/bytes_methods.c:677:37: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
                         }
                     }));
             objectSource["capsule.c"].ForEach(item =>
@@ -933,6 +949,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/obmalloc.c:54:24: error: unused parameter 'ctx' [-Werror,-Wunused-parameter]
+                            clangCompiler.Pedantic = false; // Python-3.6.1/Objects/obmalloc.c:2114:66: error: format specifies type 'void *' but the argument has type 'const uint8_t *' (aka 'const unsigned char *') [-Werror,-Wformat-pedantic]
                         }
                     }));
             objectSource["odictobject.c"].ForEach(item =>
@@ -1510,6 +1527,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Python/pylifecycle.c:181:1: error: unused function 'get_codec_name' [-Werror,-Wunused-function]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Python/pylifecycle.c:1348:29: error: unused parameter 'fd' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -1599,6 +1617,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/random.c:193:24: error: missing field 'st_dev' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Python/random.c:465:46: error: unused parameter 'blocking' [-Werror,-Wunused-parameter]
                         }
                     }));
 
@@ -2541,6 +2560,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/timemodule.c:38:21: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/timemodule.c:257:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/timemodule.c:698:1: error: string literal of length 969 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/timemodule.c:1160:1: error: unused function 'get_zone' [-Werror,-Wunused-function]
                     }
                 });
             var _localemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
@@ -2851,7 +2871,16 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_tracemalloc.c:1340:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
-            builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
+            var hashtable = builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
+            hashtable.First().PrivatePatch(settings =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror,-Wunused-parameter]
+                    }
+                });
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
             symtablemodule.First().PrivatePatch(settings =>
                 {
