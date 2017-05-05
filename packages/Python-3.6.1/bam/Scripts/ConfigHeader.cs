@@ -131,6 +131,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_STRING_H");
                 contents.AppendLine("#define HAVE_ERRNO_H");
                 contents.AppendLine("#define HAVE_LSTAT");
+                contents.AppendLine("#define PY_INT64_T PY_LONG_LONG");
                 contents.AppendLine("#define PY_FORMAT_LONG_LONG \"ll\"");
                 contents.AppendLine("#define PY_FORMAT_SIZE_T \"z\"");
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
