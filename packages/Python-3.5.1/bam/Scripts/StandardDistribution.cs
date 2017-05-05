@@ -145,6 +145,17 @@ namespace Python
             moduleList.Add(module.Include<_sqlite3>(C.DynamicLibrary.Key, ModuleDirectory, root));
             module.Include<sqlite.SqliteShared>(C.DynamicLibrary.Key, ModuleDirectory, root);
 #endif
+#if PYTHON_USE_ZLIB_PACKAGE
+            if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                // as zlibmodule is builtin
+                module.Include<global::zlib.ZLib>(C.DynamicLibrary.Key, ".", root);
+            }
+            else
+            {
+                module.Include<global::zlib.ZLib>(C.DynamicLibrary.Key, ModuleDirectory, root);
+            }
+#endif
 
             // currently not buildable
             //moduleList.Add(module.Include<spwd>(C.DynamicLibrary.Key, ModuleDirectory, root));

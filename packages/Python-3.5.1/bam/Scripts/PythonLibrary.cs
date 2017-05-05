@@ -1999,7 +1999,8 @@ namespace Python
                         }
                     });
 
-                // TODO: use an external zlib?
+#if PYTHON_USE_ZLIB_PACKAGE
+#else
                 var zlib = this.CreateCSourceContainer("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
                 zlib.PrivatePatch(this.WinNotUnicodePatch);
                 zlib.PrivatePatch(settings =>
@@ -2087,12 +2088,15 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\zlib\trees.c(602): warning C4244: '=': conversion from 'unsigned int' to 'ush', possible loss of data
                             }
                         }));
+#endif
 
                 var zlibmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
                 zlibmodule.First().PrivatePatch(settings =>
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
+#if !PYTHON_USE_ZLIB_PACKAGE
                         compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
+#endif
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
@@ -2100,6 +2104,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\zlibmodule.c(308) : warning C4706: assignment within conditional expression
                         }
                     });
+
+#if PYTHON_USE_ZLIB_PACKAGE
+                this.CompileAndLinkAgainst<global::zlib.ZLib>(zlibmodule.First() as C.CModule);
+#endif
+
                 cjkcodecs.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
                 cjkcodecs.PrivatePatch(settings =>
                     {
@@ -2936,7 +2945,9 @@ namespace Python
 
             headers.AddFiles("$(packagedir)/Modules/*.h");
             headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
+#if !PYTHON_USE_ZLIB_PACKAGE
             headers.AddFiles("$(packagedir)/Modules/zlib/*.h");
+#endif
             headers.AddFiles("$(packagedir)/Modules/_io/*.h");
 
 #if false
