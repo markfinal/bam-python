@@ -2956,8 +2956,12 @@ namespace Python
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
+                            // TODO: these should be configurables
+                            compiler.PreprocessorDefines.Add("PREFIX", "\".\"");
+                            compiler.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
+                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\"./lib/python/3.6:./lib/python/3.6/lib-dynload\""); // TODO: this was in pyconfig.h for PC
                             compiler.PreprocessorDefines.Add("VERSION", "\"3.6\"");
-                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".\"");
+                            compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
             }
 
