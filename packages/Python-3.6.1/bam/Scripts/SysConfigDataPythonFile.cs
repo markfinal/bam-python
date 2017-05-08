@@ -41,7 +41,15 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
-            this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata.py"));
+            // format from sysconfig.py: '_sysconfigdata_{abi}_{platform}_{multiarch}'
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+            {
+                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__darwin_.py")); // no ABI, no multiarch
+            }
+            else
+            {
+                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__linux_.py")); // no ABI, no multiarch
+            }
         }
 
         public override void

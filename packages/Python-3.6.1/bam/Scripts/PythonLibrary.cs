@@ -1664,6 +1664,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/sysmodule.c:163:27: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/sysmodule.c:1124:1: error: string length '742' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/sysmodule.c:1287:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\""); // no ABI defined, see sysconfig.py: TODO could get this from the Gcc version?
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -1672,6 +1673,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/sysmodule.c:163:27: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/sysmodule.c:1125:1: error: string literal of length 742 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/sysmodule.c:1287:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\""); // no ABI defined, see sysconfig.py
                         }
                     }));
 
