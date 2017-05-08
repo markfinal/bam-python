@@ -2959,7 +2959,7 @@ namespace Python
                             // TODO: these should be configurables
                             compiler.PreprocessorDefines.Add("PREFIX", "\".\"");
                             compiler.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
-                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\"./lib/python3.6:./lib/python3.6/lib-dynload\""); // TODO: this was in pyconfig.h for PC
+                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC
                             compiler.PreprocessorDefines.Add("VERSION", "\"3.6\"");
                             compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
