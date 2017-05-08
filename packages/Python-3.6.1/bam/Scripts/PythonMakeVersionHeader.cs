@@ -32,7 +32,7 @@ namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PythonMakeVersionHeader :
-        C.ProceduralHeaderFileFromToolOutput
+        C.ProceduralHeaderFile
     {
         protected override TokenizedString OutputPath
         {
@@ -42,11 +42,22 @@ namespace Python
             }
         }
 
-        protected override ICommandLineTool SourceTool
+        protected override string Contents
         {
             get
             {
-                return Bam.Core.Graph.Instance.FindReferencedModule<PythonMakeVersion>();
+                var contents = new System.Text.StringBuilder();
+                contents.AppendLine("#define FIELD3 1150"); // using PCBuild/build.bat -V
+                contents.AppendLine("#define MS_DLL_ID \"3.6\"");
+                if (this.BuildEnvironment.Configuration == EConfiguration.Debug)
+                {
+                    contents.AppendLine("#define PYTHON_DLL_NAME \"python36_d.dll\"");
+                }
+                else
+                {
+                    contents.AppendLine("#define PYTHON_DLL_NAME \"python36.dll\"");
+                }
+                return contents.ToString();
             }
         }
     }

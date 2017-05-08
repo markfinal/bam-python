@@ -221,6 +221,18 @@ namespace Python
                         }
                     }));
 
+            parserSource["myreadline.c"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4456"); // Python-3.6.1\Parser\myreadline.c(226): warning C4456: declaration of 'n' hides previous local declaration
+                            compiler.DisableWarnings.AddUnique("4706"); // python-3.6.1\parser\myreadline.c(221) : warning C4706: assignment within conditional expression
+                        }
+                    }));
+
             parserSource["node.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -267,6 +279,13 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Objects/stringlib/find.h:46:1: error: unused function 'stringlib_find_slice' [-Werror,-Wunused-function]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Objects/stringlib/find.h:46:61: error: unused parameter 'str_len' [-Werror,-Wunused-parameter]
+                    }
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4702"); // python-3.6.1\objects\stringlib\fastsearch.h(161) : warning C4702: unreachable code
+                        compiler.DisableWarnings.AddUnique("4100"); // python-3.6.1\objects\stringlib/find.h(46): warning C4100: 'str_len': unreferenced formal parameter
                     }
                 });
 
@@ -785,6 +804,7 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Objects\longobject.c(4638): warning C4100: 'context': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Objects\longobject.c(2166): warning C4456: declaration of 'i' hides previous local declaration
+                            compiler.DisableWarnings.AddUnique("4701"); // python-3.6.1\objects\longobject.c(1901) : warning C4701: potentially uninitialized local variable 'kind' used
 
                             if (objectSource.BitDepth == C.EBit.ThirtyTwo)
                             {
@@ -976,6 +996,16 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("extra-semi"); // Python-3.5.1/Objects/odictobject.c:1492:2: error: extra ';' outside of a function [-Werror,-Wextra-semi]
                         }
                     }));
+            objectSource["setobject.c"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4245"); // Python-3.6.1\Objects\setobject.c(787): warning C4245: 'function': conversion from 'int' to 'std::Py_uhash_t', signed/unsigned mismatch
+                        }
+                    }));
             objectSource["structseq.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -1018,6 +1048,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Objects\typeobject.c(2398): warning C4456: declaration of 'tmp' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4055"); // Python-3.5.1\Objects\typeobject.c(5105): warning C4055: 'type cast': from data pointer 'void *' to function pointer 'lenfunc'
                             compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Objects\typeobject.c(6128): warning C4054: 'type cast': from function pointer 'PyObject *(__cdecl *)(PyObject*,PyObject *)' to data pointer 'void *'
+                            compiler.DisableWarnings.AddUnique("4204"); // Python-3.6.1\Objects\typeobject.c(7052): warning C4204: nonstandard extension used: non-constant aggregate initializer
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -1045,6 +1076,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\Objects\unicodeobject.c(10744): warning C4389: '!=': signed/unsigned mismatch
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\objects\unicodeobject.c(4428) : warning C4701: potentially uninitialized local variable 'startinpos' used
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\objects\unicodeobject.c(10818) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4310"); // Python-3.6.1\Objects\unicodeobject.c(6989): warning C4310: cast truncates constant value
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -1161,6 +1193,7 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\bltinmodule.c(53): warning C4100: 'self': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\python\bltinmodule.c(1718) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4204"); // Python-3.6.1\Python\bltinmodule.c(160): warning C4204: nonstandard extension used: non-constant aggregate initializer
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -1341,6 +1374,8 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\getargs.c(146): warning C4100: 'self': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Python\getargs.c(918): warning C4127: conditional expression is constant
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\python\getargs.c(1219) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4456"); // Python-3.6.1\Python\getargs.c(1802): warning C4456: declaration of 'pos' hides previous local declaration
+                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Python\getargs.c(2020): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
                         }
 
                         // TODO: I cannot see how else some symbols are exported with preprocessor settings
@@ -1455,6 +1490,7 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\peephole.c(354): warning C4100: 'names': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Python\peephole.c(482): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
+                            compiler.DisableWarnings.AddUnique("4267"); // Python-3.6.1\Python\peephole.c(657): warning C4267: 'function': conversion from 'size_t' to 'unsigned int', possible loss of data
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -1520,6 +1556,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4210"); // Python-3.5.1\Python\pylifecycle.c(291): warning C4210: nonstandard extension used: function given file scope
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Python\pylifecycle.c(907): warning C4456: declaration of 'loader' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\python\pylifecycle.c(305) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.6.1\Python\pylifecycle.c(1348): warning C4100: 'fd': unreferenced formal parameter
                             var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                                 (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                                 (settings.Module as C.ObjectFile).Compiler;
@@ -1621,6 +1658,12 @@ namespace Python
             pythonSource["random.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.6.1\Python\random.c(465): warning C4100: 'blocking': unreferenced formal parameter
+                        }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
                         {
@@ -1672,6 +1715,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\sysmodule.c(163): warning C4100: 'self': unreferenced formal parameter
+                            compiler.DisableWarnings.AddUnique("4706"); // python-3.6.1\python\sysmodule.c(975) : warning C4706: assignment within conditional expression
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
@@ -2128,6 +2172,7 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\zlibmodule.c(122): warning C4100: 'ctx': unreferenced formal parameter
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\zlibmodule.c(308) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4267"); // Python-3.6.1\Modules\zlibmodule.c(145): warning C4267: '=': conversion from 'size_t' to 'uInt', possible loss of data
                         }
                     });
 
@@ -2248,6 +2293,7 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\gcmodule.c(370): warning C4100: 'data': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\gcmodule.c(1633) : warning C4706: assignment within conditional expression
+                        compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\gcmodule.c(1078): warning C4244: 'function': conversion from 'Py_ssize_t' to 'int', possible loss of data
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2411,6 +2457,7 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_functoolsmodule.c(263): warning C4100: 'unused': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_functoolsmodule.c(954) : warning C4706: assignment within conditional expression
+                        compiler.DisableWarnings.AddUnique("4701"); // python-3.6.1\modules\_functoolsmodule.c(182) : warning C4701: potentially uninitialized local variable 'nargs' used
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2435,6 +2482,7 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_operator.c(68): warning C4100: 's': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4456"); // Python-3.6.1\Modules\_operator.c(1114): warning C4456: declaration of 'newargs' hides previous local declaration
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2562,6 +2610,7 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\timemodule.c(38): warning C4100: 'unused': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\timemodule.c(402): warning C4244: '=': conversion from 'time_t' to 'int', possible loss of data
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2771,6 +2820,20 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/textio.c.h:113:1: error: string literal of length 1469 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
+            _io["winconsoleio.c"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.6.1\Modules\_io\winconsoleio.c(230): warning C4100: 'kwds': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4389"); // Python-3.6.1\Modules\_io\winconsoleio.c(327): warning C4389: '!=': signed/unsigned mismatch
+                        compiler.DisableWarnings.AddUnique("4189"); // Python-3.6.1\Modules\_io\winconsoleio.c(277): warning C4189: 'fd_is_own': local variable is initialized but not referenced
+                        compiler.DisableWarnings.AddUnique("4701"); // python-3.6.1\modules\_io\winconsoleio.c(223) : warning C4701: potentially uninitialized local variable 'tb' used
+                        compiler.DisableWarnings.AddUnique("4703"); // python-3.6.1\modules\_io\winconsoleio.c(223) : warning C4703: potentially uninitialized local pointer variable 'tb' used
+                    }
+                }));
             _io["_iomodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -2808,6 +2871,7 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\zipimport.c(914): warning C4244: 'function': conversion from 'Py_ssize_t' to 'long', possible loss of data
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\zipimport.c(1355): warning C4100: 'ispackage': unreferenced formal parameter
+                        compiler.DisableWarnings.AddUnique("4127"); // Python-3.6.1\Modules\zipimport.c(1001): warning C4127: conditional expression is constant
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2836,6 +2900,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\faulthandler.c(251): warning C4100: 'self': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4702"); // python-3.5.1\modules\faulthandler.c(934) : warning C4702: unreachable code
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\faulthandler.c(1103) : warning C4706: assignment within conditional expression
+                        compiler.DisableWarnings.AddUnique("4459"); // Python-3.6.1\Modules\faulthandler.c(994): warning C4459: declaration of 'thread' hides global declaration
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                             (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
@@ -2873,6 +2938,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_tracemalloc.c(206): warning C4232: nonstandard extension used: 'malloc': address of dllimport 'malloc' is not static, identity not guaranteed
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_tracemalloc.c(719): warning C4100: 'user_data': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_tracemalloc.c(1407) : warning C4706: assignment within conditional expression
+                        compiler.DisableWarnings.AddUnique("4204"); // Python-3.6.1\Modules\_tracemalloc.c(583): warning C4204: nonstandard extension used: non-constant aggregate initializer
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
@@ -2892,6 +2958,12 @@ namespace Python
             var hashtable = builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
             hashtable.First().PrivatePatch(settings =>
                 {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("4100"); // Python-3.6.1\Modules\hashtable.c(108): warning C4100: 'ht': unreferenced formal parameter
+                    }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
@@ -3044,6 +3116,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\PC\getpathp.c(289): warning C4456: declaration of 'keyBuf' hides previous local declaration
                             compiler.DisableWarnings.AddUnique("4189"); // Python-3.5.1\PC\getpathp.c(324): warning C4189: 'reqdSize': local variable is initialized but not referenced
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\pc\getpathp.c(548) : warning C4706: assignment within conditional expression
+                            compiler.DisableWarnings.AddUnique("4459"); // Python-3.6.1\PC\getpathp.c(541): warning C4459: declaration of 'prefix' hides global declaration
                         }
                     });
                 var winreg = pcSource.AddFiles("$(packagedir)/PC/winreg.c");
@@ -3091,6 +3164,8 @@ namespace Python
                         linker.Libraries.Add("Advapi32.lib");
                         linker.Libraries.Add("Ws2_32.lib");
                         linker.Libraries.Add("User32.lib");
+                        linker.Libraries.Add("Shlwapi.lib");
+                        linker.Libraries.Add("version.lib");
                     });
                 headers.AddFiles("$(packagedir)/PC/*.h");
 
