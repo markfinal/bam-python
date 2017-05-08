@@ -101,7 +101,7 @@ namespace Python
                 if (null != clangLinker)
                 {
                     // standard distribution path
-                    clangLinker.RPath.AddUnique("@executable_path/lib/python3.5/lib-dynload");
+                    clangLinker.RPath.AddUnique("@executable_path/lib/python3.6/lib-dynload");
                 }
             });
         }
