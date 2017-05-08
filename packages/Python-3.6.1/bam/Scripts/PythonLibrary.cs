@@ -336,6 +336,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/bytearrayobject.c:78:60: error: unused parameter 'view' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:107:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/bytearrayobject.c.h:524:1: error: string length '512' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
+                            compiler.DisableWarnings.AddUnique("unused-function"); // /Python-3.6.1/Objects/bytearrayobject.c:1078:22: error: 'stringlib_find_slice' defined but not used [-Werror=unused-function]
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -364,6 +365,7 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:65:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/clinic/bytesobject.c.h:323:23: error: unused parameter 'null' [-Werror=unused-parameter]
+                            compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Objects/stringlib/stringdefs.h:10:22: error: 'stringlib_find_slice' defined but not used [-Werror=unused-function]
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -387,6 +389,13 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Objects/bytes_methods.c:677:37: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
+                        }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Objects/bytes_methods.c:677:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Objects/stringlib/find.h:46:61: error: unused parameter 'str_len' [-Werror=unused-parameter]
                         }
                     }));
             objectSource["capsule.c"].ForEach(item =>
@@ -1522,6 +1531,12 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Python\pylifecycle.c(1540) : warning C4306: 'type cast' : conversion from 'int' to 'void (__cdecl *)(int)' of greater size
                             }
                         }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // /Python-3.6.1/Python/pylifecycle.c:1348:29: error: unused parameter 'fd' [-Werror=unused-parameter]
+                        }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
                         {
@@ -1611,6 +1626,7 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/random.c:193:1: error: missing initializer for field 'st_dev' of 'struct <anonymous>' [-Werror=missing-field-initializers]
+                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Python/random.c:465:46: error: unused parameter 'blocking' [-Werror=unused-parameter]
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -2881,6 +2897,12 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror,-Wunused-parameter]
+                    }
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror=unused-parameter]
                     }
                 });
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");

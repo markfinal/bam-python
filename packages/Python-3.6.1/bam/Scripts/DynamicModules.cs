@@ -2138,7 +2138,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:155:47: error: unused parameter 'args' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:210:1: error: missing initializer for field 'tp_is_gc' of 'PyTypeObject' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:321:17: error: ISO C90 does not support the 'z' gnu_printf length modifier [-Werror=format=]
-
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/_ctypes/cfield.c:715:1: error: 'bool_set' defined but not used [-Werror=unused-function]
                         gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/_ctypes.c:3298:15: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
