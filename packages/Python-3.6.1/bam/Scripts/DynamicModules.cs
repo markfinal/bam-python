@@ -2256,6 +2256,14 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_blake2/blake2b_impl.c:370:36: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/_blake2/impl/blake2-impl.h:22:31: error: unused function 'load32' [-Werror,-Wunused-function]
                     }
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Modules/_blake2/blake2module.c:25:5: error: missing initializer for field 'ml_flags' of 'struct PyMethodDef' [-Werror=missing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_blake2/blake2b_impl.c:370:36: error: unused parameter 'self' [-Werror=unused-parameter]
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/_blake2/impl/blake2-impl.h:22:31: error: 'load32' defined but not used [-Werror=unused-function]
+                    }
                  })
         {}
     }
@@ -2275,6 +2283,13 @@ namespace Python
                          var compiler = settings as C.ICommonCompilerSettings;
                          compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Modules/_sha3/clinic/sha3module.c.h:19:64: error: missing field 'custom_msg' initializer [-Werror,-Wmissing-field-initializers]
                          compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_sha3/sha3module.c:421:45: error: unused parameter 'closure' [-Werror,-Wunused-parameter]
+                     }
+                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                     if (null != gccCompiler)
+                     {
+                         var compiler = settings as C.ICommonCompilerSettings;
+                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Modules/_sha3/clinic/sha3module.c.h:19:5: error: missing initializer for field 'custom_msg' of '_PyArg_Parser' [-Werror=missing-field-initializers]
+                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_sha3/sha3module.c:421:45: error: unused parameter 'closure' [-Werror=unused-parameter]
                      }
                  })
         { }
