@@ -212,6 +212,10 @@ namespace Python
                 contents.AppendLine("#define HAVE_SYMLINK 1"); // required for os.symlink
                 contents.AppendLine("#define HAVE_TZNAME 1"); // required for time.timezone
                 contents.AppendLine("#define HAVE_TIMEGM 1"); // required for timegm
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+                {
+                    contents.AppendLine("#define SIZEOF__BOOL 1"); // required for ctypes
+                }
                 return contents.ToString();
             }
         }
