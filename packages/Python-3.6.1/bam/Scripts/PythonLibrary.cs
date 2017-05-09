@@ -3229,6 +3229,16 @@ namespace Python
                     this.WindowsVersionResource.DependsOn(versionHeader);
                     this.WindowsVersionResource.UsePublicPatchesPrivately(versionHeader);
                     headers.AddFile(versionHeader);
+                    versionHeader.PrivatePatch(settings =>
+                        {
+                            if (parserSource.Settings is VisualCCommon.ICommonCompilerSettings)
+                            {
+                                var crt = (parserSource.Settings as VisualCCommon.ICommonCompilerSettings).RuntimeLibrary;
+                                (versionHeader.Configuration as ConfigurePythonResourceHeader).DebugCRT =
+                                    (VisualCCommon.ERuntimeLibrary.MultiThreadedDebug == crt) ||
+                                    (VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL == crt);
+                            }
+                        });
 
                     this.PrivatePatch(settings =>
                         {

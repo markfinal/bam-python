@@ -30,10 +30,70 @@
 using Bam.Core;
 namespace Python
 {
+#if BAM_FEATURE_MODULE_CONFIGURATION
+    interface IConfigurePythonResourceHeader :
+        Bam.Core.IModuleConfiguration
+    {
+        bool DebugCRT
+        {
+            get;
+        }
+    }
+
+    sealed class ConfigurePythonResourceHeader :
+        IConfigurePythonResourceHeader
+    {
+        public ConfigurePythonResourceHeader(
+            Bam.Core.Environment buildEnvironment)
+        {
+            this.DebugCRT = false;
+        }
+
+        public bool DebugCRT
+        {
+            get;
+            set;
+        }
+    }
+
+    class EmptySettings :
+        Bam.Core.Settings
+    { }
+#endif
+
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PythonMakeVersionHeader :
         C.ProceduralHeaderFile
+#if BAM_FEATURE_MODULE_CONFIGURATION
+        , Bam.Core.IHasModuleConfiguration
+#endif
     {
+#if BAM_FEATURE_MODULE_CONFIGURATION
+        System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
+        {
+            get
+            {
+                return typeof(IConfigurePythonResourceHeader);
+            }
+        }
+
+        System.Type IHasModuleConfiguration.WriteableClassType
+        {
+            get
+            {
+                return typeof(ConfigurePythonResourceHeader);
+            }
+        }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+            this.Settings = new EmptySettings(); // in order to run a private patch
+        }
+#endif
+
         protected override TokenizedString OutputPath
         {
             get
@@ -51,9 +111,13 @@ namespace Python
                 contents.AppendLine();
                 contents.AppendFormat("#define MS_DLL_ID \"{0}\"", Version.MajorDotMinor);
                 contents.AppendLine();
-                if (this.BuildEnvironment.Configuration == EConfiguration.Debug)
+
+                var useDebugCRT = false;
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                useDebugCRT = (this.Configuration as IConfigurePythonResourceHeader).DebugCRT;
+#endif
+                if (useDebugCRT)
                 {
-                    // TODO: this is not true, as it depends on the MSVCRT
                     contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsDebugOutputName);
                 }
                 else
