@@ -174,7 +174,8 @@ namespace Python
                 contents.AppendLine("#define PyMODINIT_FUNC extern __attribute__ ((visibility(\"default\"))) PyObject*");
                 contents.AppendLine("#endif");
                 contents.AppendLine("#define HAVE_DYNAMIC_LOADING");
-                contents.AppendLine("#define SOABI \"cpython-36\"");
+                contents.AppendFormat("#define SOABI \"{0}\"", Version.SOABI);
+                contents.AppendLine();
                 contents.AppendLine("#define HAVE_DLFCN_H");
                 contents.AppendLine("#define HAVE_DLOPEN");
                 contents.AppendLine("#define HAVE_DECL_RTLD_LAZY 1");

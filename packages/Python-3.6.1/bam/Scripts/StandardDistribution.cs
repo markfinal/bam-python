@@ -42,7 +42,7 @@ namespace Python
             }
             else
             {
-                ModuleDirectory = "lib/python3.6/lib-dynload";
+                ModuleDirectory = System.String.Format("lib/python{0}/lib-dynload", Version.MajorDotMinor);
             }
         }
 
@@ -79,12 +79,21 @@ namespace Python
             else
             {
                 platIndependentModules = module.IncludeDirectory(pyLibDir, "lib", root);
-                platIndependentModules.CopiedFilename = "python3.6";
+                platIndependentModules.CopiedFilename = System.String.Format("python{0}", Version.MajorDotMinor);
 
-                module.Include<SysConfigDataPythonFile>(SysConfigDataPythonFile.Key, "lib/python3.6", root);
+                module.Include<SysConfigDataPythonFile>(
+                    SysConfigDataPythonFile.Key,
+                    System.String.Format("lib/python{0}", Version.MajorDotMinor),
+                    root);
 
-                module.Include<PyConfigHeader>(PyConfigHeader.Key, "include/python3.6", root); // needed by distutils
-                module.Include<PyMakeFile>(PyMakeFile.Key, "lib/python3.6/config-3.6", root); // needed by distutils
+                module.Include<PyConfigHeader>(
+                    PyConfigHeader.Key,
+                    System.String.Format("include/python{0}", Version.MajorDotMinor),
+                    root); // needed by distutils
+                module.Include<PyMakeFile>(
+                    PyMakeFile.Key,
+                    System.String.Format("lib/python{0}/config-{0}", Version.MajorDotMinor),
+                    root); // needed by distutils
 
                 // extension modules
                 if (module.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))

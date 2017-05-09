@@ -112,7 +112,7 @@ namespace Python
                 }
                 else
                 {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35_d");
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
                 }
             }
         }
@@ -136,15 +136,15 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python35");
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
             }
             else
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
             }
-            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("3");
-            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("5");
-            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
+            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Major);
+            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Minor);
+            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Patch);
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 
@@ -2938,7 +2938,7 @@ namespace Python
                     item.PrivatePatch(settings =>
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.PreprocessorDefines.Add("VERSION", "\"3.5\"");
+                            compiler.PreprocessorDefines.Add("VERSION", System.String.Format("\"{0}\"", Version.MajorDotMinor));
                             compiler.PreprocessorDefines.Add("PYTHONPATH", "\".\"");
                         }));
             }

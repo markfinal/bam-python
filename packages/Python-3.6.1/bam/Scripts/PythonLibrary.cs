@@ -114,7 +114,7 @@ namespace Python
                 }
                 else
                 {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python36_d");
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
                 }
             }
         }
@@ -138,15 +138,15 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python36");
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
             }
             else
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
             }
-            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("3");
-            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim("6");
-            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim("1");
+            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Major);
+            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Minor);
+            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Patch);
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 
@@ -3094,8 +3094,8 @@ namespace Python
                             // TODO: these should be configurables
                             compiler.PreprocessorDefines.Add("PREFIX", "\".\"");
                             compiler.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
-                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC
-                            compiler.PreprocessorDefines.Add("VERSION", "\"3.6\"");
+                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC, so does it need moving?
+                            compiler.PreprocessorDefines.Add("VERSION", System.String.Format("\"{0}\"", Version.MajorDotMinor));
                             compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
             }

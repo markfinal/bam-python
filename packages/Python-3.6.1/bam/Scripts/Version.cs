@@ -30,38 +30,65 @@
 using Bam.Core;
 namespace Python
 {
-    [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    class PythonMakeVersionHeader :
-        C.ProceduralHeaderFile
+    static public class Version
     {
-        protected override TokenizedString OutputPath
+        static public readonly string Major = "3";
+        static public readonly string Minor = "6";
+        static public readonly string Patch = "1";
+
+        static public string SOABI
         {
             get
             {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/pythonnt_rc.h");
+                return System.String.Format("cpython-{0}{1}", Major, Minor);
             }
         }
 
-        protected override string Contents
+        static public string NixOutputName
         {
             get
             {
-                var contents = new System.Text.StringBuilder();
-                contents.AppendFormat("#define FIELD3 {0}", Version.Field3);
-                contents.AppendLine();
-                contents.AppendFormat("#define MS_DLL_ID \"{0}\"", Version.MajorDotMinor);
-                contents.AppendLine();
-                if (this.BuildEnvironment.Configuration == EConfiguration.Debug)
-                {
-                    // TODO: this is not true, as it depends on the MSVCRT
-                    contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsDebugOutputName);
-                }
-                else
-                {
-                    contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsOutputName);
-                }
-                contents.AppendLine();
-                return contents.ToString();
+                return "python";
+            }
+        }
+
+        static public string WindowsOutputName
+        {
+            get
+            {
+                return System.String.Format("python{0}{1}", Major, Minor);
+            }
+        }
+
+        static public string WindowsDebugOutputName
+        {
+            get
+            {
+                return System.String.Format("python{0}{1}_d", Major, Minor);
+            }
+        }
+
+        static public string MajorMinor
+        {
+            get
+            {
+                return System.String.Format("{0}{1}", Major, Minor);
+            }
+        }
+
+        static public string MajorDotMinor
+        {
+            get
+            {
+                return System.String.Format("{0}.{1}", Major, Minor);
+            }
+        }
+
+        static public string Field3
+        {
+            get
+            {
+                return "1150"; // // using PCBuild/build.bat -V
             }
         }
     }
