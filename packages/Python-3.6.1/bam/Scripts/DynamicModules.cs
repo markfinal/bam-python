@@ -578,6 +578,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_testcapimodule.c(255): warning C4232: nonstandard extension used: 'tp_dealloc': address of dllimport'PyObject_Free' is not static, identity not guaranteed
                         compiler.DisableWarnings.AddUnique("4221"); // Python-3.5.1\Modules\_testcapimodule.c(2504): warning C4221: nonstandard extension used: 'buf': cannot be initialized using address of automatic variable 'data'
                         compiler.DisableWarnings.AddUnique("4204"); // Python-3.5.1\Modules\_testcapimodule.c(2504): warning C4204: nonstandard extension used: non-constant aggregate initializer
+                        compiler.DisableWarnings.AddUnique("4706"); // python-3.6.1\modules\_testcapimodule.c(1909) : warning C4706: assignment within conditional expression
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
