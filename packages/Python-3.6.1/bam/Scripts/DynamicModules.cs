@@ -2237,4 +2237,23 @@ namespace Python
                 })
         {}
     }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class blake2 :
+        DynamicExtensionModule
+    {
+        public blake2() :
+            base("blake2",
+            new Bam.Core.StringArray("Modules/blake2/blake2module", "Modules/blake2/blake2b_impl", "Modules/blake2/blake2s_impl"))
+        {}
+    }
+
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
+    class sha3 :
+        DynamicExtensionModule
+    {
+        public sha3() :
+            base("sha3")
+        { }
+    }
 }

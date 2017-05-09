@@ -135,6 +135,8 @@ namespace Python
                 moduleList.Add(module.Include<_codecs_kr>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 moduleList.Add(module.Include<_codecs_tw>(C.DynamicLibrary.Key, ModuleDirectory, root));
                 moduleList.Add(module.Include<xxsubtype>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<blake2>(C.DynamicLibrary.Key, ModuleDirectory, root));
+                moduleList.Add(module.Include<sha3>(C.DynamicLibrary.Key, ModuleDirectory, root));
             }
 
 #if PYTHON_WITH_OPENSSL

@@ -2215,6 +2215,45 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\xxsubtype.c(293): warning C4152: nonstandard extension, function/data pointer conversion in expression
                         }
                     });
+
+                builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2module.c");
+                var blake2s_impl = builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2s_impl.c");
+                blake2s_impl.First().PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4245"); // python-3.6.1\modules\_blake2\impl/blake2s-ref.c(45): warning C4245: '=': conversion from 'int' to 'uint32_t', signed/unsigned mismatch
+                            compiler.DisableWarnings.AddUnique("4100"); // python-3.6.1\modules\_blake2\clinic/blake2s_impl.c.h(76): warning C4100: '_unused_ignored': unreferenced formal parameter
+                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\_blake2\blake2s_impl.c(120): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
+                        }
+                    });
+                var blake2b_impl = builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2b_impl.c");
+                blake2b_impl.First().PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4245"); // python-3.6.1\modules\_blake2\impl/blake2b-ref.c(50): warning C4245: '=': conversion from 'int' to 'uint64_t', signed/unsigned mismatch
+                            compiler.DisableWarnings.AddUnique("4100"); // python-3.6.1\modules\_blake2\clinic/blake2b_impl.c.h(76): warning C4100: '_unused_ignored': unreferenced formal parameter
+                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\_blake2\blake2b_impl.c(120): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
+                        }
+                    });
+
+                var sha3module = builtinModuleSource.AddFiles("$(packagedir)/Modules/_sha3/sha3module.c");
+                sha3module.First().PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("4324"); // python-3.6.1\modules\_sha3\kcp\KeccakSponge.h(168): warning C4324: 'KeccakWidth1600_SpongeInstanceStruct': structure was padded due to alignment specifier
+                            compiler.DisableWarnings.AddUnique("4245"); // python-3.6.1\modules\_sha3\kcp/KeccakP-1600-opt64.c(254): warning C4245: '=': conversion from 'int' to 'UINT64', signed/unsigned mismatch
+                            compiler.DisableWarnings.AddUnique("4100"); // python-3.6.1\modules\_sha3\clinic/sha3module.c.h(45): warning C4100: '_unused_ignored': unreferenced formal parameter
+                        }
+                    });
             }
             else
             {
