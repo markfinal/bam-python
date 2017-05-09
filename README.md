@@ -18,10 +18,10 @@ If OpenSSL exists in your master package dependencies (of which Python is alread
 If sqlite exists in your master package dependencies (of which Python is already one), then add the following define to your master package definition file, to build and publish `_sqlite3` extension module:
 * `PYTHON_WITH_SQLITE`
 
+Note that the build of Sqlite must not define `SQLITE_OMIT_DEPRECATED`.
+
 If zlib exists in your master package dependencies (of which Python is already one), then add the following define to your master package definition file, to use instead of the included zlib source with Python:
 * `PYTHON_USE_ZLIB_PACKAGE`
-
-Note that the build of Sqlite must not define `SQLITE_OMIT_DEPRECATED`.
 
 Test packages exist for
 * Exercising an interpreter core
