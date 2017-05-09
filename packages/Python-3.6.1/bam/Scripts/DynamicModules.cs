@@ -2240,21 +2240,43 @@ namespace Python
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
-    class blake2 :
+    class _blake2 :
         DynamicExtensionModule
     {
-        public blake2() :
-            base("blake2",
-            new Bam.Core.StringArray("Modules/blake2/blake2module", "Modules/blake2/blake2b_impl", "Modules/blake2/blake2s_impl"))
+        public _blake2() :
+            base("_blake2",
+                 new Bam.Core.StringArray("Modules/_blake2/blake2module", "Modules/_blake2/blake2b_impl", "Modules/_blake2/blake2s_impl"),
+                 settings =>
+                 {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Modules/_blake2/blake2module.c:25:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_blake2/blake2b_impl.c:370:36: error: unused parameter 'self' [-Werror,-Wunused-parameter]
+                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/_blake2/impl/blake2-impl.h:22:31: error: unused function 'load32' [-Werror,-Wunused-function]
+                    }
+                 })
         {}
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.NotWindows)] // Windows builtin
-    class sha3 :
+    class _sha3 :
         DynamicExtensionModule
     {
-        public sha3() :
-            base("sha3")
+        public _sha3() :
+            base("_sha3",
+                 new Bam.Core.StringArray("Modules/_sha3/sha3module"),
+                 settings =>
+                 {
+                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                     if (null != clangCompiler)
+                     {
+                         var compiler = settings as C.ICommonCompilerSettings;
+                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.6.1/Modules/_sha3/clinic/sha3module.c.h:19:64: error: missing field 'custom_msg' initializer [-Werror,-Wmissing-field-initializers]
+                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/_sha3/sha3module.c:421:45: error: unused parameter 'closure' [-Werror,-Wunused-parameter]
+                     }
+                 })
         { }
     }
 }
