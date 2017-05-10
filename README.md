@@ -24,6 +24,6 @@ If zlib exists in your master package dependencies (of which Python is already o
 * `PYTHON_USE_ZLIB_PACKAGE`
 
 Test packages exist for
-* Exercising an interpreter core
+* Exercising embedding an interpreter into an application.
 * Building a shell, and publishing a standard Python module distribution
 * Building a custom extension module, and including it in a Python distribution
