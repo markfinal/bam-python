@@ -2099,12 +2099,7 @@ namespace Python
                 "Modules/_ctypes/callproc",
                 "Modules/_ctypes/cfield",
                 "Modules/_ctypes/malloc_closure",
-                "Modules/_ctypes/stgdict"
-#if BAM_HOST_WIN64
-                ,"Modules/_ctypes/libffi_msvc/ffi"
-                ,"Modules/_ctypes/libffi_msvc/prep_cif"
-#endif
-                ),
+                "Modules/_ctypes/stgdict"),
             null,
             settings =>
                 {
@@ -2124,7 +2119,6 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\cfield.c(1009): warning C4244: 'function': conversion from 'long double' to 'double', possible loss of data
                         compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\_ctypes\cfield.c(1599): warning C4127: conditional expression is constant
                         compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\_ctypes\stgdict.c(492): warning C4456: declaration of 'len' hides previous local declaration
-                        compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
                         var module = settings.Module as C.CModule;
                         if (module.BitDepth == C.EBit.ThirtyTwo)
                         {
@@ -2160,14 +2154,8 @@ namespace Python
                         linker.Libraries.AddUnique("OleAut32.lib");
                     }
                 },
-#if BAM_HOST_WIN64
-            // TODO: actually only if the TARGET is 64-bit
-            new Bam.Core.StringArray("Modules/_ctypes/libffi_msvc/win64.asm"),
-            null
-#else
             null,
             null
-#endif
             )
         { }
 
@@ -2177,10 +2165,7 @@ namespace Python
         {
             base.Init (parent);
 
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux | Bam.Core.EPlatform.OSX))
-            {
-                this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
-            }
+            this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
         }
     }
 

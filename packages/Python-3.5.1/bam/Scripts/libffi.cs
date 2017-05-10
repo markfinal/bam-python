@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using System.Linq;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
@@ -147,7 +148,6 @@ namespace Python
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux | Bam.Core.EPlatform.OSX)]
     class ffi :
         C.StaticLibrary
     {
@@ -202,6 +202,57 @@ namespace Python
                     asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/darwin64.S");
                 }
             }
+            else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/ffi.c");
+                ffi.First().PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            if (null != compiler)
+                            {
+                                compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(293): warning C4244: '=': conversion from 'unsigned int' to 'unsigned short', possible loss of data
+                                compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(466): warning C4054: 'type cast': from function pointer 'void (__cdecl *)()' to data pointer 'void *'
+                                compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(416): warning C4100: 'codeloc': unreferenced formal parameter
+                            }
+                        }
+                    });
+                var prep_cif = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/prep_cif.c");
+                prep_cif.First().PrivatePatch(settings =>
+                    {
+                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                        if (null != vcCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            if (null != compiler)
+                            {
+                                compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
+                            }
+                        }
+                    });
+                if (this.BitDepth == C.EBit.ThirtyTwo)
+                {
+                    var win32 = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/win32.c");
+                    win32.First().PrivatePatch(settings =>
+                        {
+                            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                            if (null != vcCompiler)
+                            {
+                                var compiler = settings as C.ICommonCompilerSettings;
+                                if (null != compiler)
+                                {
+                                    compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\win32.c(46): warning C4100: 'fn': unreferenced formal parameter
+                                }
+                            }
+                        });
+                }
+                else
+                {
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/win64.asm");
+                }
+            }
 
             source.PrivatePatch(settings =>
                 {
@@ -234,6 +285,12 @@ namespace Python
                         var cOnly = settings as C.ICOnlyCompilerSettings;
                         cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
                     }
+
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
+                    }
                 });
 
             asmSource.PrivatePatch(settings =>
@@ -264,6 +321,12 @@ namespace Python
                         compiler.PreprocessorDefines.Add("MACOSX");
                         compiler.DisableWarnings.AddUnique("comment"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:74:8: error: // comments are not allowed in this language [-Werror,-Wcomment]
                         compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
+                    }
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                     }
                 });
         }
