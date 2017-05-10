@@ -2100,10 +2100,6 @@ namespace Python
 #if BAM_HOST_WIN64
                 ,"Modules/_ctypes/libffi_msvc/ffi"
                 ,"Modules/_ctypes/libffi_msvc/prep_cif"
-#elif BAM_HOST_OSX64
-                ,"Modules/_ctypes/libffi_osx/ffi"
-                ,"Modules/_ctypes/libffi_osx/x86/x86-ffi64"
-                ,"Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin"
 #endif
                 ),
             null,
@@ -2146,20 +2142,9 @@ namespace Python
                     if (null != clangCompiler)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
-                        compiler.PreprocessorDefines.Add("MACOSX");
-                        compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:155:47: error: unused parameter 'args' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:210:1: error: missing field 'tp_is_gc' initializer [-Werror,-Wmissing-field-initializers]
-                        compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/_ctypes/libffi_osx/ffi.c:108:1: error: unused function 'struct_on_stack' [-Werror,-Wunused-function]
                         clangCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/_ctypes.c:3324:27: error: assigning to 'void *' from 'int (*)(void)' converts between void pointer and function pointer [-Werror,-Wpedantic]
-                    }
-                    var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
-                    if (null != clangAssembler)
-                    {
-                        var assembler = settings as C.ICommonAssemblerSettings;
-                        assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
-                        assembler.PreprocessorDefines.Add("MACOSX");
                     }
                 },
             settings =>
@@ -2176,20 +2161,6 @@ namespace Python
             // TODO: actually only if the TARGET is 64-bit
             new Bam.Core.StringArray("Modules/_ctypes/libffi_msvc/win64.asm"),
             null
-#elif BAM_HOST_OSX64
-            new Bam.Core.StringArray(
-                "Modules/_ctypes/libffi_osx/x86/darwin64.S",
-                "Modules/_ctypes/libffi_osx/x86/x86-darwin.S"),
-            settings =>
-            {
-                var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
-                if (null != clangAssembler)
-                {
-                    var assembler = settings as C.ICommonAssemblerSettings;
-                    assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
-                    assembler.PreprocessorDefines.Add("MACOSX");
-                }
-            }
 #else
             null,
             null
@@ -2197,16 +2168,17 @@ namespace Python
             )
         { }
 
-#if BAM_HOST_LINUX64
         protected override void
         Init(
             Bam.Core.Module parent)
         {
             base.Init (parent);
 
-            this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux | Bam.Core.EPlatform.OSX))
+            {
+                this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
+            }
         }
-#endif
     }
 
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.OSX)]

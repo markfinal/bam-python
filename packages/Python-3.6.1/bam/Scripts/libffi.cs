@@ -31,6 +31,7 @@ using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux)]
     class libffiheader :
         C.ProceduralHeaderFile
     {
@@ -79,6 +80,7 @@ namespace Python
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux)]
     class libfficonfig :
         C.ProceduralHeaderFile
     {
@@ -110,6 +112,7 @@ namespace Python
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux)]
     class CopyNonPublicHeadersToPublic :
         Publisher.Collation
     {
@@ -144,7 +147,7 @@ namespace Python
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
-    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux)]
+    [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux | Bam.Core.EPlatform.OSX)]
     class ffi :
         C.StaticLibrary
     {
@@ -154,50 +157,115 @@ namespace Python
         {
             base.Init(parent);
 
-            var source = this.CreateCSourceContainer("$(packagedir)/Modules/_ctypes/libffi/src/*.c");
-            source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
-            source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi.c");
+            var source = this.CreateCSourceContainer();
+            var asmSource = this.CreateAssemblerSourceContainer();
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+            {
+                source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/*.c");
+                if (this.BitDepth == C.EBit.ThirtyTwo)
+                {
+                    source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi.c");
+                }
+                else
+                {
+                    source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+                }
+
+                asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
+
+                var copyheaders = Bam.Core.Graph.Instance.FindReferencedModule<CopyNonPublicHeadersToPublic>();
+                source.DependsOn(copyheaders);
+                source.UsePublicPatches(copyheaders);
+
+                var ffiHeader = Bam.Core.Graph.Instance.FindReferencedModule<libffiheader>();
+                this.UsePublicPatches(ffiHeader);
+                source.DependsOn(ffiHeader);
+
+                var ffiConfig = Bam.Core.Graph.Instance.FindReferencedModule<libfficonfig>();
+                source.UsePublicPatches(ffiConfig);
+                source.DependsOn(ffiConfig);
+                asmSource.UsePublicPatches(ffiConfig);
+                asmSource.DependsOn(ffiConfig);
+            }
+            else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+            {
+                source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/ffi.c");
+                if (this.BitDepth == C.EBit.ThirtyTwo)
+                {
+                    source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin.c");
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-darwin.S");
+                }
+                else
+                {
+                    source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-ffi64.c");
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/darwin64.S");
+                }
+            }
 
             source.PrivatePatch(settings =>
                 {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
-                    compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
-                    compiler.DisableWarnings.AddUnique("empty-body"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
-                    compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
-                    if (this.BuildEnvironment.Configuration != Bam.Core.EConfiguration.Debug)
+                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                    if (null != gccCompiler)
                     {
-                        compiler.DisableWarnings.AddUnique("unused-result"); // Python-3.5.1/Modules/_ctypes/libffi/src/closures.c:460:17: error: ignoring return value of 'ftruncate', declared with attribute warn_unused_result [-Werror=unused-result]
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
+                        compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                        compiler.DisableWarnings.AddUnique("empty-body"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                        compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
+                        if (this.BuildEnvironment.Configuration != Bam.Core.EConfiguration.Debug)
+                        {
+                            compiler.DisableWarnings.AddUnique("unused-result"); // Python-3.5.1/Modules/_ctypes/libffi/src/closures.c:460:17: error: ignoring return value of 'ftruncate', declared with attribute warn_unused_result [-Werror=unused-result]
+                        }
+
+                        var cOnly = settings as C.ICOnlyCompilerSettings;
+                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+
+                        gccCompiler.PositionIndependentCode = true; // since it's being included into a dynamic library
+                        gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi/src/x86/ffi.c:867:0: error: ISO C forbids an empty translation unit [-Werror=pedantic]
                     }
 
-                    var cOnly = settings as C.ICOnlyCompilerSettings;
-                    cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.PreprocessorDefines.Add("MACOSX");
 
-                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                    gccCompiler.PositionIndependentCode = true; // since it's being included into a dynamic library
-                    gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi/src/x86/ffi.c:867:0: error: ISO C forbids an empty translation unit [-Werror=pedantic]
+                        var cOnly = settings as C.ICOnlyCompilerSettings;
+                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+                    }
                 });
 
-            var asmSource = this.CreateAssemblerSourceContainer("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
             asmSource.PrivatePatch(settings =>
                 {
-                    var assembler = settings as C.ICommonAssemblerSettings;
-                    assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
+                    var gccAssembler = settings as GccCommon.ICommonAssemblerSettings;
+                    if (null != gccAssembler)
+                    {
+                        var assembler = settings as C.ICommonAssemblerSettings;
+                        assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
+                    }
+
+                    var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
+                    if (null != clangAssembler)
+                    {
+                        var assembler = settings as C.ICommonAssemblerSettings;
+                        assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        assembler.PreprocessorDefines.Add("MACOSX");
+                    }
                 });
 
-            var copyheaders = Bam.Core.Graph.Instance.FindReferencedModule<CopyNonPublicHeadersToPublic>();
-            source.DependsOn(copyheaders);
-            source.UsePublicPatches(copyheaders);
-
-            var ffiHeader = Bam.Core.Graph.Instance.FindReferencedModule<libffiheader>();
-            this.UsePublicPatches(ffiHeader);
-            source.DependsOn(ffiHeader);
-
-            var ffiConfig = Bam.Core.Graph.Instance.FindReferencedModule<libfficonfig>();
-            source.UsePublicPatches(ffiConfig);
-            source.DependsOn(ffiConfig);
-            asmSource.UsePublicPatches(ffiConfig);
-            asmSource.DependsOn(ffiConfig);
+            this.PublicPatch((settings, appliedTo) =>
+                {
+                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                    if (null != clangCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        compiler.PreprocessorDefines.Add("MACOSX");
+                        compiler.DisableWarnings.AddUnique("comment"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:74:8: error: // comments are not allowed in this language [-Werror,-Wcomment]
+                        compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
+                    }
+                });
         }
     }
 }
