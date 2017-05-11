@@ -106,7 +106,12 @@ namespace Python
             {
                 var contents = new System.Text.StringBuilder();
                 contents.AppendLine("#define STDC_HEADERS 1");
-                contents.AppendLine("#define FFI_HIDDEN __attribute__ ((visibility (\"hidden\")))"); // TODO : might have to do something else with this with inline ASM
+                contents.AppendLine("#ifdef LIBFFI_ASM");
+                contents.AppendLine("#define FFI_HIDDEN(name) .hidden name");
+                contents.AppendLine("#define EH_FRAME_FLAGS \"aw\"");
+                contents.AppendLine("#else");
+                contents.AppendLine("#define FFI_HIDDEN __attribute__ ((visibility (\"hidden\")))");
+                contents.AppendLine("#endif");
                 return contents.ToString();
             }
         }
@@ -166,13 +171,14 @@ namespace Python
                 if (this.BitDepth == C.EBit.ThirtyTwo)
                 {
                     source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi.c");
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/sysv.S");
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/win32.S");
                 }
                 else
                 {
                     source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+                    asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
                 }
-
-                asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
 
                 var copyheaders = Bam.Core.Graph.Instance.FindReferencedModule<CopyNonPublicHeadersToPublic>();
                 source.DependsOn(copyheaders);
@@ -307,6 +313,10 @@ namespace Python
                     {
                         var assembler = settings as C.ICommonAssemblerSettings;
                         assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
+                        if (this.BitDepth == C.EBit.ThirtyTwo)
+                        {
+                            assembler.PreprocessorDefines.Add("HAVE_AS_ASCII_PSEUDO_OP", "1");
+                        }
                     }
 
                     var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;

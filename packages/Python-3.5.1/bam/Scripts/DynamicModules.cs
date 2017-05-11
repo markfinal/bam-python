@@ -521,13 +521,7 @@ namespace Python
                         (settings.Module as C.ObjectFile).BitDepth;
                     if (bitDepth == C.EBit.ThirtyTwo)
                     {
-                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
-                            (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(5,4))
-                        {
-                            compiler.DisableWarnings.AddUnique("overflow"); // Python-3.5.1/Modules/mathmodule.c:1457:5: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
-                        }
+                        compiler.DisableWarnings.AddUnique("overflow"); // Python-3.5.1/Modules/mathmodule.c:1457:5: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
                     }
                 }
                 var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -569,14 +563,7 @@ namespace Python
                         var cCompiler = settings as C.ICOnlyCompilerSettings;
                         cCompiler.LanguageStandard = C.ELanguageStandard.C99; // Python-3.5.1/Modules/_struct.c:860:9: error: this decimal constant is unsigned only in ISO C90 [-Werror]
 
-                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
-                            (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(5,4))
-                        {
-                            compiler.DisableWarnings.AddUnique("overflow"); // Python-3.5.1/Modules/mathmodule.c:1457:5: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
-                            compiler.DisableWarnings.AddUnique("type-limits"); // Python-3.5.1/Modules/_struct.c:860:33: error: comparison is always false due to limited range of data type [-Werror=type-limits]
-                        }
+                        compiler.DisableWarnings.AddUnique("type-limits"); // Python-3.5.1/Modules/_struct.c:860:33: error: comparison is always false due to limited range of data type [-Werror=type-limits]
                     }
                 }
                 var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -2172,13 +2159,8 @@ namespace Python
                             (settings.Module as C.ObjectFile).BitDepth;
                         if (bitDepth == C.EBit.ThirtyTwo)
                         {
-                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
-                                (settings.Module as C.ObjectFile).Compiler;
-                            if (compilerUsed.IsAtLeast(5,4))
-                            {
-                                compiler.DisableWarnings.AddUnique("int-to-pointer-cast"); // Python-3.5.1/Modules/_ctypes/cfield.c:1341:25: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-                            }
+                            compiler.DisableWarnings.AddUnique("int-to-pointer-cast"); // Python-3.5.1/Modules/_ctypes/cfield.c:1341:25: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+                            compiler.WarningsAsErrors = false; // Python-3.5.1/Modules/_ctypes/cfield.c:816:5: error: right shift count >= width of type [-Werror]
                         }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;

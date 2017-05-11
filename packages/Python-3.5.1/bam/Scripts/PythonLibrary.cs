@@ -171,13 +171,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pyport.h:58:27: error: ISO C90 does not support 'long long' [-Werror=long-long]
                             if (this.BitDepth == C.EBit.ThirtyTwo)
                             {
+                                compiler.DisableWarnings.AddUnique("sizeof-pointer-memaccess"); // Python-3.5.1/Include/pyport.h:857:52: error: argument to 'sizeof' in 'memcpy' call is the same pointer type 'va_list {aka char *}' as the destination; expected 'char' or an explicit length [-Werror=sizeof-pointer-memaccess]
+                                compiler.DisableWarnings.AddUnique("uninitialized"); // Python-3.5.1/Include/pyport.h:857:35: error: 'countva' is used uninitialized in this function [-Werror=uninitialized]
                                 var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                                     (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                                     (settings.Module as C.ObjectFile).Compiler;
                                 if (compilerUsed.IsAtLeast(5,4))
                                 {
-                                    compiler.DisableWarnings.AddUnique("sizeof-pointer-memaccess"); // Python-3.5.1/Include/pyport.h:857:52: error: argument to 'sizeof' in 'memcpy' call is the same pointer type 'va_list {aka char *}' as the destination; expected 'char' or an explicit length [-Werror=sizeof-pointer-memaccess]
-                                    compiler.DisableWarnings.AddUnique("uninitialized"); // Python-3.5.1/Include/pyport.h:319:19: error: 'countva' is used uninitialized in this function [-Werror=uninitialized]
                                     compiler.DisableWarnings.AddUnique("shift-count-overflow"); // Python-3.5.1/Include/pyhash.h:28:37: error: left shift count >= width of type [-Werror=shift-count-overflow]
                                 }
                             }
@@ -791,6 +791,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/longobject.c:4638:25: error: unused parameter 'v' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/longobject.c:4979:1: error: string length '792' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/longobject.c:5116:5: error: missing initializer for field 'ml_doc' of 'PyMethodDef' [-Werror=missing-field-initializers]
+
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/longobject.c:2834:9: error: left shift count >= width of type [-Werror]
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -1046,6 +1051,11 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Objects/clinic/unicodeobject.c.h:5:1: error: string length '569' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Objects/stringlib/asciilib.h:7:34: error: 'asciilib_parse_args_finds_unicode' defined but not used [-Werror=unused-function]
+
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/stringlib/codecs.h:56:21: error: right shift count >= width of type [-Werror]
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -1498,6 +1508,11 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Python/pyhash.c:275:11: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.WarningsAsErrors = false; // Python-3.5.1/Python/pyhash.c:111:9: error: left shift count >= width of type [-Werror]
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -1668,6 +1683,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/sysmodule.c:163:27: error: unused parameter 'self' [-Werror=unused-parameter]
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Python/sysmodule.c:1124:1: error: string length '742' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/sysmodule.c:1287:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+
+                            if (objectSource.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                compiler.WarningsAsErrors = false; // Python-3.5.1/Python/sysmodule.c:755:5: error: left shift count >= width of type [-Werror]
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -2335,13 +2355,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sre.c:2672:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                         if (this.BitDepth == C.EBit.ThirtyTwo)
                         {
-                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
-                                (settings.Module as C.ObjectFile).Compiler;
-                            if (compilerUsed.IsAtLeast(5,4))
-                            {
-                                compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/sre_lib.h:202:42: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
-                            }
+                            compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/sre_lib.h:202:42: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
                         }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
