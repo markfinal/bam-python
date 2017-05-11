@@ -171,6 +171,16 @@ namespace Python
                         if (null != gccCompiler)
                         {
                             compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pyport.h:58:27: error: ISO C90 does not support 'long long' [-Werror=long-long]
+                            if (this.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                    compiler.DisableWarnings.AddUnique("shift-count-overflow"); // Python-3.6.1/Include/pyhash.h:28:37: error: left shift count >= width of type [-Werror=shift-count-overflow]
+                                }
+                            }
                         }
                     }
                 });
@@ -578,6 +588,17 @@ namespace Python
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Objects/dictobject.c:2649:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Objects/dictobject.c:2698:40: error: unused parameter 'args' [-Werror=unused-parameter]
+
+                            if (this.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                    compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.6.1/Objects/dictobject.c:329:16: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+                                }
+                            }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                         if (null != clangCompiler)
@@ -2432,6 +2453,16 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_sre.c:281:36: error: unused parameter 'module' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sre.c:2672:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+                        if (this.BitDepth == C.EBit.ThirtyTwo)
+                        {
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(5,4))
+                            {
+                                compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.6.1/Modules/sre_lib.h:202:42: error: comparison between signed and unsigned integer expressions [-Werror=sign-compare]
+                            }
+                        }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
