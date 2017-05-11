@@ -515,6 +515,20 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/mathmodule.c:2049:1: error: string length '706' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
                     compiler.DisableWarnings.AddUnique("unused-parameter"); // /Python-3.5.1/Modules/mathmodule.c:689:20: error: unused parameter 'self' [-Werror=unused-parameter]
                     compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/mathmodule.c:2116:5: error: missing initializer for field 'ml_flags' of 'PyMethodDef' [-Werror=missing-field-initializers]
+
+                    var bitDepth = (settings.Module is Bam.Core.IModuleGroup) ?
+                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).BitDepth :
+                        (settings.Module as C.ObjectFile).BitDepth;
+                    if (bitDepth == C.EBit.ThirtyTwo)
+                    {
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(5,4))
+                        {
+                            compiler.DisableWarnings.AddUnique("overflow"); // Python-3.5.1/Modules/mathmodule.c:1457:5: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+                        }
+                    }
                 }
                 var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                 if (null != clangCompiler)
@@ -546,6 +560,24 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_struct.c:346:41: error: unused parameter 'f' [-Werror=unused-parameter]
                     compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_struct.c:727:5: error: missing initializer for field 'pack' of 'formatdef' [-Werror=missing-field-initializers]
                     compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_struct.c:2225:1: error: string length '1284' is greater than the length '509' ISO C90 compilers are required to support [-Werror=overlength-strings]
+
+                    var bitDepth = (settings.Module is Bam.Core.IModuleGroup) ?
+                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).BitDepth :
+                        (settings.Module as C.ObjectFile).BitDepth;
+                    if (bitDepth == C.EBit.ThirtyTwo)
+                    {
+                        var cCompiler = settings as C.ICOnlyCompilerSettings;
+                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // Python-3.5.1/Modules/_struct.c:860:9: error: this decimal constant is unsigned only in ISO C90 [-Werror]
+
+                        var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.ObjectFile).Compiler;
+                        if (compilerUsed.IsAtLeast(5,4))
+                        {
+                            compiler.DisableWarnings.AddUnique("overflow"); // Python-3.5.1/Modules/mathmodule.c:1457:5: error: large integer implicitly truncated to unsigned type [-Werror=overflow]
+                            compiler.DisableWarnings.AddUnique("type-limits"); // Python-3.5.1/Modules/_struct.c:860:33: error: comparison is always false due to limited range of data type [-Werror=type-limits]
+                        }
+                    }
                 }
                 var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                 if (null != clangCompiler)
@@ -2134,6 +2166,20 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:321:17: error: ISO C90 does not support the 'z' gnu_printf length modifier [-Werror=format=]
 
                         gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/_ctypes.c:3298:15: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
+
+                        var bitDepth = (settings.Module is Bam.Core.IModuleGroup) ?
+                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).BitDepth :
+                            (settings.Module as C.ObjectFile).BitDepth;
+                        if (bitDepth == C.EBit.ThirtyTwo)
+                        {
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(5,4))
+                            {
+                                compiler.DisableWarnings.AddUnique("int-to-pointer-cast"); // Python-3.5.1/Modules/_ctypes/cfield.c:1341:25: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
+                            }
+                        }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
