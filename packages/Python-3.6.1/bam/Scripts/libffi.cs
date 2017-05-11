@@ -190,8 +190,17 @@ namespace Python
             }
             else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
-                source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/ffi.c");
-                if (this.BitDepth == C.EBit.ThirtyTwo)
+                var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/ffi.c");
+                ffi.First().PrivatePatch(settings =>
+                    {
+                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
+                        if (null != clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/_ctypes/libffi_osx/ffi.c:108:1: error: unused function 'struct_on_stack' [-Werror,-Wunused-function]
+                        }
+                    });
+                    if (this.BitDepth == C.EBit.ThirtyTwo)
                 {
                     source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin.c");
                     asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-darwin.S");
@@ -211,12 +220,9 @@ namespace Python
                         if (null != vcCompiler)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
-                            if (null != compiler)
-                            {
-                                compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(293): warning C4244: '=': conversion from 'unsigned int' to 'unsigned short', possible loss of data
-                                compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(466): warning C4054: 'type cast': from function pointer 'void (__cdecl *)()' to data pointer 'void *'
-                                compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(416): warning C4100: 'codeloc': unreferenced formal parameter
-                            }
+                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(293): warning C4244: '=': conversion from 'unsigned int' to 'unsigned short', possible loss of data
+                            compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(466): warning C4054: 'type cast': from function pointer 'void (__cdecl *)()' to data pointer 'void *'
+                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(416): warning C4100: 'codeloc': unreferenced formal parameter
                         }
                     });
                 var prep_cif = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/prep_cif.c");
@@ -226,10 +232,7 @@ namespace Python
                         if (null != vcCompiler)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
-                            if (null != compiler)
-                            {
-                                compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
-                            }
+                            compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
                         }
                     });
                 if (this.BitDepth == C.EBit.ThirtyTwo)
@@ -241,10 +244,7 @@ namespace Python
                             if (null != vcCompiler)
                             {
                                 var compiler = settings as C.ICommonCompilerSettings;
-                                if (null != compiler)
-                                {
-                                    compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\win32.c(46): warning C4100: 'fn': unreferenced formal parameter
-                                }
+                                compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\win32.c(46): warning C4100: 'fn': unreferenced formal parameter
                             }
                         });
                 }
@@ -279,6 +279,10 @@ namespace Python
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
+                        clangCompiler.AllWarnings = true;
+                        clangCompiler.ExtraWarnings = true;
+                        clangCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi_osx/x86/x86-ffi64.c:602:30: error: assigning to 'void *volatile' from 'void (void)' converts between void pointer and function pointer [-Werror,-Wpedantic]
+
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.PreprocessorDefines.Add("MACOSX");
 
