@@ -794,7 +794,16 @@ namespace Python
 
                             if (objectSource.BitDepth == C.EBit.ThirtyTwo)
                             {
-                                compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/longobject.c:2834:9: error: left shift count >= width of type [-Werror]
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                }
+                                else
+                                {
+                                    compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/longobject.c:2834:9: error: left shift count >= width of type [-Werror]
+                                }
                             }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -1054,7 +1063,16 @@ namespace Python
 
                             if (objectSource.BitDepth == C.EBit.ThirtyTwo)
                             {
-                                compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/stringlib/codecs.h:56:21: error: right shift count >= width of type [-Werror]
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                }
+                                else
+                                {
+                                    compiler.WarningsAsErrors = false; // Python-3.5.1/Objects/stringlib/codecs.h:56:21: error: right shift count >= width of type [-Werror]
+                                }
                             }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -1511,7 +1529,16 @@ namespace Python
 
                             if (objectSource.BitDepth == C.EBit.ThirtyTwo)
                             {
-                                compiler.WarningsAsErrors = false; // Python-3.5.1/Python/pyhash.c:111:9: error: left shift count >= width of type [-Werror]
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                }
+                                else
+                                {
+                                    compiler.WarningsAsErrors = false; // Python-3.5.1/Python/pyhash.c:111:9: error: left shift count >= width of type [-Werror]
+                                }
                             }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -1686,7 +1713,16 @@ namespace Python
 
                             if (objectSource.BitDepth == C.EBit.ThirtyTwo)
                             {
-                                compiler.WarningsAsErrors = false; // Python-3.5.1/Python/sysmodule.c:755:5: error: left shift count >= width of type [-Werror]
+                                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                    (settings.Module as C.ObjectFile).Compiler;
+                                if (compilerUsed.IsAtLeast(5,4))
+                                {
+                                }
+                                else
+                                {
+                                    compiler.WarningsAsErrors = false; // Python-3.5.1/Python/sysmodule.c:755:5: error: left shift count >= width of type [-Werror]
+                                }
                             }
                         }
                         var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;

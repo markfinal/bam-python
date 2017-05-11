@@ -2155,7 +2155,16 @@ namespace Python
                         if (bitDepth == C.EBit.ThirtyTwo)
                         {
                             compiler.DisableWarnings.AddUnique("int-to-pointer-cast"); // Python-3.6.1/Modules/_ctypes/cfield.c:1320:25: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-                            compiler.WarningsAsErrors = false; // Python-3.6.1/Modules/_ctypes/cfield.c:804:5: error: right shift count >= width of type [-Werror]
+                            var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.ObjectFile).Compiler;
+                            if (compilerUsed.IsAtLeast(5,4))
+                            {
+                            }
+                            else
+                            {
+                                compiler.WarningsAsErrors = false; // Python-3.6.1/Modules/_ctypes/cfield.c:804:5: error: right shift count >= width of type [-Werror]
+                            }
                         }
                     }
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
