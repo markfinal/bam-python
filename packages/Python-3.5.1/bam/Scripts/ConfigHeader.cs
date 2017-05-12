@@ -111,6 +111,7 @@ namespace Python
         {
             get
             {
+                var bitDepth = (C.EBit)Bam.Core.CommandLineProcessor.Evaluate(new C.Options.DefaultBitDepth());
                 var contents = new System.Text.StringBuilder();
 #if BAM_FEATURE_MODULE_CONFIGURATION
                 if ((this.Configuration as IConfigurePython).PyDEBUG)
@@ -142,16 +143,35 @@ namespace Python
                 else
                 {
                     contents.AppendLine("#define SIZEOF_WCHAR_T 2");
-                    contents.AppendLine("#define SIZEOF_LONG 8");
-                    contents.AppendLine("#define SIZEOF_SIZE_T 8");
-                    contents.AppendLine("#define SIZEOF_VOID_P 8");
                     contents.AppendLine("#define VA_LIST_IS_ARRAY 1");
-                    contents.AppendLine("#define SIZEOF_TIME_T 8");
+                    // note SIZEOF_SIZE_T and SIZEOF_VOID_P must match in order for pyport.h
+                    // to define Py_ssize_t
+                    if (bitDepth == C.EBit.SixtyFour)
+                    {
+                        contents.AppendLine("#define SIZEOF_LONG 8");
+                        contents.AppendLine("#define SIZEOF_SIZE_T 8");
+                        contents.AppendLine("#define SIZEOF_VOID_P 8");
+                        contents.AppendLine("#define SIZEOF_TIME_T 8");
+                    }
+                    else
+                    {
+                        contents.AppendLine("#define SIZEOF_LONG 4");
+                        contents.AppendLine("#define SIZEOF_SIZE_T 4");
+                        contents.AppendLine("#define SIZEOF_VOID_P 4");
+                        contents.AppendLine("#define SIZEOF_TIME_T 4");
+                    }
                 }
                 contents.AppendLine("#define SIZEOF_LONG_LONG 8");
                 contents.AppendLine("#define SIZEOF_INT 4");
                 contents.AppendLine("#define SIZEOF_SHORT 2");
-                contents.AppendLine("#define SIZEOF_OFF_T 8");
+                if (bitDepth == C.EBit.SixtyFour)
+                {
+                    contents.AppendLine("#define SIZEOF_OFF_T 8");
+                }
+                else
+                {
+                    contents.AppendLine("#define SIZEOF_OFF_T 4");
+                }
                 contents.AppendLine("#define HAVE_STDARG_PROTOTYPES");
                 contents.AppendLine("#define HAVE_UINTPTR_T");
                 contents.AppendLine("#define HAVE_WCHAR_H");
