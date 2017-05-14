@@ -143,7 +143,6 @@ namespace Python
                 else
                 {
                     contents.AppendLine("#define SIZEOF_WCHAR_T 2");
-                    contents.AppendLine("#define VA_LIST_IS_ARRAY 1");
                     // note SIZEOF_SIZE_T and SIZEOF_VOID_P must match in order for pyport.h
                     // to define Py_ssize_t
                     if (bitDepth == C.EBit.SixtyFour)
@@ -152,6 +151,9 @@ namespace Python
                         contents.AppendLine("#define SIZEOF_SIZE_T 8");
                         contents.AppendLine("#define SIZEOF_VOID_P 8");
                         contents.AppendLine("#define SIZEOF_TIME_T 8");
+                        // NOTE: only define this in 64-bit builds
+                        // in 32-bit builds, it will cause segfaults deallocating PyLists
+                        contents.AppendLine("#define VA_LIST_IS_ARRAY 1");
                     }
                     else
                     {
