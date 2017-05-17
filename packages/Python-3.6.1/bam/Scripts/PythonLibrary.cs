@@ -1226,6 +1226,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4457"); // Python-3.5.1\Python\ceval.c(3879): warning C4457: declaration of 'name' hides function parameter
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Python\ceval.c(4762): warning C4244: '=': conversion from 'Py_ssize_t' to 'int', possible loss of data
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\python\ceval.c(2616) : warning C4701: potentially uninitialized local variable 'function_location' used
+
+                            if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebug ||
+                                vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDebugDLL)
+                            {
+                                compiler.DisableWarnings.AddUnique("4702"); // python-3.6.1\python\ceval.c(3514) : warning C4702: unreachable code
+                            }
                         }
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                         if (null != gccCompiler)
