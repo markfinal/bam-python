@@ -176,7 +176,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_UINT32_T");
                 contents.AppendLine("#define HAVE_INT32_T");
                 contents.AppendLine("#define HAVE_FCNTL_H");
-                contents.AppendLine("#define HAVE_UNISTD_H");
+                contents.AppendLine("#define HAVE_UNISTD_H 1"); // required to have a value in _scproxy.c for Xcode9+
                 contents.AppendLine("#define HAVE_SIGNAL_H");
                 contents.AppendLine("#define TIME_WITH_SYS_TIME");
                 contents.AppendLine("#define HAVE_DIRENT_H");
