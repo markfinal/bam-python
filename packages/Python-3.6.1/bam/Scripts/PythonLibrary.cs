@@ -3293,7 +3293,7 @@ namespace Python
 
                 // TODO: would like to do this, but can't, see bug#101
                 //headers.AddFile(pyConfigHeader);
-                headers.AddFile(pyConfigHeader.GeneratedPaths[PyConfigHeader.Key].Parse());
+                headers.AddFile(pyConfigHeader.GeneratedPaths[PyConfigHeader.Key].ToString());
             }
         }
     }

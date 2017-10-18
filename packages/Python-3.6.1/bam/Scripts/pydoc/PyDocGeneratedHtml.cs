@@ -69,7 +69,7 @@ namespace Python
         Evaluate()
         {
             this.ReasonToExecute = null;
-            var generatedPath = this.GeneratedPaths[Key].Parse();
+            var generatedPath = this.GeneratedPaths[Key].ToString();
             if (!System.IO.File.Exists(generatedPath))
             {
                 this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);

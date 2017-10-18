@@ -56,7 +56,7 @@ namespace Python
         Evaluate()
         {
             this.ReasonToExecute = null;
-            var outputPath = this.GeneratedPaths[Key].Parse();
+            var outputPath = this.GeneratedPaths[Key].ToString();
             if (!System.IO.File.Exists(outputPath))
             {
                 this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
@@ -68,7 +68,7 @@ namespace Python
         ExecuteInternal(
             ExecutionContext context)
         {
-            var destPath = this.GeneratedPaths[Key].Parse();
+            var destPath = this.GeneratedPaths[Key].ToString();
             var destDir = System.IO.Path.GetDirectoryName(destPath);
             if (!System.IO.Directory.Exists(destDir))
             {

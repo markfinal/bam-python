@@ -41,6 +41,7 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
+            this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in"));
         }
 
         protected override TokenizedString OutputPath
@@ -63,9 +64,8 @@ namespace Python
         {
             get
             {
-                var templatePath = this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in");
                 var contents = new System.Text.StringBuilder();
-                using (System.IO.TextReader reader = new System.IO.StreamReader(templatePath.Parse()))
+                using (System.IO.TextReader reader = new System.IO.StreamReader(this.Macros["templateConfig"].ToString()))
                 {
                     contents.Append(reader.ReadToEnd());
                 }
