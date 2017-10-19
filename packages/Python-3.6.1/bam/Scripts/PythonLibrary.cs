@@ -3291,9 +3291,7 @@ namespace Python
                         linker.Libraries.Add("-ldl");
                     });
 
-                // TODO: would like to do this, but can't, see bug#101
-                //headers.AddFile(pyConfigHeader);
-                headers.AddFile(pyConfigHeader.GeneratedPaths[PyConfigHeader.Key].ToString());
+                headers.AddFile(pyConfigHeader);
             }
         }
     }
