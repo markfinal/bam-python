@@ -148,6 +148,7 @@ namespace Python
                 System.IO.Directory.CreateDirectory(destDir);
             }
             var stubPath = this.Macros["templateConfig"].ToString();
+            var stubText = System.IO.File.ReadAllText(stubPath);
             // TODO: this should be following the rules in Modules/makesetup and Modules/Setup.dist
             // for which modules are static (and thus part of the Python library) and which are shared
             // and separate in the distribution
