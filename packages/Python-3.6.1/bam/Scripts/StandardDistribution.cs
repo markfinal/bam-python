@@ -46,6 +46,8 @@ namespace Python
             }
         }
 
+#if D_NEW_PUBLISHING
+#else
         public static Publisher.CollatedDirectory
         Publish(
             Publisher.Collation module,
@@ -182,5 +184,6 @@ namespace Python
 
             return platIndependentModules;
         }
+#endif
     }
 }

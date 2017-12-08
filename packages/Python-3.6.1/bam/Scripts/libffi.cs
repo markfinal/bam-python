@@ -122,6 +122,8 @@ namespace Python
     class CopyNonPublicHeadersToPublic :
         Publisher.Collation
     {
+#if D_NEW_PUBLISHING
+#else
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -150,6 +152,7 @@ namespace Python
             var baseHeader = this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h"), ".");
             this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h"), ".", baseHeader);
         }
+#endif
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]

@@ -161,6 +161,8 @@ namespace Python
     class ShellRuntime :
         Publisher.Collation
     {
+#if D_NEW_PUBLISHING
+#else
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -170,5 +172,6 @@ namespace Python
             var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             StandardDistribution.Publish(this, app);
         }
+#endif
     }
 }
