@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using System.Linq;
 namespace ShellTest1
 {
     sealed class TestRuntime :
@@ -39,9 +40,16 @@ namespace ShellTest1
         {
             base.Init(parent);
 
+#if D_NEW_PUBLISHING
+            this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            Python.StandardDistribution.Publish(this, this.Find<Python.PythonShell>().First());
+            this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir);
+#else
             var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             Python.StandardDistribution.Publish(this, pyShellCopy);
             this.IncludeFile("$(packagedir)/data/helloworld.py", ".", pyShellCopy);
+#endif
         }
     }
 }

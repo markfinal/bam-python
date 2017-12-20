@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using System.Linq;
 namespace Python
 {
     static class StandardDistribution
@@ -47,6 +48,29 @@ namespace Python
         }
 
 #if D_NEW_PUBLISHING
+    public static Bam.Core.Array<Publisher.ICollatedObject>
+    Publish(
+        Publisher.Collation collator,
+        Publisher.ICollatedObject anchor)
+        {
+            var pyLibCopy = collator.Find<PythonLibrary>().First();
+            var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
+
+            Bam.Core.Array<Publisher.ICollatedObject> platIndependentModules = null;
+            if (collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.ExecutableDir, renameLeaf: "lib");
+            }
+            else
+            {
+                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.CreateTokenizedString("$(0)/lib", collator.ExecutableDir), renameLeaf: System.String.Format("python{0}", Version.MajorDotMinor));
+            }
+
+            // TODO: stack overflow - as it depends on something already there, I think
+            collator.Include<_ctypes>(C.DynamicLibrary.Key, collator.CreateTokenizedString("$(0)/DLLs", collator.ExecutableDir));
+
+            return platIndependentModules;
+        }
 #else
         public static Publisher.CollatedDirectory
         Publish(
