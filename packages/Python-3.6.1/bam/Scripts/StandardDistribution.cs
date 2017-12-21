@@ -31,6 +31,38 @@ using Bam.Core;
 using System.Linq;
 namespace Python
 {
+    class AllDynamicModules :
+        Bam.Core.Module
+    {
+        private void
+        RequiredToExist<T>() where T : Bam.Core.Module, new()
+        {
+            var dependent = Bam.Core.Graph.Instance.FindReferencedModule<T>();
+            this.Requires(dependent);
+        }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            this.RequiredToExist<_ctypes>();
+        }
+
+        public override void Evaluate()
+        {
+        }
+
+        protected override void ExecuteInternal(ExecutionContext context)
+        {
+        }
+
+        protected override void GetExecutionPolicy(string mode)
+        {
+        }
+    }
+
     static class StandardDistribution
     {
         public readonly static string ModuleDirectory;
@@ -66,8 +98,11 @@ namespace Python
                 platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.CreateTokenizedString("$(0)/lib", collator.ExecutableDir), renameLeaf: System.String.Format("python{0}", Version.MajorDotMinor));
             }
 
-            // TODO: stack overflow - as it depends on something already there, I think
-            collator.Include<_ctypes>(C.DynamicLibrary.Key, collator.CreateTokenizedString("$(0)/DLLs", collator.ExecutableDir));
+            // put dynamic modules in the right place
+            foreach (var dynmodule in collator.Find<Python.DynamicExtensionModule>())
+            {
+                (dynmodule as Publisher.CollatedObject).SetPublishingDirectory("$(0)/" + ModuleDirectory, new[] { collator.ExecutableDir });
+            }
 
             return platIndependentModules;
         }

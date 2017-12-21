@@ -104,6 +104,9 @@ namespace Python
                     clangLinker.RPath.AddUnique(System.String.Format("@executable_path/{0}", StandardDistribution.ModuleDirectory));
                 }
             });
+
+            var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
+            this.Requires(allModules);
         }
 
         public Bam.Core.Settings
