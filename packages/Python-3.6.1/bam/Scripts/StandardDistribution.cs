@@ -101,7 +101,13 @@ namespace Python
             // put dynamic modules in the right place
             foreach (var dynmodule in collator.Find<Python.DynamicExtensionModule>())
             {
-                (dynmodule as Publisher.CollatedObject).SetPublishingDirectory("$(0)/" + ModuleDirectory, new[] { collator.ExecutableDir });
+                var collatedDynModule = (dynmodule as Publisher.CollatedObject);
+                collatedDynModule.SetPublishingDirectory("$(0)/" + ModuleDirectory, new[] { collator.ExecutableDir });
+                if (!collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                {
+                    // copy dynamic modules last, since they go inside the platform independent directory structure
+                    collatedDynModule.Requires(platIndependentModules.First() as Bam.Core.Module);
+                }
             }
 
             return platIndependentModules;
