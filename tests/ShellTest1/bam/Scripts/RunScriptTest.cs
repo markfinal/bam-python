@@ -29,6 +29,7 @@
 #endregion // License
 using Bam.Core;
 using System.Linq;
+using Python.StandardDistribution;
 namespace ShellTest1
 {
     sealed class TestRuntime :
@@ -42,8 +43,10 @@ namespace ShellTest1
 
 #if D_NEW_PUBLISHING
             this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
             this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
-            Python.StandardDistribution.Publish(this, this.Find<Python.PythonShell>().First());
+            this.IncludePythonStandardDistribution(this.Find<Python.PythonShell>().First());
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir);
 #else
             var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);

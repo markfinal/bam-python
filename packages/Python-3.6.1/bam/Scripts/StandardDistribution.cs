@@ -29,6 +29,7 @@
 #endregion // License
 using Bam.Core;
 using System.Linq;
+#if D_NEW_PUBLISHING
 namespace Python
 {
     class AllDynamicModules :
@@ -62,12 +63,14 @@ namespace Python
         {
         }
     }
-
-    static class StandardDistribution
+}
+namespace Python.StandardDistribution
+{
+    public static class PublisherExtensions
     {
         public readonly static string ModuleDirectory;
 
-        static StandardDistribution()
+        static PublisherExtensions()
         {
             if (Bam.Core.OSUtilities.IsWindowsHosting)
             {
@@ -79,11 +82,21 @@ namespace Python
             }
         }
 
-#if D_NEW_PUBLISHING
-    public static Bam.Core.Array<Publisher.ICollatedObject>
-    Publish(
-        Publisher.Collation collator,
-        Publisher.ICollatedObject anchor)
+        public static void
+        RegisterPythonModuleTypesToCollate(
+            this Publisher.Collation collator)
+        {
+            collator.Mapping.Register(
+                typeof(SysConfigDataPythonFile),
+                SysConfigDataPythonFile.Key,
+                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                true);
+        }
+
+        public static Bam.Core.Array<Publisher.ICollatedObject>
+        IncludePythonStandardDistribution(
+            this Publisher.Collation collator,
+            Publisher.ICollatedObject anchor)
         {
             var pyLibCopy = collator.Find<PythonLibrary>().First();
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
@@ -110,9 +123,35 @@ namespace Python
                 }
             }
 
+            var sysConfigData = collator.Find<SysConfigDataPythonFile>().FirstOrDefault();
+            if (null != sysConfigData)
+            {
+                (sysConfigData as Publisher.CollatedObject).DependsOn(platIndependentModules.First() as Bam.Core.Module);
+            }
+
             return platIndependentModules;
         }
+    }
+}
 #else
+namespace Python
+{
+    static class StandardDistribution
+    {
+        public readonly static string ModuleDirectory;
+
+        static StandardDistribution()
+        {
+            if (Bam.Core.OSUtilities.IsWindowsHosting)
+            {
+                ModuleDirectory = "DLLs";
+            }
+            else
+            {
+                ModuleDirectory = System.String.Format("lib/python{0}/lib-dynload", Version.MajorDotMinor);
+            }
+        }
+
         public static Publisher.CollatedDirectory
         Publish(
             Publisher.Collation module,
@@ -249,6 +288,6 @@ namespace Python
 
             return platIndependentModules;
         }
-#endif
     }
 }
+#endif
