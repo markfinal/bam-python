@@ -3283,6 +3283,9 @@ namespace Python
                 var sysConfigDataPy = Bam.Core.Graph.Instance.FindReferencedModule<SysConfigDataPythonFile>();
                 this.Requires(sysConfigDataPy);
 
+                var pyMakeFile = Bam.Core.Graph.Instance.FindReferencedModule<PyMakeFile>();
+                this.Requires(pyMakeFile);
+
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
