@@ -48,7 +48,83 @@ namespace Python
         {
             base.Init(parent);
 
+            // common to all platforms
+            this.RequiredToExist<_multiprocessing>();
             this.RequiredToExist<_ctypes>();
+            this.RequiredToExist<_testmultiphase>();
+            this.RequiredToExist<_testimportmultiple>();
+            this.RequiredToExist<_testbuffer>();
+            this.RequiredToExist<_testcapi>();
+            this.RequiredToExist<_elementtree>();
+            this.RequiredToExist<unicodedata>();
+            this.RequiredToExist<select>();
+            this.RequiredToExist<_socket>();
+            this.RequiredToExist<fpectl>();
+            this.RequiredToExist<fpetest>();
+            this.RequiredToExist<pyexpat>();
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
+            {
+                // extension modules
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    this.RequiredToExist<_scproxy>();
+                }
+                this.RequiredToExist<_opcode>();
+                this.RequiredToExist<_lsprof>();
+                this.RequiredToExist<_json>();
+                this.RequiredToExist<_thread>();
+                this.RequiredToExist<array>();
+                this.RequiredToExist<cmath>();
+                this.RequiredToExist<math>();
+                this.RequiredToExist<_struct>();
+                this.RequiredToExist<_random>();
+                this.RequiredToExist<_pickle>();
+                this.RequiredToExist<_datetime>();
+                this.RequiredToExist<_bisect>();
+                this.RequiredToExist<_heapq>();
+                this.RequiredToExist<fcntl>();
+                this.RequiredToExist<grp>();
+                this.RequiredToExist<mmap>();
+                this.RequiredToExist<_csv>();
+                this.RequiredToExist<_crypt>();
+                this.RequiredToExist<nis>();
+                this.RequiredToExist<termios>();
+                this.RequiredToExist<resource>();
+                this.RequiredToExist<_posixsubprocess>();
+                this.RequiredToExist<audioop>();
+                this.RequiredToExist<_md5>();
+                this.RequiredToExist<_sha1>();
+                this.RequiredToExist<_sha256>();
+                this.RequiredToExist<_sha512>();
+                this.RequiredToExist<syslog>();
+                if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                {
+                    this.RequiredToExist<_curses>();
+                    this.RequiredToExist<_curses_panel>();
+                }
+                this.RequiredToExist<binascii>();
+                this.RequiredToExist<parser>();
+                this.RequiredToExist<zlib>();
+                this.RequiredToExist<_multibytecodec>();
+                this.RequiredToExist<_codecs_cn>();
+                this.RequiredToExist<_codecs_hk>();
+                this.RequiredToExist<_codecs_iso2022>();
+                this.RequiredToExist<_codecs_jp>();
+                this.RequiredToExist<_codecs_kr>();
+                this.RequiredToExist<_codecs_tw>();
+                this.RequiredToExist<xxsubtype>();
+                this.RequiredToExist<_blake2>();
+                this.RequiredToExist<_sha3>();
+
+#if PYTHON_WITH_OPENSSL
+                this.RequiredToExist<_ssl>();
+                this.RequiredToExist<_hashlib>();
+#endif
+#if PYTHON_WITH_SQLITE
+                this.RequiredToExist<_sqlite3>();
+#endif
+            }
         }
 
         public override void Evaluate()
@@ -91,6 +167,18 @@ namespace Python.StandardDistribution
                 SysConfigDataPythonFile.Key,
                 collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
                 true);
+
+            // required by distutils
+            collator.Mapping.Register(
+                typeof(PyConfigHeader),
+                PyConfigHeader.Key,
+                collator.CreateTokenizedString("$(0)/include/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                true);
+            collator.Mapping.Register(
+                typeof(PyMakeFile),
+                PyConfigHeader.Key,
+                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor + "/config-" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                true);
         }
 
         public static Bam.Core.Array<Publisher.ICollatedObject>
@@ -127,6 +215,16 @@ namespace Python.StandardDistribution
             if (null != sysConfigData)
             {
                 (sysConfigData as Publisher.CollatedObject).DependsOn(platIndependentModules.First() as Bam.Core.Module);
+            }
+            var pyConfigHeader = collator.Find<PyConfigHeader>().FirstOrDefault();
+            if (null != pyConfigHeader)
+            {
+                (pyConfigHeader as Publisher.CollatedObject).DependsOn(platIndependentModules.First() as Bam.Core.Module);
+            }
+            var pyMakeFile = collator.Find<PyMakeFile>().FirstOrDefault();
+            if (null != pyMakeFile)
+            {
+                (pyMakeFile as Publisher.CollatedObject).DependsOn(platIndependentModules.First() as Bam.Core.Module);
             }
 
             return platIndependentModules;
