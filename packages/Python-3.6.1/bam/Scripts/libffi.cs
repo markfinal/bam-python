@@ -122,14 +122,27 @@ namespace Python
     class CopyNonPublicHeadersToPublic :
         Publisher.Collation
     {
-#if D_NEW_PUBLISHING
-#else
         protected override void
         Init(
             Bam.Core.Module parent)
         {
             base.Init(parent);
 
+#if D_NEW_PUBLISHING
+            var publishRoot = this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders");
+
+            this.PublicPatch((settings, appliedTo) =>
+                {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    if (null != compiler)
+                    {
+                        compiler.IncludePaths.AddUnique(publishRoot);
+                    }
+                });
+
+            this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h", publishRoot);
+            this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h", publishRoot);
+#else
             // the build mode depends on whether this path has been set or not
             if (this.GeneratedPaths.ContainsKey(Key))
             {
@@ -151,8 +164,8 @@ namespace Python
 
             var baseHeader = this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h"), ".");
             this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h"), ".", baseHeader);
-        }
 #endif
+        }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
