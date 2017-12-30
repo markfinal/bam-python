@@ -192,11 +192,11 @@ namespace Python.StandardDistribution
             Bam.Core.Array<Publisher.ICollatedObject> platIndependentModules = null;
             if (collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.ExecutableDir, renameLeaf: "lib");
+                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.ExecutableDir, anchor as Publisher.CollatedObject, renameLeaf: "lib");
             }
             else
             {
-                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.CreateTokenizedString("$(0)/lib", collator.ExecutableDir), renameLeaf: System.String.Format("python{0}", Version.MajorDotMinor));
+                platIndependentModules = collator.IncludeDirectories(pyLibDir, collator.CreateTokenizedString("$(0)/lib", collator.ExecutableDir), anchor as Publisher.CollatedObject, renameLeaf: System.String.Format("python{0}", Version.MajorDotMinor));
             }
 
             // put dynamic modules in the right place

@@ -140,8 +140,16 @@ namespace Python
                     }
                 });
 
-            this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h", publishRoot);
-            this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h", publishRoot);
+            var headerPaths = new Bam.Core.StringArray
+            {
+                "src/x86/ffitarget.h",
+                "include/ffi_common.h"
+            };
+
+            foreach (var header in headerPaths)
+            {
+                this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/" + header, publishRoot, null);
+            }
 #else
             // the build mode depends on whether this path has been set or not
             if (this.GeneratedPaths.ContainsKey(Key))
