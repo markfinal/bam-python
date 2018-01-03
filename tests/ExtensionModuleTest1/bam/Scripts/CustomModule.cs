@@ -28,16 +28,28 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
+using System.Linq;
 namespace ExtensionModuleTest1
 {
     [Bam.Core.ModuleGroup("ExtensionModuleTest1")]
-    class CustomModule :
+    sealed class CustomModule :
         Python.DynamicExtensionModule
     {
         public CustomModule()
             :
             base("custommodule", "source/custommodule")
         { }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            var shell = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonShell>();
+            shell.Requires(this);
+        }
     }
 
     sealed class CustomModuleRuntime :
@@ -49,11 +61,22 @@ namespace ExtensionModuleTest1
         {
             base.Init(parent);
 
+#if D_NEW_PUBLISHING
+            this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor);
+
+            var extensionModule = this.Find<CustomModule>().First();
+            (extensionModule as Publisher.CollatedObject).SetPublishingDirectory("$(0)/" + Python.StandardDistribution.PublisherExtensions.ModuleDirectory, new[] { this.ExecutableDir });
+#else
             var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
 
             var custommodule = this.Include<CustomModule>(C.Plugin.Key, Python.StandardDistribution.ModuleDirectory, app);
             custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
+#endif
         }
     }
 }

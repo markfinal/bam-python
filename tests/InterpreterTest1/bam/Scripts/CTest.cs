@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
 namespace InterpreterTest1
 {
     sealed class CTest :
@@ -97,6 +98,13 @@ namespace InterpreterTest1
         {
             base.Init(parent);
 
+#if D_NEW_PUBLISHING
+            this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<CTest>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor);
+#else
             var app = this.Include<CTest>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var pyLibCopy = this.Include<Python.PythonLibrary>(C.DynamicLibrary.Key, ".", app);
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
@@ -112,6 +120,7 @@ namespace InterpreterTest1
                 platIndependentModules.CopiedFilename = "python3.5";
                 this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", app);
             }
+#endif
         }
     }
 }
