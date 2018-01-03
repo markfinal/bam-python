@@ -62,7 +62,7 @@ namespace ExtensionModuleTest1
             base.Init(parent);
 
 #if D_NEW_PUBLISHING
-            this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);

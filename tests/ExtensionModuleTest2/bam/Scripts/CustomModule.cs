@@ -69,7 +69,7 @@ namespace ExtensionModuleTest2
             base.Init(parent);
 
 #if D_NEW_PUBLISHING
-            this.SetDefaultMacros(EPublishingType.ConsoleApplication);
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
             this.Mapping.Register(typeof(Python.PyDocGeneratedHtml), Python.PyDocGeneratedHtml.Key, this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false);
 
