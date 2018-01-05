@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -101,9 +102,12 @@ namespace Python
                 if (null != clangLinker)
                 {
                     // standard distribution path
-                    clangLinker.RPath.AddUnique(System.String.Format("@executable_path/{0}", StandardDistribution.ModuleDirectory));
+                    clangLinker.RPath.AddUnique(System.String.Format("@executable_path/{0}", StandardDistribution.PublisherExtensions.ModuleDirectory));
                 }
             });
+
+            var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
+            this.Requires(allModules);
         }
 
         public Bam.Core.Settings
@@ -167,8 +171,16 @@ namespace Python
         {
             base.Init(parent);
 
+#if D_NEW_PUBLISHING
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor);
+#else
             var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             StandardDistribution.Publish(this, app);
+#endif
         }
     }
 }

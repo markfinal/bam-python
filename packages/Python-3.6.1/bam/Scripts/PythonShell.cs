@@ -28,6 +28,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -171,6 +172,11 @@ namespace Python
             base.Init(parent);
 
 #if D_NEW_PUBLISHING
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor);
 #else
             var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             StandardDistribution.Publish(this, app);

@@ -41,6 +41,15 @@ namespace Python
             base.Init(parent);
         }
 
+        protected override string GuardString
+        {
+            get
+            {
+                // no guard in a MakeFile
+                return null;
+            }
+        }
+
         protected override TokenizedString OutputPath
         {
             get
