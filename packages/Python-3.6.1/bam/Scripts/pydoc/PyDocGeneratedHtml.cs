@@ -94,6 +94,7 @@ namespace Python
             switch (mode)
             {
             case "Native":
+            case "MakeFile":
                 var className = "Python." + mode + "PyDocToHtml";
                 this.Policy = Bam.Core.ExecutionPolicyUtilities<IPyDocGenerationPolicy>.Create(className);
                 break;
