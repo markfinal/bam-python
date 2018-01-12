@@ -29,6 +29,7 @@
 #endregion // License
 using Bam.Core;
 using Python.StandardDistribution;
+using System.Linq;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -90,21 +91,6 @@ namespace Python
                 });
 
             this.LinkAgainst<PythonLibrary>();
-            this.PrivatePatch(settings =>
-            {
-                var gccLinker = settings as GccCommon.ICommonLinkerSettings;
-                if (null != gccLinker)
-                {
-                    gccLinker.CanUseOrigin = true;
-                    gccLinker.RPath.AddUnique("$ORIGIN");
-                }
-                var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
-                if (null != clangLinker)
-                {
-                    // standard distribution path
-                    clangLinker.RPath.AddUnique(System.String.Format("@executable_path/{0}", StandardDistribution.PublisherExtensions.ModuleDirectory));
-                }
-            });
 
             var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
             this.Requires(allModules);
@@ -176,7 +162,7 @@ namespace Python
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.Key);
-            this.IncludePythonStandardDistribution(appAnchor);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 #else
             var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             StandardDistribution.Publish(this, app);

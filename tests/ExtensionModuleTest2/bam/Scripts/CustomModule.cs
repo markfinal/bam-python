@@ -74,10 +74,10 @@ namespace ExtensionModuleTest2
             this.Mapping.Register(typeof(Python.PyDocGeneratedHtml), Python.PyDocGeneratedHtml.Key, this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false);
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
-            this.IncludePythonStandardDistribution(appAnchor);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             var extensionModule = this.Find<CustomModule>().First();
-            (extensionModule as Publisher.CollatedObject).SetPublishingDirectory("$(0)/" + Python.StandardDistribution.PublisherExtensions.ModuleDirectory, new[] { this.ExecutableDir });
+            this.SetPublishingDirectoryForPythonBinaryModule(extensionModule as Publisher.CollatedObject);
 
             this.PyInterpreter = appAnchor as Publisher.CollatedFile;
 #else

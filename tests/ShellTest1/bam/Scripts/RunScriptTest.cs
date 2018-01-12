@@ -46,7 +46,8 @@ namespace ShellTest1
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
-            this.IncludePythonStandardDistribution(appAnchor);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
+
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
 #else
             var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);

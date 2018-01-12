@@ -29,6 +29,7 @@
 #endregion // License
 using Bam.Core;
 using Python.StandardDistribution;
+using System.Linq;
 namespace InterpreterTest1
 {
     sealed class CxxTest :
@@ -102,7 +103,10 @@ namespace InterpreterTest1
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<CxxTest>(C.Cxx.ConsoleApplication.Key);
-            this.IncludePythonStandardDistribution(appAnchor);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
+
+            // note that as this is not using PythonShell, it is not adding a dependency on all of the dynamic
+            // modules, so these are not built
 #else
             var app = this.Include<CxxTest>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var pyLibCopy = this.Include<Python.PythonLibrary>(C.DynamicLibrary.Key, ".", app);

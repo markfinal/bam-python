@@ -66,10 +66,10 @@ namespace ExtensionModuleTest1
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
-            this.IncludePythonStandardDistribution(appAnchor);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             var extensionModule = this.Find<CustomModule>().First();
-            (extensionModule as Publisher.CollatedObject).SetPublishingDirectory("$(0)/" + Python.StandardDistribution.PublisherExtensions.ModuleDirectory, new[] { this.ExecutableDir });
+            this.SetPublishingDirectoryForPythonBinaryModule(extensionModule as Publisher.CollatedObject);
 #else
             var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
