@@ -45,20 +45,10 @@ namespace ShellTest1
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            this.Mapping.Register(
-                typeof(Python.PythonZip),
-                Publisher.ZipModule.Key,
-                this.CreateTokenizedString("$(0)", new[] { this.ExecutableDir }),
-                true
-            );
-
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
-            this.Include<Python.PythonZip>(
-                Publisher.ZipModule.Key
-            );
 #else
             var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
             Python.StandardDistribution.Publish(this, pyShellCopy);
