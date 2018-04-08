@@ -139,6 +139,31 @@ namespace Python
         {
         }
     }
+
+    public sealed class PythonZip :
+        Publisher.ZipModule
+    {
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            this.Macros.Add("zipoutputbasename", "python" + Version.MajorDotMinor);
+
+            var pylib = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonLibrary>();
+            this.DependsOn(pylib);
+            this.Macros.Add("pathtozip", pylib.LibraryDirectory);
+
+            base.Init(parent);
+
+            this.PrivatePatch(settings =>
+                {
+                    var zipSettings = settings as Publisher.IZipSettings;
+                    zipSettings.RecursivePaths = true;
+                    zipSettings.Update = true;
+                }
+            );
+        }
+    }
 }
 namespace Python.StandardDistribution
 {
