@@ -240,6 +240,55 @@ namespace Python.StandardDistribution
             }
         }
 
+        public static void
+        IncludePythonPlatformDependentModules(
+            this Publisher.Collation collator,
+            Bam.Core.Array<Publisher.ICollatedObject> platIndependentModules = null)
+        {
+            // put dynamic modules in the right place
+            foreach (var dynmodule in collator.Find<Python.DynamicExtensionModule>())
+            {
+                var collatedDynModule = (dynmodule as Publisher.CollatedObject);
+                collator.SetPublishingDirectoryForPythonBinaryModule(collatedDynModule);
+                if (null != platIndependentModules && !collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                {
+                    // copy dynamic modules last, since they go inside the platform independent directory structure
+                    collatedDynModule.Requires(platIndependentModules.First() as Bam.Core.Module);
+                }
+            }
+
+            var sysConfigData = collator.Find<SysConfigDataPythonFile>().FirstOrDefault();
+            if (null != sysConfigData)
+            {
+                var sysConfigDataModule = (sysConfigData as Publisher.CollatedObject);
+                if (null != platIndependentModules)
+                {
+                    sysConfigDataModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
+                }
+                collator.SetPublishingDirectoryForPythonBinaryModule(sysConfigDataModule);
+            }
+            var pyConfigHeader = collator.Find<PyConfigHeader>().FirstOrDefault();
+            if (null != pyConfigHeader)
+            {
+                var headerModule = (pyConfigHeader as Publisher.CollatedObject);
+                if (null != platIndependentModules)
+                {
+                    headerModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
+                }
+                headerModule.SetPublishingDirectory("$(0)", new[] { collator.HeaderDir });
+            }
+            var pyMakeFile = collator.Find<PyMakeFile>().FirstOrDefault();
+            if (null != pyMakeFile)
+            {
+                var makeFileModule = (pyMakeFile as Publisher.CollatedObject);
+                if (null != platIndependentModules)
+                {
+                    makeFileModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
+                }
+                collator.SetPublishingDirectoryForPythonBinaryModule(makeFileModule);
+            }
+        }
+
         public static Bam.Core.Array<Publisher.ICollatedObject>
         IncludePythonStandardDistribution(
             this Publisher.Collation collator,
@@ -299,39 +348,7 @@ namespace Python.StandardDistribution
                 throw new Bam.Core.Exception("Unknown platform");
             }
 
-            // put dynamic modules in the right place
-            foreach (var dynmodule in collator.Find<Python.DynamicExtensionModule>())
-            {
-                var collatedDynModule = (dynmodule as Publisher.CollatedObject);
-                collator.SetPublishingDirectoryForPythonBinaryModule(collatedDynModule);
-                if (!collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-                {
-                    // copy dynamic modules last, since they go inside the platform independent directory structure
-                    collatedDynModule.Requires(platIndependentModules.First() as Bam.Core.Module);
-                }
-            }
-
-            var sysConfigData = collator.Find<SysConfigDataPythonFile>().FirstOrDefault();
-            if (null != sysConfigData)
-            {
-                var sysConfigDataModule = (sysConfigData as Publisher.CollatedObject);
-                sysConfigDataModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
-                collator.SetPublishingDirectoryForPythonBinaryModule(sysConfigDataModule);
-            }
-            var pyConfigHeader = collator.Find<PyConfigHeader>().FirstOrDefault();
-            if (null != pyConfigHeader)
-            {
-                var headerModule = (pyConfigHeader as Publisher.CollatedObject);
-                headerModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
-                headerModule.SetPublishingDirectory("$(0)", new[] { collator.HeaderDir });
-            }
-            var pyMakeFile = collator.Find<PyMakeFile>().FirstOrDefault();
-            if (null != pyMakeFile)
-            {
-                var makeFileModule = (pyMakeFile as Publisher.CollatedObject);
-                makeFileModule.DependsOn(platIndependentModules.First() as Bam.Core.Module);
-                collator.SetPublishingDirectoryForPythonBinaryModule(makeFileModule);
-            }
+            IncludePythonPlatformDependentModules(collator, platIndependentModules);
 
             // standard distribution should copy AFTER the Python library
             foreach (var module in platIndependentModules)
