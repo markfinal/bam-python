@@ -147,7 +147,7 @@ namespace Python
         Init(
             Bam.Core.Module parent)
         {
-            this.Macros.Add("zipoutputbasename", "python" + Version.MajorDotMinor);
+            this.Macros.Add("zipoutputbasename", "python" + Version.MajorMinor);
 
             var pylib = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonLibrary>();
             this.DependsOn(pylib);
