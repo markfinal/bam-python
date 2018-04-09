@@ -243,8 +243,38 @@ namespace Python.StandardDistribution
         public static void
         IncludePythonPlatformDependentModules(
             this Publisher.Collation collator,
+            Publisher.ICollatedObject anchor,
             Bam.Core.Array<Publisher.ICollatedObject> platIndependentModules = null)
         {
+            anchor.SourceModule.PrivatePatch(settings =>
+                {
+                    var gccLinker = settings as GccCommon.ICommonLinkerSettings;
+                    if (null != gccLinker)
+                    {
+                        gccLinker.CanUseOrigin = true;
+                    }
+                    if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
+                    {
+                        if (null != gccLinker)
+                        {
+                            gccLinker.RPath.AddUnique("$ORIGIN/../lib");
+                        }
+                        var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
+                        if (null != clangLinker)
+                        {
+                            clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
+                        }
+                    }
+                    else
+                    {
+                        if (null != gccLinker)
+                        {
+                            gccLinker.RPath.AddUnique("$ORIGIN");
+                        }
+                    }
+                }
+            );
+
             // put dynamic modules in the right place
             foreach (var dynmodule in collator.Find<Python.DynamicExtensionModule>())
             {
@@ -295,31 +325,6 @@ namespace Python.StandardDistribution
             Publisher.ICollatedObject anchor,
             Publisher.ICollatedObject pythonLib)
         {
-            anchor.SourceModule.PrivatePatch(settings =>
-                {
-                    var gccLinker = settings as GccCommon.ICommonLinkerSettings;
-                    if (null != gccLinker)
-                    {
-                        gccLinker.CanUseOrigin = true;
-	                    if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
-	                    {
-	                        gccLinker.RPath.AddUnique("$ORIGIN/../lib");
-	                    }
-	                    else
-	                    {
-	                        gccLinker.RPath.AddUnique("$ORIGIN");
-	                    }
-                    }
-                    if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
-                    {
-                        var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
-                        if (null != clangLinker)
-                        {
-                            clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
-                        }
-                    }
-                });
-
             var pyLibCopy = collator.Find<PythonLibrary>().First();
             var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
 
@@ -348,7 +353,7 @@ namespace Python.StandardDistribution
                 throw new Bam.Core.Exception("Unknown platform");
             }
 
-            IncludePythonPlatformDependentModules(collator, platIndependentModules);
+            IncludePythonPlatformDependentModules(collator, anchor, platIndependentModules);
 
             // standard distribution should copy AFTER the Python library
             foreach (var module in platIndependentModules)

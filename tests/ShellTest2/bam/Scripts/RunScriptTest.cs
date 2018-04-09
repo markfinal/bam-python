@@ -65,7 +65,7 @@ namespace ShellTest2
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
             this.Include<Python.PythonZip>(Publisher.ZipModule.Key);
-            this.IncludePythonPlatformDependentModules();
+            this.IncludePythonPlatformDependentModules(appAnchor);
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
         }
