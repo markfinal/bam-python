@@ -301,14 +301,14 @@ namespace Python.StandardDistribution
                     if (null != gccLinker)
                     {
                         gccLinker.CanUseOrigin = true;
-                    if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
-                    {
-                        gccLinker.RPath.AddUnique("$ORIGIN/../lib");
-                        }
-                        else
-                        {
-                            gccLinker.RPath.AddUnique("$ORIGIN");
-                        }
+	                    if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
+	                    {
+	                        gccLinker.RPath.AddUnique("$ORIGIN/../lib");
+	                    }
+	                    else
+	                    {
+	                        gccLinker.RPath.AddUnique("$ORIGIN");
+	                    }
                     }
                     if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
                     {
