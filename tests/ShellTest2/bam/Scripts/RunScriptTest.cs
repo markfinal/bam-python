@@ -44,12 +44,24 @@ namespace ShellTest2
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            this.Mapping.Register(
-                typeof(Python.PythonZip),
-                Publisher.ZipModule.Key,
-                this.CreateTokenizedString("$(0)", new[] { this.ExecutableDir }),
-                true
-            );
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.Mapping.Register(
+                    typeof(Python.PythonZip),
+                    Publisher.ZipModule.Key,
+                    this.CreateTokenizedString("$(0)", new[] { this.ExecutableDir }),
+                    true
+                );
+            }
+            else
+            {
+                this.Mapping.Register(
+                    typeof(Python.PythonZip),
+                    Publisher.ZipModule.Key,
+                    this.CreateTokenizedString("$(0)/lib", new[] { this.ExecutableDir }),
+                    true
+                );
+            }
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
             this.Include<Python.PythonZip>(Publisher.ZipModule.Key);
