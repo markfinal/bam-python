@@ -32,6 +32,22 @@ using System.Linq;
 using Python.StandardDistribution;
 namespace ShellTest2
 {
+    [Bam.Core.ModulePackageDirectoryRedirect(typeof(Python.PythonShell))]
+    sealed class PythonShellWithZipLibrary :
+        Python.PythonShell
+    {
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            // additional runtime dependency is required, for the zipped library
+            var libraryZip = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonZip>();
+            this.Requires(libraryZip);
+        }
+    }
+
     sealed class TestRuntime :
         Publisher.Collation
     {
@@ -44,27 +60,7 @@ namespace ShellTest2
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                this.Mapping.Register(
-                    typeof(Python.PythonZip),
-                    Publisher.ZipModule.Key,
-                    this.CreateTokenizedString("$(0)", new[] { this.ExecutableDir }),
-                    true
-                );
-            }
-            else
-            {
-                this.Mapping.Register(
-                    typeof(Python.PythonZip),
-                    Publisher.ZipModule.Key,
-                    this.CreateTokenizedString("$(0)/lib", new[] { this.ExecutableDir }),
-                    true
-                );
-            }
-
-            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
-            this.Include<Python.PythonZip>(Publisher.ZipModule.Key);
+            var appAnchor = this.Include<PythonShellWithZipLibrary>(C.ConsoleApplication.Key);
             this.IncludePythonPlatformDependentModules(appAnchor);
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
