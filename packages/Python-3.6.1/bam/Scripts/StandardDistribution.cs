@@ -140,6 +140,7 @@ namespace Python
         }
     }
 
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
     public sealed class PythonZip :
         Publisher.ZipModule
     {
@@ -178,6 +179,18 @@ namespace Python.StandardDistribution
                 SysConfigDataPythonFile.Key,
                 collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
                 true);
+
+            var zipCollationPath = "$(0)";
+            if (!collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                zipCollationPath += "/lib";
+            }
+            collator.Mapping.Register(
+                typeof(Python.PythonZip),
+                Publisher.ZipModule.Key,
+                collator.CreateTokenizedString(zipCollationPath, new[] { collator.ExecutableDir }),
+                true
+            );
 
             // required by distutils
             collator.Mapping.Register(
