@@ -1788,6 +1788,15 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.6.1/Python/thread_pthread.h:438:50: error: format specifies type 'void *' but the argument has type 'pthread_lock *' [-Werror,-Wformat-pedantic]
                             }
                         }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            if (item.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                            {
+                                compiler.DisableWarnings.AddUnique("format"); // Python-3.6.1/Python/thread_pthread.h:438:5: error: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘struct pthread_lock *’ [-Werror=format=]
+                            }
+                        }
                     }));
 
             pythonSource["traceback.c"].ForEach(item =>
@@ -3048,6 +3057,10 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror=unused-parameter]
+                        if (this.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                        {
+                            compiler.DisableWarnings.AddUnique("format"); // Python-3.6.1/Modules/hashtable.c:243:12: error: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘struct _Py_hashtable_t *’ [-Werror=format=]
+                        }
                     }
                 });
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
