@@ -148,7 +148,20 @@ namespace Python
         Init(
             Bam.Core.Module parent)
         {
-            this.Macros.Add("zipoutputbasename", "python" + Version.MajorMinor);
+            var basename = Version.WindowsOutputName; // pythonMN.zip - applicable to all platforms
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+#else
+                if (pyConfigHeader.PyDEBUG)
+#endif
+                {
+                    basename = Version.WindowsDebugOutputName; // pythonMN_d.zip
+                }
+            }
+            this.Macros.Add("zipoutputbasename", basename);
 
             var pylib = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonLibrary>();
             this.DependsOn(pylib);
