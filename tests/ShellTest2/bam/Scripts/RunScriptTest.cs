@@ -38,12 +38,20 @@ namespace ShellTest2
     {
         void
         IOverrideModuleConfiguration.execute(
-            Bam.Core.IModuleConfiguration config)
+            Bam.Core.IModuleConfiguration config,
+            Bam.Core.Environment buildEnvironment)
         {
             var pythonConfig = config as Python.ConfigurePython;
             if (null != pythonConfig)
             {
-                pythonConfig.PyDEBUG = false;
+                if (buildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                {
+                    pythonConfig.PyDEBUG = false; // depends on the CRT debug-ness
+                }
+                else
+                {
+                    pythonConfig.PyDEBUG = (buildEnvironment.Configuration == Bam.Core.EConfiguration.Debug);
+                }
             }
         }
     }
