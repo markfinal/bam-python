@@ -32,6 +32,23 @@ using System.Linq;
 using Python.StandardDistribution;
 namespace ShellTest2
 {
+#if BAM_FEATURE_MODULE_CONFIGURATION
+    sealed class UserConfiguration :
+        Bam.Core.IOverrideModuleConfiguration
+    {
+        void
+        IOverrideModuleConfiguration.execute(
+            Bam.Core.IModuleConfiguration config)
+        {
+            var pythonConfig = config as Python.ConfigurePython;
+            if (null != pythonConfig)
+            {
+                pythonConfig.PyDEBUG = false;
+            }
+        }
+    }
+#endif
+
     [Bam.Core.ModulePackageDirectoryRedirect(typeof(Python.PythonShell))]
     sealed class PythonShellWithZipLibrary :
         Python.PythonShell
