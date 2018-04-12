@@ -1783,6 +1783,10 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/thread.c:375:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            if (item.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                            {
+                                compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.6.1/Python/thread_pthread.h:438:50: error: format specifies type 'void *' but the argument has type 'pthread_lock *' [-Werror,-Wformat-pedantic]
+                            }
                         }
                     }));
 
@@ -3034,6 +3038,10 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror,-Wunused-parameter]
+                        if (this.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                        {
+                            compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.6.1/Modules/hashtable.c:243:12: error: format specifies type 'void *' but the argument has type '_Py_hashtable_t *' (aka 'struct _Py_hashtable_t *') [-Werror,-Wformat-pedantic]
+                        }
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
