@@ -194,7 +194,22 @@ namespace Python.StandardDistribution
                 true);
 
             var zipCollationPath = "$(0)";
-            if (!collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            if (collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                // next to executable
+            }
+            else if (collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+            {
+                if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
+                {
+                    zipCollationPath += "/../lib";
+                }
+                else
+                {
+                    zipCollationPath += "/lib";
+                }
+            }
+            else if (collator.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
                 zipCollationPath += "/lib";
             }
