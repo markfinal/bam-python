@@ -117,13 +117,26 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+#else
+                if (pyConfigHeader.PyDEBUG)
+#endif
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName + "_d");
+                }
+                else
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
+                }
             }
             else
             {
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
                 this.Macros["pluginprefix"] = Bam.Core.TokenizedString.CreateVerbatim(string.Empty);
                 this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
             }
-            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
 
             this.moduleSourceModules = this.CreateCSourceContainer();
             foreach (var basename in this.SourceFiles)
