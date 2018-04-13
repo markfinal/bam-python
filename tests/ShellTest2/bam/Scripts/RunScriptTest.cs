@@ -58,7 +58,7 @@ namespace ShellTest2
 #endif
 
     [Bam.Core.ModulePackageDirectoryRedirect(typeof(Python.PythonShell))]
-    sealed class PythonShellWithZipLibrary :
+    class PythonShellWithZipLibrary :
         Python.PythonShell
     {
         protected override void
