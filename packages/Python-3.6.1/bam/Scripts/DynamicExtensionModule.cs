@@ -138,6 +138,10 @@ namespace Python
                 this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".so");
             }
 
+            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Major);
+            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Minor);
+            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Patch);
+
             this.moduleSourceModules = this.CreateCSourceContainer();
             foreach (var basename in this.SourceFiles)
             {
