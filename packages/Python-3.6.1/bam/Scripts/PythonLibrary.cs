@@ -107,14 +107,34 @@ namespace Python
             var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
             if (null != vcCompiler)
             {
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>(settings.Module.BuildEnvironment);
+
                 if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
                     vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
                 {
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                    if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+#else
+                    if (pyConfigHeader.PyDEBUG)
+#endif
+                    {
+                        throw new Bam.Core.Exception("VisualStudio non-debug runtime detected, but Python was configured in Py_DEBUG mode. Inconsistent states.");
+                    }
+
                     NotPyDEBUGPatch(settings);
                 }
                 else
                 {
                     this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
+
+#if BAM_FEATURE_MODULE_CONFIGURATION
+                    if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+#else
+                    if (!pyConfigHeader.PyDEBUG)
+#endif
+                    {
+                        throw new Bam.Core.Exception("VisualStudio debug runtime detected, but Python was not configured in Py_DEBUG mode. Inconsistent states.");
+                    }
                 }
             }
         }
@@ -1763,6 +1783,19 @@ namespace Python
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Python/thread.c:375:7: error: missing field 'doc' initializer [-Werror,-Wmissing-field-initializers]
+                            if (item.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                            {
+                                compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.6.1/Python/thread_pthread.h:438:50: error: format specifies type 'void *' but the argument has type 'pthread_lock *' [-Werror,-Wformat-pedantic]
+                            }
+                        }
+                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
+                        if (null != gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            if (item.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                            {
+                                compiler.DisableWarnings.AddUnique("format"); // Python-3.6.1/Python/thread_pthread.h:438:5: error: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘struct pthread_lock *’ [-Werror=format=]
+                            }
                         }
                     }));
 
@@ -3014,12 +3047,20 @@ namespace Python
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror,-Wunused-parameter]
+                        if (this.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                        {
+                            compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.6.1/Modules/hashtable.c:243:12: error: format specifies type 'void *' but the argument has type '_Py_hashtable_t *' (aka 'struct _Py_hashtable_t *') [-Werror,-Wformat-pedantic]
+                        }
                     }
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
                     if (null != gccCompiler)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.6.1/Modules/hashtable.c:108:48: error: unused parameter 'ht' [-Werror=unused-parameter]
+                        if (this.BuildEnvironment.Configuration == Bam.Core.EConfiguration.Debug)
+                        {
+                            compiler.DisableWarnings.AddUnique("format"); // Python-3.6.1/Modules/hashtable.c:243:12: error: format ‘%p’ expects argument of type ‘void *’, but argument 2 has type ‘struct _Py_hashtable_t *’ [-Werror=format=]
+                        }
                     }
                 });
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
