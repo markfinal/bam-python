@@ -3170,6 +3170,20 @@ namespace Python
                 });
 #endif
 
+            // although PyConfigHeader is only explicitly used on non-Windows platforms in the main library, it's needed
+            // for the closing patch on Windows
+
+            // TODO: is there a call for a CompileWith function?
+            var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+            this.UsePublicPatches(pyConfigHeader);
+            parserSource.DependsOn(pyConfigHeader);
+            objectSource.DependsOn(pyConfigHeader);
+            pythonSource.DependsOn(pyConfigHeader);
+            builtinModuleSource.DependsOn(pyConfigHeader);
+            cjkcodecs.DependsOn(pyConfigHeader);
+            _io.DependsOn(pyConfigHeader);
+            // TODO: end of function
+
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pcSource = this.CreateCSourceContainer("$(packagedir)/PC/dl_nt.c");
@@ -3296,17 +3310,6 @@ namespace Python
             }
             else
             {
-                // TODO: is there a call for a CompileWith function?
-                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-                this.UsePublicPatches(pyConfigHeader);
-                parserSource.DependsOn(pyConfigHeader);
-                objectSource.DependsOn(pyConfigHeader);
-                pythonSource.DependsOn(pyConfigHeader);
-                builtinModuleSource.DependsOn(pyConfigHeader);
-                cjkcodecs.DependsOn(pyConfigHeader);
-                _io.DependsOn(pyConfigHeader);
-                // TODO: end of function
-
 #if BAM_FEATURE_MODULE_CONFIGURATION
                 if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
 #else
