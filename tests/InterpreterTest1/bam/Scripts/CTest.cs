@@ -51,6 +51,8 @@ namespace InterpreterTest1
                         winCompiler.CharacterSet = C.ECharacterSet.Unicode;
                     }
                 #endif
+                    var cCompiler = settings as C.ICOnlyCompilerSettings;
+                    cCompiler.LanguageStandard = C.ELanguageStandard.C99;
                     var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                     if (null != visualcCompiler)
                     {
