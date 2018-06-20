@@ -72,10 +72,6 @@ namespace InterpreterTest2
                 });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                this.LinkAgainst<WindowsSDK.WindowsSDK>();
-            }
 
             this.PrivatePatch(settings =>
                 {

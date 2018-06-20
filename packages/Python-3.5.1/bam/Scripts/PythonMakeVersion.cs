@@ -72,11 +72,6 @@ namespace Python
                         clangCompiler.Pedantic = true;
                     }
                 });
-
-            if (this.Linker is VisualCCommon.LinkerBase)
-            {
-                this.LinkAgainst<WindowsSDK.WindowsSDK>();
-            }
         }
 
         System.Collections.Generic.Dictionary<string, TokenizedStringArray> ICommandLineTool.EnvironmentVariables

@@ -3043,7 +3043,6 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\invalid_parameter_handler.c(16): warning C4100: 'pReserved': unreferenced formal parameter
                         }
                     });
-                this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;

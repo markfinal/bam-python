@@ -45,14 +45,7 @@ namespace Python
             this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
 
             var source = this.CreateCSourceContainer("$(packagedir)/Programs/python.c");
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                if (this.Linker is VisualCCommon.LinkerBase)
-                {
-                    this.CompileAndLinkAgainst<WindowsSDK.WindowsSDK>(source);
-                }
-            }
-            else
+            if (!this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
                 source.DependsOn(pyConfigHeader);
