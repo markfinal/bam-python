@@ -65,8 +65,8 @@ namespace Python
             this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(0)/$(1).html", outputDirectory, Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)));
         }
 
-        public override void
-        Evaluate()
+        protected override void
+        EvaluateInternal()
         {
             this.ReasonToExecute = null;
             var generatedPath = this.GeneratedPaths[Key].ToString();

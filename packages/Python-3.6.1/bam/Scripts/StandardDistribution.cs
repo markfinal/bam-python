@@ -127,7 +127,7 @@ namespace Python
             }
         }
 
-        public override void Evaluate()
+        protected override void EvaluateInternal()
         {
         }
 
