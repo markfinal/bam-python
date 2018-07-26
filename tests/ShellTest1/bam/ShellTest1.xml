@@ -2,8 +2,14 @@
 <PackageDefinition xsi:schemaLocation="http://www.buildamation.com ./Schema/BamPackageDefinitionV1.xsd" name="ShellTest1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildamation.com">
   <Description>Testing the Python Shell</Description>
   <Dependents>
+    <Package name="Clang" version="Xcode4" />
+    <Package name="Clang" version="Xcode5" />
+    <Package name="Clang" version="Xcode6" />
+    <Package name="Clang" version="Xcode7" />
     <Package name="Clang" version="Xcode8" default="true" />
+    <Package name="Clang" version="Xcode9" />
     <Package name="Gcc" version="4.8" default="true" />
+    <Package name="Gcc" version="5.4" />
     <Package name="Python" version="3.5.1" />
     <Package name="Python" version="3.6.1" default="true" />
     <Package name="VisualC" version="10.0" />

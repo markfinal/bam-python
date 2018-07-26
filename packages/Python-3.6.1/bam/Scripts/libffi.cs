@@ -128,7 +128,6 @@ namespace Python
         {
             base.Init(parent);
 
-#if D_NEW_PUBLISHING
             var publishRoot = this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders");
 
             this.PublicPatch((settings, appliedTo) =>
@@ -150,29 +149,6 @@ namespace Python
             {
                 this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/" + header, publishRoot, null);
             }
-#else
-            // the build mode depends on whether this path has been set or not
-            if (this.GeneratedPaths.ContainsKey(Key))
-            {
-                this.GeneratedPaths[Key].Aliased(this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders"));
-            }
-            else
-            {
-                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders"));
-            }
-
-            this.PublicPatch((settings, appliedTo) =>
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    if (null != compiler)
-                    {
-                        compiler.IncludePaths.AddUnique(this.GeneratedPaths[Key]);
-                    }
-                });
-
-            var baseHeader = this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h"), ".");
-            this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h"), ".", baseHeader);
-#endif
         }
     }
 

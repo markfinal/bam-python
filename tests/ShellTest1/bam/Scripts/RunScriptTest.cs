@@ -41,7 +41,6 @@ namespace ShellTest1
         {
             base.Init(parent);
 
-#if D_NEW_PUBLISHING
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
@@ -49,11 +48,6 @@ namespace ShellTest1
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
-#else
-            var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            Python.StandardDistribution.Publish(this, pyShellCopy);
-            this.IncludeFile("$(packagedir)/data/helloworld.py", ".", pyShellCopy);
-#endif
         }
     }
 }

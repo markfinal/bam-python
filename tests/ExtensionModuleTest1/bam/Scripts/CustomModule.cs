@@ -61,7 +61,6 @@ namespace ExtensionModuleTest1
         {
             base.Init(parent);
 
-#if D_NEW_PUBLISHING
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
@@ -70,13 +69,6 @@ namespace ExtensionModuleTest1
 
             var extensionModule = this.Find<CustomModule>().First();
             this.SetPublishingDirectoryForPythonBinaryModule(extensionModule as Publisher.CollatedObject);
-#else
-            var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
-
-            var custommodule = this.Include<CustomModule>(C.Plugin.Key, Python.StandardDistribution.ModuleDirectory, app);
-            custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
-#endif
         }
     }
 }

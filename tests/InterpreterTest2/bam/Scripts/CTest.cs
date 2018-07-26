@@ -97,7 +97,6 @@ namespace InterpreterTest2
         {
             base.Init(parent);
 
-#if D_NEW_PUBLISHING
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
@@ -108,23 +107,6 @@ namespace InterpreterTest2
 
             // note that as this is not using PythonShell, it is not adding a dependency on all of the dynamic
             // modules, so these are not built
-#else
-            var app = this.Include<CTest>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var pyLibCopy = this.Include<Python.PythonLibrary>(C.DynamicLibrary.Key, ".", app);
-            var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
-
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, ".", app);
-                platIndependentModules.CopiedFilename = "lib";
-            }
-            else
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", app);
-                platIndependentModules.CopiedFilename = "python3.5";
-                this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", app);
-            }
-#endif
         }
     }
 }

@@ -142,9 +142,7 @@ namespace Python
             {
                 this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
             }
-            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Major);
-            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Minor);
-            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Patch);
+            this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 

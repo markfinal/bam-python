@@ -68,7 +68,6 @@ namespace ExtensionModuleTest2
         {
             base.Init(parent);
 
-#if D_NEW_PUBLISHING
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
             this.Mapping.Register(typeof(Python.PyDocGeneratedHtml), Python.PyDocGeneratedHtml.Key, this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false);
@@ -80,15 +79,6 @@ namespace ExtensionModuleTest2
             this.SetPublishingDirectoryForPythonBinaryModule(extensionModule as Publisher.CollatedObject);
 
             this.PyInterpreter = appAnchor as Publisher.CollatedFile;
-#else
-            var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
-
-            var custommodule = this.Include<CustomModule>(C.Plugin.Key, Python.StandardDistribution.ModuleDirectory, app);
-            custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
-
-            this.PyInterpreter = app;
-#endif
         }
     }
 
@@ -139,11 +129,7 @@ namespace ExtensionModuleTest2
             this.StripBinariesFrom<CustomModuleRuntime, CustomModuleDebugSymbols>();
 
             var collator = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>();
-#if D_NEW_PUBLISHING
             this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, collator, collator.PyInterpreter);
-#else
-            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, "pyapidocs", runtime.InitialReference);
-#endif
         }
     }
 }
