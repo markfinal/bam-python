@@ -50,7 +50,7 @@ namespace InterpreterTest2
                     {
                         winCompiler.CharacterSet = C.ECharacterSet.Unicode;
                     }
-                #endif
+#endif
                     var cCompiler = settings as C.ICOnlyCompilerSettings;
                     cCompiler.LanguageStandard = C.ELanguageStandard.C99;
                     var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
