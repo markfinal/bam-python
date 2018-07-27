@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -142,9 +142,7 @@ namespace Python
             {
                 this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
             }
-            this.Macros["MajorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Major);
-            this.Macros["MinorVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Minor);
-            this.Macros["PatchVersion"] = Bam.Core.TokenizedString.CreateVerbatim(Version.Patch);
+            this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 
@@ -3043,7 +3041,6 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\invalid_parameter_handler.c(16): warning C4100: 'pReserved': unreferenced formal parameter
                         }
                     });
-                this.CompilePubliclyAndLinkAgainst<WindowsSDK.WindowsSDK>(parserSource);
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
@@ -3120,9 +3117,7 @@ namespace Python
                         linker.Libraries.Add("-ldl");
                     });
 
-                // TODO: would like to do this, but can't, see bug#101
-                //headers.AddFile(pyConfigHeader);
-                headers.AddFile(pyConfigHeader.GeneratedPaths[PyConfigHeader.Key].Parse());
+                headers.AddFile(pyConfigHeader);
             }
         }
     }

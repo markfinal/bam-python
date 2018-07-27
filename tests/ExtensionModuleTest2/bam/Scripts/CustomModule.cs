@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,16 +28,28 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
+using System.Linq;
 namespace ExtensionModuleTest2
 {
     [Bam.Core.ModuleGroup("ExtensionModuleTest2")]
-    class CustomModule :
+    sealed class CustomModule :
         Python.DynamicExtensionModule
     {
         public CustomModule()
             :
             base("custommodule", "source/custommodule")
         { }
+
+        protected override void
+        Init(
+            Bam.Core.Module parent)
+        {
+            base.Init(parent);
+
+            var shell = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonShell>();
+            shell.Requires(this);
+        }
     }
 
     sealed class CustomModuleRuntime :
@@ -56,13 +68,17 @@ namespace ExtensionModuleTest2
         {
             base.Init(parent);
 
-            var app = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var platformIndependentModulesPublish = Python.StandardDistribution.Publish(this, app);
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+            this.Mapping.Register(typeof(Python.PyDocGeneratedHtml), Python.PyDocGeneratedHtml.Key, this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false);
 
-            var custommodule = this.Include<CustomModule>(C.Plugin.Key, Python.StandardDistribution.ModuleDirectory, app);
-            custommodule.Requires(platformIndependentModulesPublish); // publish after everything else
+            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
-            this.PyInterpreter = app;
+            var extensionModule = this.Find<CustomModule>().First();
+            this.SetPublishingDirectoryForPythonBinaryModule(extensionModule as Publisher.CollatedObject);
+
+            this.PyInterpreter = appAnchor as Publisher.CollatedFile;
         }
     }
 
@@ -112,8 +128,8 @@ namespace ExtensionModuleTest2
 
             this.StripBinariesFrom<CustomModuleRuntime, CustomModuleDebugSymbols>();
 
-            var runtime = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>();
-            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, "pyapidocs", runtime.InitialReference);
+            var collator = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>();
+            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, collator, collator.PyInterpreter);
         }
     }
 }

@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -72,11 +72,6 @@ namespace Python
                         clangCompiler.Pedantic = true;
                     }
                 });
-
-            if (this.Linker is VisualCCommon.LinkerBase)
-            {
-                this.LinkAgainst<WindowsSDK.WindowsSDK>();
-            }
         }
 
         System.Collections.Generic.Dictionary<string, TokenizedStringArray> ICommandLineTool.EnvironmentVariables

@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -52,11 +52,11 @@ namespace Python
             }
         }
 
-        public override void
-        Evaluate()
+        protected override void
+        EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var outputPath = this.GeneratedPaths[Key].Parse();
+            var outputPath = this.GeneratedPaths[Key].ToString();
             if (!System.IO.File.Exists(outputPath))
             {
                 this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
@@ -68,7 +68,7 @@ namespace Python
         ExecuteInternal(
             ExecutionContext context)
         {
-            var destPath = this.GeneratedPaths[Key].Parse();
+            var destPath = this.GeneratedPaths[Key].ToString();
             var destDir = System.IO.Path.GetDirectoryName(destPath);
             if (!System.IO.Directory.Exists(destDir))
             {

@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
+using System.Linq;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -44,14 +46,7 @@ namespace Python
             this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
 
             var source = this.CreateCSourceContainer("$(packagedir)/Programs/python.c");
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                if (this.Linker is VisualCCommon.LinkerBase)
-                {
-                    this.CompileAndLinkAgainst<WindowsSDK.WindowsSDK>(source);
-                }
-            }
-            else
+            if (!this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
                 source.DependsOn(pyConfigHeader);
@@ -89,21 +84,9 @@ namespace Python
                 });
 
             this.LinkAgainst<PythonLibrary>();
-            this.PrivatePatch(settings =>
-            {
-                var gccLinker = settings as GccCommon.ICommonLinkerSettings;
-                if (null != gccLinker)
-                {
-                    gccLinker.CanUseOrigin = true;
-                    gccLinker.RPath.AddUnique("$ORIGIN");
-                }
-                var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
-                if (null != clangLinker)
-                {
-                    // standard distribution path
-                    clangLinker.RPath.AddUnique(System.String.Format("@executable_path/{0}", StandardDistribution.ModuleDirectory));
-                }
-            });
+
+            var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
+            this.Requires(allModules);
         }
 
         public Bam.Core.Settings
@@ -167,8 +150,11 @@ namespace Python
         {
             base.Init(parent);
 
-            var app = this.Include<PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            StandardDistribution.Publish(this, app);
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
         }
     }
 }

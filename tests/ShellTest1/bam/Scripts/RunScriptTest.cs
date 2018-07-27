@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using System.Linq;
+using Python.StandardDistribution;
 namespace ShellTest1
 {
     sealed class TestRuntime :
@@ -39,9 +41,13 @@ namespace ShellTest1
         {
             base.Init(parent);
 
-            var pyShellCopy = this.Include<Python.PythonShell>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            Python.StandardDistribution.Publish(this, pyShellCopy);
-            this.IncludeFile("$(packagedir)/data/helloworld.py", ".", pyShellCopy);
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
+
+            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
+
+            this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
         }
     }
 }

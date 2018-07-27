@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -205,6 +205,7 @@ namespace Python
                 contents.AppendLine("#define HAVE_SOCKADDR_STORAGE"); // for socket extension module
                 contents.AppendLine("#define HAVE_SYS_WAIT_H"); // for help() to work in the shell
                 contents.AppendLine("#define HAVE_WAITPID"); // for help() to work in the shell
+                contents.AppendLine("#define HAVE_GETPID"); // for os.getpid()
                 if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                 {
                     contents.AppendLine("#define HAVE_FSTATVFS");

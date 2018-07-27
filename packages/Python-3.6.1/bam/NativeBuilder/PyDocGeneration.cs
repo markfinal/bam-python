@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,7 @@ namespace Python
             Bam.Core.TokenizedString generatedHtml,
             string moduleToDocument)
         {
-            var outputPath = generatedHtml.Parse();
+            var outputPath = generatedHtml.ToString();
             var outputDir = System.IO.Path.GetDirectoryName(outputPath);
             if (!System.IO.Directory.Exists(outputDir))
             {
@@ -57,7 +57,7 @@ namespace Python
 
             // TODO: which environment variables? fails on Windows with none
             var envVars = new Bam.Core.StringArray("*");
-            CommandLineProcessor.Processor.Execute(context, interpreterPath.Parse(), args, outputDir, envVars);
+            CommandLineProcessor.Processor.Execute(context, interpreterPath.ToString(), args, outputDir, envVars);
         }
     }
 }

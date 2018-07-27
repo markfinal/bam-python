@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -65,11 +65,11 @@ namespace Python
             this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(0)/$(1).html", outputDirectory, Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)));
         }
 
-        public override void
-        Evaluate()
+        protected override void
+        EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var generatedPath = this.GeneratedPaths[Key].Parse();
+            var generatedPath = this.GeneratedPaths[Key].ToString();
             if (!System.IO.File.Exists(generatedPath))
             {
                 this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
@@ -94,6 +94,7 @@ namespace Python
             switch (mode)
             {
             case "Native":
+            case "MakeFile":
                 var className = "Python." + mode + "PyDocToHtml";
                 this.Policy = Bam.Core.ExecutionPolicyUtilities<IPyDocGenerationPolicy>.Create(className);
                 break;

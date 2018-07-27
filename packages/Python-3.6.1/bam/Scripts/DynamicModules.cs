@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -392,7 +392,20 @@ namespace Python
                     var compiler = settings as C.ICommonCompilerSettings;
                     compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_json.c:33:5: error: missing initializer for field 'doc' of 'PyMemberDef' [-Werror=missing-field-initializers]
                     compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_json.c:1203:43: error: unused parameter 'args' [-Werror=unused-parameter]
+
+                    var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
+                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                        (settings.Module as C.ObjectFile).Compiler;
+
+                    if (compilerUsed.IsAtLeast(5))
+                    {
+                        if (0 != (settings.Module.BuildEnvironment.Configuration & Bam.Core.EConfiguration.NotDebug))
+                        {
+                            compiler.DisableWarnings.AddUnique("strict-overflow"); // Python-3.6.1/Modules/_json.c:398:1: error: assuming signed overflow does not occur when assuming that (X + c) >= X is always true [-Werror=strict-overflow]
+                        }
+                    }
                 }
+
                 var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                 if (null != clangCompiler)
                 {

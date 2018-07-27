@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -28,6 +28,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
 using Bam.Core;
+using Python.StandardDistribution;
+using System.Linq;
 namespace InterpreterTest1
 {
     sealed class CxxTest :
@@ -70,10 +72,6 @@ namespace InterpreterTest1
                 });
 
             this.CompileAndLinkAgainst<Python.PythonLibrary>(source);
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                this.LinkAgainst<WindowsSDK.WindowsSDK>();
-            }
 
             this.PrivatePatch(settings =>
                 {
@@ -96,21 +94,14 @@ namespace InterpreterTest1
         {
             base.Init(parent);
 
-            var app = this.Include<CxxTest>(C.ConsoleApplication.Key, EPublishingType.ConsoleApplication);
-            var pyLibCopy = this.Include<Python.PythonLibrary>(C.DynamicLibrary.Key, ".", app);
-            var pyLibDir = (pyLibCopy.SourceModule as Python.PythonLibrary).LibraryDirectory;
+            this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
+            this.RegisterPythonModuleTypesToCollate();
 
-            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, ".", app);
-                platIndependentModules.CopiedFilename = "lib";
-            }
-            else
-            {
-                var platIndependentModules = this.IncludeDirectory(pyLibDir, "lib", app);
-                platIndependentModules.CopiedFilename = "python3.5";
-                this.Include<Python.SysConfigDataPythonFile>(Python.SysConfigDataPythonFile.Key, "lib/python3.5", app);
-            }
+            var appAnchor = this.Include<CxxTest>(C.Cxx.ConsoleApplication.Key);
+            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
+
+            // note that as this is not using PythonShell, it is not adding a dependency on all of the dynamic
+            // modules, so these are not built
         }
     }
 }

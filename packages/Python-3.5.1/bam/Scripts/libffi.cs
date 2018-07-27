@@ -1,5 +1,5 @@
 #region License
-// Copyright (c) 2010-2017, Mark Final
+// Copyright (c) 2010-2018, Mark Final
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
+            this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in"));
         }
 
         protected override TokenizedString OutputPath
@@ -63,9 +64,8 @@ namespace Python
         {
             get
             {
-                var templatePath = this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in");
                 var contents = new System.Text.StringBuilder();
-                using (System.IO.TextReader reader = new System.IO.StreamReader(templatePath.Parse()))
+                using (System.IO.TextReader reader = new System.IO.StreamReader(this.Macros["templateConfig"].ToString()))
                 {
                     contents.Append(reader.ReadToEnd());
                 }
@@ -128,27 +128,27 @@ namespace Python
         {
             base.Init(parent);
 
-            // the build mode depends on whether this path has been set or not
-            if (this.GeneratedPaths.ContainsKey(Key))
-            {
-                this.GeneratedPaths[Key].Aliased(this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders"));
-            }
-            else
-            {
-                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders"));
-            }
+            var publishRoot = this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders");
 
             this.PublicPatch((settings, appliedTo) =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
                     if (null != compiler)
                     {
-                        compiler.IncludePaths.AddUnique(this.GeneratedPaths[Key]);
+                        compiler.IncludePaths.AddUnique(publishRoot);
                     }
                 });
 
-            var baseHeader = this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffitarget.h"), ".");
-            this.IncludeFile(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi_common.h"), ".", baseHeader);
+            var headerPaths = new Bam.Core.StringArray
+            {
+                "src/x86/ffitarget.h",
+                "include/ffi_common.h"
+            };
+
+            foreach (var header in headerPaths)
+            {
+                this.IncludeFiles<CopyNonPublicHeadersToPublic>("$(packagedir)/Modules/_ctypes/libffi/" + header, publishRoot, null);
+            }
         }
     }
 
