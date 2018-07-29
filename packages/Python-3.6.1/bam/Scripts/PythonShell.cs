@@ -112,7 +112,7 @@ namespace Python
         {
             get
             {
-                return this.GeneratedPaths[C.ConsoleApplication.Key];
+                return this.GeneratedPaths[C.ConsoleApplication.ExecutableKey];
             }
         }
 
@@ -139,6 +139,14 @@ namespace Python
                 return null;
             }
         }
+
+        public Bam.Core.Array<int> SuccessfulExitCodes
+        {
+            get
+            {
+                return new Bam.Core.Array<int> { 0 };
+            }
+        }
     }
 
     class ShellRuntime :
@@ -153,7 +161,7 @@ namespace Python
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<PythonShell>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
         }
     }

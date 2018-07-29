@@ -29,6 +29,8 @@
 #endregion // License
 namespace Python
 {
+#if BAM_V2
+#else
     public sealed class NativePyDocToHtml :
         IPyDocGenerationPolicy
     {
@@ -60,4 +62,5 @@ namespace Python
             CommandLineProcessor.Processor.Execute(context, interpreterPath.ToString(), args, outputDir, envVars);
         }
     }
+#endif
 }

@@ -29,6 +29,8 @@
 #endregion // License
 namespace Python
 {
+#if BAM_V2
+#else
     public sealed class MakeFilePyDocToHtml :
         IPyDocGenerationPolicy
     {
@@ -62,4 +64,5 @@ namespace Python
             meta.CommonMetaData.AddDirectory(htmlOutputDir);
         }
     }
+#endif
 }

@@ -133,10 +133,6 @@ namespace Python
         protected override void ExecuteInternal(ExecutionContext context)
         {
         }
-
-        protected override void GetExecutionPolicy(string mode)
-        {
-        }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -188,8 +184,11 @@ namespace Python.StandardDistribution
         {
             collator.Mapping.Register(
                 typeof(SysConfigDataPythonFile),
-                SysConfigDataPythonFile.Key,
-                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                SysConfigDataPythonFile.SysConfigDataPythonFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/lib/python" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
 
             var zipCollationPath = "$(0)";
@@ -214,21 +213,30 @@ namespace Python.StandardDistribution
             }
             collator.Mapping.Register(
                 typeof(Python.PythonZip),
-                Publisher.ZipModule.Key,
-                collator.CreateTokenizedString(zipCollationPath, new[] { collator.ExecutableDir }),
+                Publisher.ZipModule.ZipKey,
+                collator.CreateTokenizedString(
+                    zipCollationPath,
+                    new[] { collator.ExecutableDir }
+                ),
                 true
             );
 
             // required by distutils
             collator.Mapping.Register(
                 typeof(PyConfigHeader),
-                PyConfigHeader.Key,
-                collator.CreateTokenizedString("$(0)/include/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                PyConfigHeader.HeaderFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/include/python" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
             collator.Mapping.Register(
                 typeof(PyMakeFile),
-                PyConfigHeader.Key,
-                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor + "/config-" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                PyConfigHeader.HeaderFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/lib/python" + Version.MajorDotMinor + "/config-" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
         }
 

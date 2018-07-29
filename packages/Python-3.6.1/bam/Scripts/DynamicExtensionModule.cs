@@ -36,7 +36,7 @@ namespace Python
     {
         private string ModuleName;
         private Bam.Core.StringArray SourceFiles;
-        private Bam.Core.StringArray Libraries;
+        private Bam.Core.StringArray LibsToLink;
         private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
         private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
         private Bam.Core.StringArray AssemblerFiles;
@@ -55,7 +55,7 @@ namespace Python
         {
             this.ModuleName = moduleName;
             this.SourceFiles = sourceFiles;
-            this.Libraries = libraries;
+            this.LibsToLink = libraries;
             this.CompilationPatch = compilationPatch;
             this.LinkerPatch = linkerPatch;
             this.AssemblerFiles = (null != assemblerFiles) ? assemblerFiles : null;
@@ -196,12 +196,12 @@ namespace Python
 
             this.CompileAndLinkAgainst<PythonLibrary>(this.moduleSourceModules);
 
-            if (this.Libraries != null)
+            if (this.LibsToLink != null)
             {
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
-                        foreach (var lib in this.Libraries)
+                        foreach (var lib in this.LibsToLink)
                         {
                             linker.Libraries.AddUnique(lib);
                         }

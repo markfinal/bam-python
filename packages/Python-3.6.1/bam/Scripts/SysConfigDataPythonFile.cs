@@ -34,7 +34,7 @@ namespace Python
     class SysConfigDataPythonFile :
         Bam.Core.Module
     {
-        public static Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("_sysconfigdata Python file");
+        public const string SysConfigDataPythonFileKey = "_sysconfigdata Python file";
 
         protected override void
         Init(
@@ -44,11 +44,17 @@ namespace Python
             // format from sysconfig.py: '_sysconfigdata_{abi}_{platform}_{multiarch}'
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
-                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__darwin_.py")); // no ABI, no multiarch
+                this.RegisterGeneratedFile(
+                    SysConfigDataPythonFileKey,
+                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__darwin_.py") // no ABI, no multiarch
+                );
             }
             else
             {
-                this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__linux_.py")); // no ABI, no multiarch
+                this.RegisterGeneratedFile(
+                    SysConfigDataPythonFileKey,
+                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__linux_.py") // no ABI, no multiarch
+                );
             }
         }
 
@@ -56,10 +62,12 @@ namespace Python
         EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var outputPath = this.GeneratedPaths[Key].ToString();
+            var outputPath = this.GeneratedPaths[SysConfigDataPythonFileKey].ToString();
             if (!System.IO.File.Exists(outputPath))
             {
-                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(
+                    this.GeneratedPaths[SysConfigDataPythonFileKey]
+                );
                 return;
             }
         }
@@ -68,7 +76,7 @@ namespace Python
         ExecuteInternal(
             ExecutionContext context)
         {
-            var destPath = this.GeneratedPaths[Key].ToString();
+            var destPath = this.GeneratedPaths[SysConfigDataPythonFileKey].ToString();
             var destDir = System.IO.Path.GetDirectoryName(destPath);
             if (!System.IO.Directory.Exists(destDir))
             {
@@ -79,13 +87,6 @@ namespace Python
                 writeFile.NewLine = "\n";
                 writeFile.WriteLine("build_time_vars = {}");
             }
-        }
-
-        protected override void
-        GetExecutionPolicy(
-            string mode)
-        {
-            // TODO: do nothing
         }
     }
 }

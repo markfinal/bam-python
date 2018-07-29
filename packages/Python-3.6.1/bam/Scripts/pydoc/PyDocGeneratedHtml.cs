@@ -32,9 +32,8 @@ namespace Python
     public class PyDocGeneratedHtml :
         Bam.Core.Module
     {
-        static public Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("PyDoc.Html");
+        public const string PyDocHtmlKey = "PyDoc.Html";
 
-        private IPyDocGenerationPolicy Policy = null;
         private Bam.Core.TokenizedString interpreterPath = null;
         private string moduleToDocument;
 
@@ -47,7 +46,7 @@ namespace Python
 
         public void
         Interpreter<DependentModule>(
-            Bam.Core.PathKey key,
+            string key,
             Bam.Core.TokenizedString publishedPath) where DependentModule : Bam.Core.Module, new()
         {
             var module = Bam.Core.Graph.Instance.FindReferencedModule<DependentModule>();
@@ -62,17 +61,26 @@ namespace Python
             Bam.Core.TokenizedString outputDirectory)
         {
             this.moduleToDocument = nameOfModule;
-            this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(0)/$(1).html", outputDirectory, Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)));
+            this.RegisterGeneratedFile(
+                PyDocHtmlKey,
+                this.CreateTokenizedString(
+                    "$(0)/$(1).html",
+                    outputDirectory,
+                    Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)
+                )
+            );
         }
 
         protected override void
         EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var generatedPath = this.GeneratedPaths[Key].ToString();
+            var generatedPath = this.GeneratedPaths[PyDocHtmlKey].ToString();
             if (!System.IO.File.Exists(generatedPath))
             {
-                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(
+                    this.GeneratedPaths[PyDocHtmlKey]
+                );
             }
         }
 
@@ -80,25 +88,6 @@ namespace Python
         ExecuteInternal(
             Bam.Core.ExecutionContext context)
         {
-            if (null == this.Policy)
-            {
-                return;
-            }
-            this.Policy.html(this, context, this.Tool as Bam.Core.ICommandLineTool, this.interpreterPath, this.GeneratedPaths[Key], this.moduleToDocument);
-        }
-
-        protected override void
-        GetExecutionPolicy(
-            string mode)
-        {
-            switch (mode)
-            {
-            case "Native":
-            case "MakeFile":
-                var className = "Python." + mode + "PyDocToHtml";
-                this.Policy = Bam.Core.ExecutionPolicyUtilities<IPyDocGenerationPolicy>.Create(className);
-                break;
-            }
         }
 
         private Bam.Core.PreBuiltTool Compiler
