@@ -29,6 +29,8 @@
 #endregion // License
 using Bam.Core;
 using System.Linq;
+using System.Collections.Generic;
+
 namespace Python
 {
     class AllDynamicModules :
@@ -171,6 +173,16 @@ namespace Python
                     zipSettings.Update = true;
                 }
             );
+        }
+
+        public override System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>> InputModules
+        {
+            get
+            {
+                // since there is a dependency on PythonLibrary which does not need to be passed
+                // through to Zip
+                return System.Linq.Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>>();
+            }
         }
     }
 }

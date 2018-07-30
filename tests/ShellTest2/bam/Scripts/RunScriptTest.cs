@@ -85,7 +85,7 @@ namespace ShellTest2
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<PythonShellWithZipLibrary>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<PythonShellWithZipLibrary>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonPlatformDependentModules(appAnchor);
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
