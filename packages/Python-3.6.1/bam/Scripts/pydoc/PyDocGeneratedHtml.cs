@@ -105,7 +105,7 @@ namespace Python
 
 #if D_PACKAGE_XCODEBUILDER
                 case "Xcode":
-                    //XcodeSupport.GenerateHtml(this);
+                    XcodeSupport.GenerateHtml(this);
                     break;
 #endif
 
