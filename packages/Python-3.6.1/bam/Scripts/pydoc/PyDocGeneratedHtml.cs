@@ -87,7 +87,7 @@ namespace Python
             {
 #if D_PACKAGE_MAKEFILEBUILDER
                 case "MakeFile":
-                    //MakeFileSupport.GenerateHtml(this);
+                    MakeFileSupport.GenerateHtml(this);
                     break;
 #endif
 
