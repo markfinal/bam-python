@@ -29,9 +29,9 @@
 #endregion // License
 namespace Python
 {
+    [CommandLineProcessor.OutputPath(PyDocGeneratedHtml.PyDocHtmlKey, "", ignore: true)]
     public sealed class PyDocSettings :
         Bam.Core.Settings,
-        CommandLineProcessor.IConvertToCommandLine,
         IPyDocSettings
     {
         public PyDocSettings(
@@ -40,11 +40,37 @@ namespace Python
             this.InitializeAllInterfaces(module, true, true);
         }
 
-        void
-        CommandLineProcessor.IConvertToCommandLine.Convert(
-            Bam.Core.StringArray commandLine)
+        [CommandLineProcessor.Bool("-B", "")]
+        bool IPyDocSettings.DontWriteByteCode
         {
-            (this as IPyDocSettings).Convert(commandLine);
+            get;
+            set;
+        }
+
+        [CommandLineProcessor.String("-m ")]
+        string IPyDocSettings.Module
+        {
+            get;
+            set;
+        }
+
+        [CommandLineProcessor.Bool("-w", "")]
+        bool IPyDocSettings.WriteToCurrentDirectory
+        {
+            get;
+            set;
+        }
+
+        [CommandLineProcessor.String("")]
+        string IPyDocSettings.ModuleToDocument
+        {
+            get;
+            set;
+        }
+
+        public override void AssignFileLayout()
+        {
+            this.FileLayout = ELayout.Cmds_Outputs_Inputs;
         }
     }
 }

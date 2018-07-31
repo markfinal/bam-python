@@ -27,6 +27,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
+using System.Linq;
 namespace Python
 {
     public class PyDocGeneratedHtml :
@@ -34,7 +35,6 @@ namespace Python
     {
         public const string PyDocHtmlKey = "PyDoc.Html";
 
-        private Bam.Core.TokenizedString interpreterPath = null;
         private string moduleToDocument;
 
         protected override void
@@ -42,17 +42,12 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
-        }
 
-        public void
-        Interpreter<DependentModule>(
-            string key,
-            Bam.Core.TokenizedString publishedPath) where DependentModule : Bam.Core.Module, new()
-        {
-            var module = Bam.Core.Graph.Instance.FindReferencedModule<DependentModule>();
-            this.Requires(module);
-            this.Tool = module;
-            this.interpreterPath = publishedPath;
+            this.PrivatePatch(settings =>
+                {
+                    var pyDocSettings = settings as IPyDocSettings;
+                    pyDocSettings.ModuleToDocument = this.moduleToDocument;
+                });
         }
 
         public void
@@ -88,6 +83,35 @@ namespace Python
         ExecuteInternal(
             Bam.Core.ExecutionContext context)
         {
+            switch (Bam.Core.Graph.Instance.Mode)
+            {
+#if D_PACKAGE_MAKEFILEBUILDER
+                case "MakeFile":
+                    //MakeFileSupport.GenerateHtml(this);
+                    break;
+#endif
+
+#if D_PACKAGE_NATIVEBUILDER
+                case "Native":
+                    NativeSupport.GenerateHtml(this, context);
+                    break;
+#endif
+
+#if D_PACKAGE_VSSOLUTIONBUILDER
+                case "VSSolution":
+                    //VSSolutionSupport.GenerateHtml(this);
+                    break;
+#endif
+
+#if D_PACKAGE_XCODEBUILDER
+                case "Xcode":
+                    //XcodeSupport.GenerateHtml(this);
+                    break;
+#endif
+
+                default:
+                    throw new System.NotImplementedException();
+            }
         }
 
         private Bam.Core.PreBuiltTool Compiler
@@ -100,6 +124,14 @@ namespace Python
             set
             {
                 this.Tool = value;
+            }
+        }
+
+        public override Bam.Core.TokenizedString WorkingDirectory
+        {
+            get
+            {
+                return this.OutputDirectories.First();
             }
         }
     }
