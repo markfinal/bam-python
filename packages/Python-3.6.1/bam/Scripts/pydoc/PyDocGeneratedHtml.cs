@@ -99,7 +99,7 @@ namespace Python
 
 #if D_PACKAGE_VSSOLUTIONBUILDER
                 case "VSSolution":
-                    //VSSolutionSupport.GenerateHtml(this);
+                    VSSolutionSupport.GenerateHtml(this);
                     break;
 #endif
 
