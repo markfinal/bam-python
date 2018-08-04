@@ -93,7 +93,7 @@ namespace Python
 
 #if D_PACKAGE_NATIVEBUILDER
                 case "Native":
-                    NativeSupport.GenerateHtml(this, context);
+                    NativeBuilder.Support.RunCommandLineTool(this, context);
                     break;
 #endif
 

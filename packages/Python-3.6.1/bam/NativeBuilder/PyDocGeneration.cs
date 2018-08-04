@@ -30,6 +30,7 @@
 namespace Python
 {
 #if BAM_V2
+#if false
     public static partial class NativeSupport
     {
         public static void
@@ -53,6 +54,7 @@ namespace Python
             );
         }
     }
+#endif
 #else
     public sealed class NativePyDocToHtml :
         IPyDocGenerationPolicy
