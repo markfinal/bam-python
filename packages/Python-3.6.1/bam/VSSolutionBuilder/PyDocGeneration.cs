@@ -41,30 +41,10 @@ namespace Python
             var project = solution.EnsureProjectExists(encapsulating);
             var config = project.GetConfiguration(encapsulating);
 
-            var commands = new Bam.Core.StringArray();
-            foreach (var dir in module.OutputDirectories)
-            {
-                commands.Add(
-                    System.String.Format(
-                        "IF NOT EXIST {0} MKDIR {0}",
-                        dir.ToStringQuoteIfNecessary()
-                    )
-                );
-            }
-            var args = new Bam.Core.StringArray();
-            if (module.WorkingDirectory != null)
-            {
-                args.Add(System.String.Format("cd /D {0} &&", module.WorkingDirectory.ToStringQuoteIfNecessary()));
-            }
-            args.Add(CommandLineProcessor.Processor.StringifyTool(module.Tool as Bam.Core.ICommandLineTool));
-            args.AddRange(
-                CommandLineProcessor.NativeConversion.Convert(
-                    module.Settings,
-                    module
-                )
+            VSSolutionBuilder.Support.AddPostBuildSteps(
+                config,
+                module
             );
-            commands.Add(args.ToString(' '));
-            config.AddPostBuildCommands(commands);
 
             // add order dependency on tool
             // but note the custom handler here, which checks to see if we're running a tool
