@@ -47,11 +47,15 @@ namespace Python
             );
 
             // add order dependency on tool
-            // but note the custom handler here, which checks to see if we're running a tool
+            var tool = module.Tool;
+#if D_PACKAGE_PUBLISHER
+            // note the custom handler here, which checks to see if we're running a tool
             // that has been collated
-            var tool = (module.Tool is Publisher.CollatedCommandLineTool) ?
-                (module.Tool as Publisher.ICollatedObject).SourceModule :
-                module.Tool;
+            if (tool is Publisher.CollatedCommandLineTool)
+            {
+                tool = (tool as Publisher.ICollatedObject).SourceModule;
+            }
+#endif
             var toolProject = tool.MetaData as VSSolutionBuilder.VSProject;
             if (null != toolProject)
             {
