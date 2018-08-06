@@ -117,19 +117,6 @@ namespace Python
             }
         }
 
-        private Bam.Core.PreBuiltTool Compiler
-        {
-            get
-            {
-                return this.Tool as Bam.Core.PreBuiltTool;
-            }
-
-            set
-            {
-                this.Tool = value;
-            }
-        }
-
         public override Bam.Core.TokenizedString WorkingDirectory
         {
             get
