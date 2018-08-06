@@ -39,53 +39,30 @@ namespace Python
 
             var workspace = Bam.Core.Graph.Instance.MetaData as XcodeBuilder.WorkspaceMeta;
             var target = workspace.EnsureTargetExists(encapsulating);
-            target.EnsureOutputFileReferenceExists(
-                module.GeneratedPaths[PyDocGeneratedHtml.PyDocHtmlKey],
-                XcodeBuilder.FileReference.EFileType.ZipArchive,
-                XcodeBuilder.Target.EProductType.Utility);
             var configuration = target.GetConfiguration(encapsulating);
+
+            XcodeBuilder.Support.AddPreBuildStepForCommandLineTool(
+                module,
+                target,
+                configuration,
+                XcodeBuilder.FileReference.EFileType.TextFile, // TODO: HTML
+                true,
+                false
+            );
+
+            target.SetType(XcodeBuilder.Target.EProductType.Utility);
             configuration.SetProductName(Bam.Core.TokenizedString.CreateVerbatim("PyDoc"));
 
-            var commands = new Bam.Core.StringArray();
-            foreach (var dir in module.OutputDirectories)
-            {
-                commands.Add(
-                    System.String.Format(
-                        "[[ ! -d {0} ]] && mkdir -p {0}",
-                        dir.ToStringQuoteIfNecessary()
-                    )
-                );
-            }
-
-            var args = new Bam.Core.StringArray();
-            if (module.WorkingDirectory != null)
-            {
-                args.Add(
-                    System.String.Format(
-                        "cd {0} &&",
-                        Bam.Core.IOWrapper.EscapeSpacesInPath(module.WorkingDirectory.ToString())
-                    )
-                );
-            }
-            args.Add(CommandLineProcessor.Processor.StringifyTool(module.Tool as Bam.Core.ICommandLineTool));
-            args.AddRange(
-                CommandLineProcessor.NativeConversion.Convert(
-                    module.Settings,
-                    module
-                )
-            );
-            args.Add(CommandLineProcessor.Processor.TerminatingArgs(module.Tool as Bam.Core.ICommandLineTool));
-            args.Add("|| true"); // because zip returns 12 (nothing to do) upon success
-            commands.Add(args.ToString(' '));
-
-            target.AddPreBuildCommands(commands, configuration);
-
             // add order dependency on tool
-            // but note the custom handler here, which checks to see if we're running a tool
+            var tool = module.Tool;
+#if D_PACKAGE_PUBLISHER
+            // note the custom handler here, which checks to see if we're running a tool
             // that has been collated
-            var tool = (module.Tool is Publisher.CollatedCommandLineTool) ?
-                (module.Tool as Publisher.ICollatedObject).SourceModule :
-                module.Tool;
+            if (tool is Publisher.CollatedCommandLineTool)
+            {
+                tool = (tool as Publisher.ICollatedObject).SourceModule;
+            }
+#endif
             var toolTarget = tool.MetaData as XcodeBuilder.Target;
             if (null != toolTarget)
             {
