@@ -108,7 +108,21 @@ namespace Python
 
 #if D_PACKAGE_XCODEBUILDER
                 case "Xcode":
-                    XcodeSupport.GenerateHtml(this);
+                    {
+                        XcodeBuilder.Target target;
+                        XcodeBuilder.Configuration configuration;
+                        XcodeBuilder.Support.AddPreBuildStepForCommandLineTool(
+                            this,
+                            out target,
+                            out configuration,
+                            XcodeBuilder.FileReference.EFileType.TextFile, // TODO: HTML
+                            true,
+                            false,
+                            addOrderOnlyDependencyOnTool: true // Python itself
+                        );
+                        target.SetType(XcodeBuilder.Target.EProductType.Utility);
+                        configuration.SetProductName(Bam.Core.TokenizedString.CreateVerbatim("PyDoc"));
+                    }
                     break;
 #endif
 
