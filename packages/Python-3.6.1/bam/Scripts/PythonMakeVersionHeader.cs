@@ -30,7 +30,6 @@
 using Bam.Core;
 namespace Python
 {
-#if BAM_FEATURE_MODULE_CONFIGURATION
     interface IConfigurePythonResourceHeader :
         Bam.Core.IModuleConfiguration
     {
@@ -59,16 +58,12 @@ namespace Python
     class EmptySettings :
         Bam.Core.Settings
     { }
-#endif
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PythonMakeVersionHeader :
-        C.ProceduralHeaderFile
-#if BAM_FEATURE_MODULE_CONFIGURATION
-        , Bam.Core.IHasModuleConfiguration
-#endif
+        C.ProceduralHeaderFile,
+        Bam.Core.IHasModuleConfiguration
     {
-#if BAM_FEATURE_MODULE_CONFIGURATION
         System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
         {
             get
@@ -92,7 +87,6 @@ namespace Python
             base.Init(parent);
             this.Settings = new EmptySettings(); // in order to run a private patch
         }
-#endif
 
         protected override TokenizedString OutputPath
         {
@@ -112,10 +106,7 @@ namespace Python
                 contents.AppendFormat("#define MS_DLL_ID \"{0}\"", Version.MajorDotMinor);
                 contents.AppendLine();
 
-                var useDebugCRT = false;
-#if BAM_FEATURE_MODULE_CONFIGURATION
-                useDebugCRT = (this.Configuration as IConfigurePythonResourceHeader).DebugCRT;
-#endif
+                var useDebugCRT = (this.Configuration as IConfigurePythonResourceHeader).DebugCRT;
                 if (useDebugCRT)
                 {
                     contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsDebugOutputName);

@@ -32,7 +32,6 @@ using System.Linq;
 using Python.StandardDistribution;
 namespace ShellTest2
 {
-#if BAM_FEATURE_MODULE_CONFIGURATION
     sealed class UserConfiguration :
         Bam.Core.IOverrideModuleConfiguration
     {
@@ -55,7 +54,6 @@ namespace ShellTest2
             }
         }
     }
-#endif
 
     [Bam.Core.ModulePackageDirectoryRedirect(typeof(Python.PythonShell))]
     class PythonShellWithZipLibrary :

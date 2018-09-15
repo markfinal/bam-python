@@ -30,7 +30,6 @@
 using Bam.Core;
 namespace Python
 {
-#if BAM_FEATURE_MODULE_CONFIGURATION
     interface IConfigurePython :
         Bam.Core.IModuleConfiguration
     {
@@ -55,16 +54,12 @@ namespace Python
             set;
         }
     }
-#endif
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PyConfigHeader :
-        C.ProceduralHeaderFile
-#if BAM_FEATURE_MODULE_CONFIGURATION
-        , Bam.Core.IHasModuleConfiguration
-#endif
+        C.ProceduralHeaderFile,
+        Bam.Core.IHasModuleConfiguration
     {
-#if BAM_FEATURE_MODULE_CONFIGURATION
         System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
         {
             get
@@ -79,24 +74,6 @@ namespace Python
             {
                 return typeof(ConfigurePython);
             }
-        }
-#else
-        public bool PyDEBUG
-        {
-            get;
-            set;
-        }
-#endif
-
-        protected override void
-        Init(
-            Bam.Core.Module parent)
-        {
-            base.Init(parent);
-#if !BAM_FEATURE_MODULE_CONFIGURATION
-            // TODO: can this be exposed on a command line option?
-            this.PyDEBUG = false; // set to true to enable Py_DEBUG
-#endif
         }
 
         protected override TokenizedString OutputPath
@@ -113,11 +90,7 @@ namespace Python
             {
                 var bitDepth = (C.EBit)Bam.Core.CommandLineProcessor.Evaluate(new C.Options.DefaultBitDepth());
                 var contents = new System.Text.StringBuilder();
-#if BAM_FEATURE_MODULE_CONFIGURATION
                 if ((this.Configuration as IConfigurePython).PyDEBUG)
-#else
-                if (this.PyDEBUG)
-#endif
                 {
                     contents.AppendLine("#define Py_DEBUG");
                 }

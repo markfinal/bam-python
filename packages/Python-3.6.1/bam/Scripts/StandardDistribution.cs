@@ -149,11 +149,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-#if BAM_FEATURE_MODULE_CONFIGURATION
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                if (pyConfigHeader.PyDEBUG)
-#endif
                 {
                     basename = Version.WindowsDebugOutputName; // pythonMN_d.zip
                 }

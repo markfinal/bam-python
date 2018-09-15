@@ -118,11 +118,7 @@ namespace Python
             {
                 this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-#if BAM_FEATURE_MODULE_CONFIGURATION
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                if (pyConfigHeader.PyDEBUG)
-#endif
                 {
                     this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName + "_d");
                 }
