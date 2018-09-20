@@ -27,15 +27,14 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
+using System.Linq;
 namespace Python
 {
     public class PyDocGeneratedHtml :
         Bam.Core.Module
     {
-        static public Bam.Core.PathKey Key = Bam.Core.PathKey.Generate("PyDoc.Html");
+        public const string PyDocHtmlKey = "PyDoc.Html";
 
-        private IPyDocGenerationPolicy Policy = null;
-        private Bam.Core.TokenizedString interpreterPath = null;
         private string moduleToDocument;
 
         protected override void
@@ -43,17 +42,12 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
-        }
 
-        public void
-        Interpreter<DependentModule>(
-            Bam.Core.PathKey key,
-            Bam.Core.TokenizedString publishedPath) where DependentModule : Bam.Core.Module, new()
-        {
-            var module = Bam.Core.Graph.Instance.FindReferencedModule<DependentModule>();
-            this.Requires(module);
-            this.Tool = module;
-            this.interpreterPath = publishedPath;
+            this.PrivatePatch(settings =>
+                {
+                    var pyDocSettings = settings as IPyDocSettings;
+                    pyDocSettings.ModuleToDocument = this.moduleToDocument;
+                });
         }
 
         public void
@@ -62,17 +56,26 @@ namespace Python
             Bam.Core.TokenizedString outputDirectory)
         {
             this.moduleToDocument = nameOfModule;
-            this.RegisterGeneratedFile(Key, this.CreateTokenizedString("$(0)/$(1).html", outputDirectory, Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)));
+            this.RegisterGeneratedFile(
+                PyDocHtmlKey,
+                this.CreateTokenizedString(
+                    "$(0)/$(1).html",
+                    outputDirectory,
+                    Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)
+                )
+            );
         }
 
         protected override void
         EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var generatedPath = this.GeneratedPaths[Key].ToString();
+            var generatedPath = this.GeneratedPaths[PyDocHtmlKey].ToString();
             if (!System.IO.File.Exists(generatedPath))
             {
-                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(
+                    this.GeneratedPaths[PyDocHtmlKey]
+                );
             }
         }
 
@@ -80,37 +83,59 @@ namespace Python
         ExecuteInternal(
             Bam.Core.ExecutionContext context)
         {
-            if (null == this.Policy)
+            switch (Bam.Core.Graph.Instance.Mode)
             {
-                return;
+#if D_PACKAGE_MAKEFILEBUILDER
+                case "MakeFile":
+                    MakeFileBuilder.Support.Add(this);
+                    break;
+#endif
+
+#if D_PACKAGE_NATIVEBUILDER
+                case "Native":
+                    NativeBuilder.Support.RunCommandLineTool(this, context);
+                    break;
+#endif
+
+#if D_PACKAGE_VSSOLUTIONBUILDER
+                case "VSSolution":
+                    VSSolutionBuilder.Support.AddPostBuildSteps(
+                        this,
+                        addOrderOnlyDependencyOnTool: true // python itself!
+                    );
+                    break;
+#endif
+
+#if D_PACKAGE_XCODEBUILDER
+                case "Xcode":
+                    {
+                        XcodeBuilder.Target target;
+                        XcodeBuilder.Configuration configuration;
+                        XcodeBuilder.Support.AddPreBuildStepForCommandLineTool(
+                            this,
+                            out target,
+                            out configuration,
+                            XcodeBuilder.FileReference.EFileType.TextFile, // TODO: HTML
+                            true,
+                            false,
+                            addOrderOnlyDependencyOnTool: true // Python itself
+                        );
+                        target.SetType(XcodeBuilder.Target.EProductType.Utility);
+                        configuration.SetProductName(Bam.Core.TokenizedString.CreateVerbatim("PyDoc"));
+                    }
+                    break;
+#endif
+
+                default:
+                    throw new System.NotImplementedException();
             }
-            this.Policy.html(this, context, this.Tool as Bam.Core.ICommandLineTool, this.interpreterPath, this.GeneratedPaths[Key], this.moduleToDocument);
         }
 
-        protected override void
-        GetExecutionPolicy(
-            string mode)
-        {
-            switch (mode)
-            {
-            case "Native":
-            case "MakeFile":
-                var className = "Python." + mode + "PyDocToHtml";
-                this.Policy = Bam.Core.ExecutionPolicyUtilities<IPyDocGenerationPolicy>.Create(className);
-                break;
-            }
-        }
-
-        private Bam.Core.PreBuiltTool Compiler
+        public override Bam.Core.TokenizedString WorkingDirectory
         {
             get
             {
-                return this.Tool as Bam.Core.PreBuiltTool;
-            }
-
-            set
-            {
-                this.Tool = value;
+                return this.OutputDirectories.First();
             }
         }
     }

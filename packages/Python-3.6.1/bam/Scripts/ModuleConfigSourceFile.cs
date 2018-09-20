@@ -39,8 +39,14 @@ namespace Python
             Bam.Core.Module parent)
         {
             base.Init(parent);
-            this.GeneratedPaths[Key] = this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c");
-            this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/config.c.in"));
+            this.RegisterGeneratedFile(
+                SourceFileKey,
+                this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c")
+            );
+            this.Macros.Add(
+                "templateConfig",
+                this.CreateTokenizedString("$(packagedir)/Modules/config.c.in")
+            );
 
             this.PublicPatch((settings, appliedTo) =>
                 {
@@ -56,10 +62,12 @@ namespace Python
         EvaluateInternal()
         {
             this.ReasonToExecute = null;
-            var outputPath = this.GeneratedPaths[Key].ToString();
+            var outputPath = this.GeneratedPaths[SourceFileKey].ToString();
             if (!System.IO.File.Exists(outputPath))
             {
-                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(this.GeneratedPaths[Key]);
+                this.ReasonToExecute = Bam.Core.ExecuteReasoning.FileDoesNotExist(
+                    this.GeneratedPaths[SourceFileKey]
+                );
                 return;
             }
         }
@@ -141,7 +149,7 @@ namespace Python
         ExecuteInternal(
             ExecutionContext context)
         {
-            var destPath = this.GeneratedPaths[Key].ToString();
+            var destPath = this.GeneratedPaths[SourceFileKey].ToString();
             var destDir = System.IO.Path.GetDirectoryName(destPath);
             if (!System.IO.Directory.Exists(destDir))
             {
@@ -161,13 +169,6 @@ namespace Python
                 writeFile.Write(stubText);
             }
             Bam.Core.Log.MessageAll("Written '{0}'", destPath);
-        }
-
-        protected override void
-        GetExecutionPolicy(
-            string mode)
-        {
-            // TODO: do nothing
         }
     }
 }

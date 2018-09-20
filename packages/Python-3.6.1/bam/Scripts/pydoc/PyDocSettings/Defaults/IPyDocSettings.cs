@@ -37,6 +37,9 @@ namespace Python.DefaultSettings
             this IPyDocSettings settings,
             Bam.Core.Module module)
         {
+            settings.DontWriteByteCode = true;
+            settings.Module = "pydoc";
+            settings.WriteToCurrentDirectory = true;
         }
 
         public static void

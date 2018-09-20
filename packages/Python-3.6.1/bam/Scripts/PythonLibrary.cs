@@ -112,11 +112,7 @@ namespace Python
                 if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
                     vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
                 {
-#if BAM_FEATURE_MODULE_CONFIGURATION
                     if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                    if (pyConfigHeader.PyDEBUG)
-#endif
                     {
                         throw new Bam.Core.Exception("VisualStudio non-debug runtime detected, but Python was configured in Py_DEBUG mode. Inconsistent states.");
                     }
@@ -127,11 +123,7 @@ namespace Python
                 {
                     this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
 
-#if BAM_FEATURE_MODULE_CONFIGURATION
                     if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                    if (!pyConfigHeader.PyDEBUG)
-#endif
                     {
                         throw new Bam.Core.Exception("VisualStudio debug runtime detected, but Python was not configured in Py_DEBUG mode. Inconsistent states.");
                     }
@@ -3307,11 +3299,7 @@ namespace Python
             }
             else
             {
-#if BAM_FEATURE_MODULE_CONFIGURATION
                 if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                if (!pyConfigHeader.PyDEBUG)
-#endif
                 {
                     parserSource.PrivatePatch(NotPyDEBUGPatch);
                     objectSource.PrivatePatch(NotPyDEBUGPatch);

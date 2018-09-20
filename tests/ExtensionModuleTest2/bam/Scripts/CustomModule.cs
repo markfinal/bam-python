@@ -70,9 +70,13 @@ namespace ExtensionModuleTest2
 
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
-            this.Mapping.Register(typeof(Python.PyDocGeneratedHtml), Python.PyDocGeneratedHtml.Key, this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false);
+            this.Mapping.Register(
+                typeof(Python.PyDocGeneratedHtml),
+                Python.PyDocGeneratedHtml.PyDocHtmlKey,
+                this.CreateTokenizedString("$(0)/pyapidocs", new[] { this.ExecutableDir }), false
+            );
 
-            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             var extensionModule = this.Find<CustomModule>().First();
@@ -95,10 +99,15 @@ namespace ExtensionModuleTest2
             var publishing = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>() as CustomModuleRuntime;
             this.Requires(publishing);
 
-            // set the interpreter to run the Python command
-            this.Interpreter<Python.PythonShell>(C.ConsoleApplication.Key, publishing.PyInterpreter.GeneratedPaths[Publisher.CollatedFile.Key]);
+            // use the collated Python, which has all of it's dependencies collated beside it
+            // to make it runnable
+            this.Tool = publishing.PyInterpreter;
+
             // specify which module to document, and where the HTML should be generated at
-            this.ModuleToDocument("custommodule", this.CreateTokenizedString("$(packagebuilddir)/$(moduleoutputdir)/docs"));
+            this.ModuleToDocument(
+                "custommodule",
+                this.CreateTokenizedString("$(packagebuilddir)/$(moduleoutputdir)/docs")
+            );
         }
     }
 
@@ -129,7 +138,7 @@ namespace ExtensionModuleTest2
             this.StripBinariesFrom<CustomModuleRuntime, CustomModuleDebugSymbols>();
 
             var collator = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>();
-            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.Key, collator, collator.PyInterpreter);
+            this.Include<CustomModuleAPIDocs>(Python.PyDocGeneratedHtml.PyDocHtmlKey, collator, collator.PyInterpreter);
         }
     }
 }

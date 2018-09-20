@@ -29,6 +29,8 @@
 #endregion // License
 using Bam.Core;
 using System.Linq;
+using System.Collections.Generic;
+
 namespace Python
 {
     class AllDynamicModules :
@@ -133,10 +135,6 @@ namespace Python
         protected override void ExecuteInternal(ExecutionContext context)
         {
         }
-
-        protected override void GetExecutionPolicy(string mode)
-        {
-        }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -151,11 +149,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
-#if BAM_FEATURE_MODULE_CONFIGURATION
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-#else
-                if (pyConfigHeader.PyDEBUG)
-#endif
                 {
                     basename = Version.WindowsDebugOutputName; // pythonMN_d.zip
                 }
@@ -176,6 +170,16 @@ namespace Python
                 }
             );
         }
+
+        public override System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>> InputModules
+        {
+            get
+            {
+                // since there is a dependency on PythonLibrary which does not need to be passed
+                // through to Zip
+                return System.Linq.Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>>();
+            }
+        }
     }
 }
 namespace Python.StandardDistribution
@@ -188,8 +192,11 @@ namespace Python.StandardDistribution
         {
             collator.Mapping.Register(
                 typeof(SysConfigDataPythonFile),
-                SysConfigDataPythonFile.Key,
-                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                SysConfigDataPythonFile.SysConfigDataPythonFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/lib/python" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
 
             var zipCollationPath = "$(0)";
@@ -214,21 +221,30 @@ namespace Python.StandardDistribution
             }
             collator.Mapping.Register(
                 typeof(Python.PythonZip),
-                Publisher.ZipModule.Key,
-                collator.CreateTokenizedString(zipCollationPath, new[] { collator.ExecutableDir }),
+                Publisher.ZipModule.ZipKey,
+                collator.CreateTokenizedString(
+                    zipCollationPath,
+                    new[] { collator.ExecutableDir }
+                ),
                 true
             );
 
             // required by distutils
             collator.Mapping.Register(
                 typeof(PyConfigHeader),
-                PyConfigHeader.Key,
-                collator.CreateTokenizedString("$(0)/include/python" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                PyConfigHeader.HeaderFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/include/python" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
             collator.Mapping.Register(
                 typeof(PyMakeFile),
-                PyConfigHeader.Key,
-                collator.CreateTokenizedString("$(0)/lib/python" + Version.MajorDotMinor + "/config-" + Version.MajorDotMinor, new[] { collator.ExecutableDir }),
+                PyConfigHeader.HeaderFileKey,
+                collator.CreateTokenizedString(
+                    "$(0)/lib/python" + Version.MajorDotMinor + "/config-" + Version.MajorDotMinor,
+                    new[] { collator.ExecutableDir }
+                ),
                 true);
         }
 

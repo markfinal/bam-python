@@ -64,7 +64,7 @@ namespace ExtensionModuleTest1
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             var extensionModule = this.Find<CustomModule>().First();

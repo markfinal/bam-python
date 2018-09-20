@@ -33,6 +33,28 @@ namespace Python
     public interface IPyDocSettings :
         Bam.Core.ISettingsBase
     {
-        // TODO: should the module name and output dir be in here?
+        bool DontWriteByteCode
+        {
+            get;
+            set;
+        }
+
+        string Module
+        {
+            get;
+            set;
+        }
+
+        bool WriteToCurrentDirectory
+        {
+            get;
+            set;
+        }
+
+        string ModuleToDocument
+        {
+            get;
+            set;
+        }
     }
 }

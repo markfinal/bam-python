@@ -100,7 +100,7 @@ namespace InterpreterTest2
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<CTest>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<CTest>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/resources/*.py"), this.ExecutableDir, appAnchor);

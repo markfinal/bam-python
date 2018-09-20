@@ -100,7 +100,7 @@ namespace InterpreterTest1
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<CTest>(C.ConsoleApplication.Key);
+            var appAnchor = this.Include<CTest>(C.ConsoleApplication.ExecutableKey);
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             // note that as this is not using PythonShell, it is not adding a dependency on all of the dynamic
