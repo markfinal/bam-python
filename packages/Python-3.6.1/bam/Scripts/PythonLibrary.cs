@@ -142,6 +142,34 @@ namespace Python
             }
         }
 
+        sealed class VCParserSourceSuppressor :
+            C.SuppressWarningsDelegate
+        {
+            public VCParserSourceSuppressor()
+            {
+                this.Add("grammar.c", "4244");
+                this.Add("myreadline.c", "4456", "4706");
+                this.Add("node.c", "4244");
+                this.Add("tokenizer.c", "4244", "4100", "4706");
+            }
+        }
+
+        sealed class GccParserSourceSuppressor :
+            C.SuppressWarningsDelegate
+        {
+            public GccParserSourceSuppressor()
+            {
+            }
+        }
+
+        sealed class ClangParserSourceSuppressor :
+            C.SuppressWarningsDelegate
+        {
+            public ClangParserSourceSuppressor()
+            {
+            }
+        }
+
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -187,10 +215,27 @@ namespace Python
 
             var headers = this.CreateHeaderContainer("$(packagedir)/Include/*.h");
 
-            var parserSource = this.CreateCSourceContainer("$(packagedir)/Parser/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$"));
+            var parserSource = this.CreateCSourceContainer(
+                "$(packagedir)/Parser/*.c",
+                filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$")
+            );
             parserSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Parser/*.h");
 
+#if true
+            if (parserSource.Compiler is VisualCCommon.CompilerBase)
+            {
+                parserSource.SuppressWarningsDelegate(new VCParserSourceSuppressor());
+            }
+            else if (parserSource.Compiler is GccCommon.CompilerBase)
+            {
+                parserSource.SuppressWarningsDelegate(new GccParserSourceSuppressor());
+            }
+            else if (parserSource.Compiler is ClangCommon.CompilerBase)
+            {
+                parserSource.SuppressWarningsDelegate(new ClangParserSourceSuppressor());
+            }
+#else
             parserSource["grammar.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -278,6 +323,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Parser/tokenizer.c:351:15: error: unused parameter 'set_readline' [-Werror,-Wunused-parameter]
                         }
                     }));
+#endif
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
