@@ -167,6 +167,9 @@ namespace Python
         {
             public ClangParserSourceSuppressor()
             {
+                this.Add("grammar.c", "format-pedantic");
+                this.Add("metagrammar.c", "missing-field-initializers");
+                this.Add("tokenizer.c", "unused-parameter");
             }
         }
 
