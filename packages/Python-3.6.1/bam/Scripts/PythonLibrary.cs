@@ -159,6 +159,9 @@ namespace Python
         {
             public GccParserSourceSuppressor()
             {
+                this.Add("grammar.c", "format");
+                this.Add("metagrammar.c", "missing-field-initializers");
+                this.Add("tokenizer.c", "unused-parameter");
             }
         }
 
