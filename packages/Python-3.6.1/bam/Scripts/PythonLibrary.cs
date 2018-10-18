@@ -142,40 +142,6 @@ namespace Python
             }
         }
 
-        sealed class VCParserSourceSuppressor :
-            C.SuppressWarningsDelegate
-        {
-            public VCParserSourceSuppressor()
-            {
-                this.Add("grammar.c", "4244");
-                this.Add("myreadline.c", "4456", "4706");
-                this.Add("node.c", "4244");
-                this.Add("tokenizer.c", "4244", "4100", "4706");
-            }
-        }
-
-        sealed class GccParserSourceSuppressor :
-            C.SuppressWarningsDelegate
-        {
-            public GccParserSourceSuppressor()
-            {
-                this.Add("grammar.c", "format");
-                this.Add("metagrammar.c", "missing-field-initializers");
-                this.Add("tokenizer.c", "unused-parameter");
-            }
-        }
-
-        sealed class ClangParserSourceSuppressor :
-            C.SuppressWarningsDelegate
-        {
-            public ClangParserSourceSuppressor()
-            {
-                this.Add("grammar.c", "format-pedantic");
-                this.Add("metagrammar.c", "missing-field-initializers");
-                this.Add("tokenizer.c", "unused-parameter");
-            }
-        }
-
         protected override void
         Init(
             Bam.Core.Module parent)
@@ -231,15 +197,15 @@ namespace Python
 #if true
             if (parserSource.Compiler is VisualCCommon.CompilerBase)
             {
-                parserSource.SuppressWarningsDelegate(new VCParserSourceSuppressor());
+                parserSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryParser());
             }
             else if (parserSource.Compiler is GccCommon.CompilerBase)
             {
-                parserSource.SuppressWarningsDelegate(new GccParserSourceSuppressor());
+                parserSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryParser());
             }
             else if (parserSource.Compiler is ClangCommon.CompilerBase)
             {
-                parserSource.SuppressWarningsDelegate(new ClangParserSourceSuppressor());
+                parserSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryParser());
             }
 #else
             parserSource["grammar.c"].ForEach(item =>
