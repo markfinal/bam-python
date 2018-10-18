@@ -193,8 +193,6 @@ namespace Python
             );
             parserSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Parser/*.h");
-
-#if true
             if (parserSource.Compiler is VisualCCommon.CompilerBase)
             {
                 parserSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryParser());
@@ -207,98 +205,26 @@ namespace Python
             {
                 parserSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryParser());
             }
-#else
-            parserSource["grammar.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Parser\grammar.c(83): warning C4244: '=': conversion from 'int' to 'short', possible loss of data
-                        }
-                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                        if (null != gccCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Parser/grammar.c:107:16: error: format '%p' expects argument of type 'void *', but argument 2 has type 'struct labellist *' [-Werror=format=]
-                        }
-                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                        if (null != clangCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("format-pedantic"); // Python-3.5.1/Parser/grammar.c:106:41: error: format specifies type 'void *' but the argument has type 'labellist *' [-Werror,-Wformat-pedantic]
-                        }
-                    }));
 
-            parserSource["metagrammar.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                        if (null != gccCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Parser/metagrammar.c:15:5: error: missing initializer for field 's_lower' of 'state' [-Werror=missing-field-initializers]
-                        }
-                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                        if (null != clangCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Parser/metagrammar.c:15:17: error: missing field 's_lower' initializer [-Werror,-Wmissing-field-initializers]
-                        }
-                    }));
-
-            parserSource["myreadline.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("4456"); // Python-3.6.1\Parser\myreadline.c(226): warning C4456: declaration of 'n' hides previous local declaration
-                            compiler.DisableWarnings.AddUnique("4706"); // python-3.6.1\parser\myreadline.c(221) : warning C4706: assignment within conditional expression
-                        }
-                    }));
-
-            parserSource["node.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Parser\node.c(13): warning C4244: '=': conversion from 'int' to 'short', possible loss of data
-                        }
-                    }));
-
-            parserSource["tokenizer.c"].ForEach(item =>
-                item.PrivatePatch(settings =>
-                    {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Parser\tokenizer.c(217): warning C4244: '=': conversion from 'int' to 'char', possible loss of data
-                            compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Parser\tokenizer.c(351): warning C4100: 'set_readline': unreferenced formal parameter
-                            compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\parser\tokenizer.c(623) : warning C4706: assignment within conditional expression
-                        }
-                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                        if (null != gccCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Parser/tokenizer.c:351:15: error: unused parameter 'set_readline' [-Werror=unused-parameter]
-                        }
-                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                        if (null != clangCompiler)
-                        {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Parser/tokenizer.c:351:15: error: unused parameter 'set_readline' [-Werror,-Wunused-parameter]
-                        }
-                    }));
-#endif
 
             var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
+            headers.AddFiles("$(packagedir)/Objects/*.h");
+
+#if true
+            if (objectSource.Compiler is VisualCCommon.CompilerBase)
+            {
+                objectSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryObjects());
+            }
+            else if (objectSource.Compiler is GccCommon.CompilerBase)
+            {
+                objectSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryObjects());
+            }
+            else if (objectSource.Compiler is ClangCommon.CompilerBase)
+            {
+                objectSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryObjects());
+            }
+#else
             objectSource.PrivatePatch(settings =>
                 {
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
@@ -1121,7 +1047,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Objects/stringlib/find.h:134:1: error: unused function 'asciilib_parse_args_finds_unicode' [-Werror,-Wunused-function]
                         }
                     }));
-            headers.AddFiles("$(packagedir)/Objects/*.h");
+#endif
 
             var pythonSource = this.CreateCSourceContainer("$(packagedir)/Python/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*dynload_)(?!.*dup2)(?!.*strdup)(?!.*frozenmain)(?!.*sigcheck).*)$"));

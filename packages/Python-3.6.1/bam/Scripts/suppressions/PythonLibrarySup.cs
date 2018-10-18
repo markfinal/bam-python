@@ -42,6 +42,50 @@ namespace Python
                 this.Add("tokenizer.c", "4244", "4100", "4706");
             }
         }
+
+        sealed class PythonLibraryObjects :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryObjects()
+            {
+                this.Add("abstract.c", "4100", "4706");
+                this.Add("boolobject.c", "4100");
+                this.Add("bytearrayobject.c", "4100", "4244", "4702");
+                this.Add("bytesobject.c", "4100", "4244", "4702");
+                this.Add("bytes_methods.c", "4100", "4244", "4702");
+                this.Add("cellobject.c", "4100");
+                this.Add("classobject.c", "4100");
+                this.Add("codeobject.c", "4100", "4244");
+                this.Add("complexobject.c", "4100", "4701");
+                this.Add("descrobject.c", "4100");
+                this.Add("dictobject.c", "4100", "4702", "4706");
+                this.Add("dictobject.c", 19, "4456");
+                this.Add("exceptions.c", "4100");
+                this.Add("fileobject.c", "4100", "4244");
+                this.Add("floatobject.c", "4100", "4244");
+                this.Add("frameobject.c", "4100");
+                this.Add("funcobject.c", "4100", "4244");
+                this.Add("genobject.c", "4100");
+                this.Add("genobject.c", 19, "4457");
+                this.Add("listobject.c", "4100");
+                this.Add("longobject.c", "4100", "4701");
+                this.Add("longobject.c", 19, "4456");
+                this.Add("memoryobject.c", "4100");
+                this.Add("memoryobject.c", 19, "4456");
+                this.Add("methodobject.c", "4100");
+                this.Add("moduleobject.c", "4100", "4152");
+                this.Add("namespaceobject.c", "4100");
+                this.Add("object.c", "4100");
+                this.Add("obmalloc.c", "4100");
+                this.Add("setobject.c", "4245");
+                this.Add("structseq.c", "4706");
+                this.Add("tupleobject.c", "4245");
+                this.Add("typeobject.c", "4204");
+                this.Add("typeobject.c", 19, "4456");
+                this.Add("unicodeobject.c", "4127", "4310", "4389", "4701", "4702", "4706");
+                this.Add("unicodeobject.c", 19, "4456", "4457");
+            }
+        }
     }
 
     namespace Gcc.WarningSuppression
@@ -56,6 +100,14 @@ namespace Python
                 this.Add("tokenizer.c", "unused-parameter");
             }
         }
+
+        sealed class PythonLibraryObjects :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryObjects()
+            {
+            }
+        }
     }
 
     namespace Clang.WarningSuppression
@@ -68,6 +120,14 @@ namespace Python
                 this.Add("grammar.c", "format-pedantic");
                 this.Add("metagrammar.c", "missing-field-initializers");
                 this.Add("tokenizer.c", "unused-parameter");
+            }
+        }
+
+        sealed class PythonLibraryObjects :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryObjects()
+            {
             }
         }
     }
