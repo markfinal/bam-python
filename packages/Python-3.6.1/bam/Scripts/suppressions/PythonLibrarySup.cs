@@ -86,6 +86,48 @@ namespace Python
                 this.Add("unicodeobject.c", 19, "4456", "4457");
             }
         }
+
+        sealed class PythonLibraryPython :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryPython()
+            {
+                this.Add("ast.c", "4100", "4702");
+                this.Add("ast.c", 19, "4457");
+                this.Add("bltinmodule.c", "4100", "4204", "4706");
+                this.Add("ceval.c", "4100", "4918");
+                this.Add("ceval.c", 19, "4456", "4457");
+                this.Add("codecs.c", "4310", "4244", "4100", "4706");
+                this.Add("codecs.c", 19, "4456");
+                this.Add("compile.c", "4100", "4244", "4702");
+                this.Add("compile.c", 19, "4457");
+                this.Add("dtoa.c", "4244", "4706");
+                this.Add("errors.c", "4706");
+                this.Add("fileutils.c", "4244", "4706");
+                this.Add("formatter_unicode.c", "4100");
+                this.Add("getargs.c", "4100", "4127", "4244", "4706");
+                this.Add("getargs.c", 19, "4456");
+                this.Add("import.c", "4100", "4706");
+                this.Add("marshal.c", "4100", "4244");
+                this.Add("marshal.c", 19, "4456");
+                this.Add("peephole.c", "4100", "4244", "4267");
+                this.Add("pyfpe.c", "4100");
+                this.Add("pylifecycle.c", "4100", "4210", "4706");
+                this.Add("pylifecycle.c", 19, "4456");
+                this.Add("pystate.c", "4706");
+                this.Add("Python-ast.c", 19, "4456");
+                this.Add("pythonrun.c", "4100");
+                this.Add("pytime.c", "4100");
+                this.Add("random.c", "4100");
+                this.Add("symtable.c", "4100", "4706");
+                this.Add("symtable.c", 19, "4457");
+                this.Add("sysmodule.c", "4100", "4706");
+                this.Add("thread.c", "4100", "4189");
+                this.Add("traceback.c", "4100");
+                this.Add("_warnings.c", "4100");
+                this.Add("_warnings.c", 19, "4456");
+            }
+        }
     }
 
     namespace Gcc.WarningSuppression
@@ -120,6 +162,14 @@ namespace Python
                 this.Add("unicodeobject.c", "unused-function");
                 this.Add("structseq.c", "missing-field-initializers");
                 this.Add("exceptions.c", "missing-field-initializers", "unused-parameter");
+            }
+        }
+
+        sealed class PythonLibraryPython :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryPython()
+            {
             }
         }
     }
@@ -158,6 +208,14 @@ namespace Python
                 this.Add("bytesobject.c", "unused-function");
                 this.Add("abstract.c", "unused-parameter");
                 this.Add("exceptions.c", "unused-parameter", "missing-field-initializers");
+            }
+        }
+
+        sealed class PythonLibraryPython :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryPython()
+            {
             }
         }
     }

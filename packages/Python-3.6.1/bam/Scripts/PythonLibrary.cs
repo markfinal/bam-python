@@ -223,6 +223,7 @@ namespace Python
                 objectSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryObjects());
             }
 
+
             var pythonSource = this.CreateCSourceContainer("$(packagedir)/Python/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*dynload_)(?!.*dup2)(?!.*strdup)(?!.*frozenmain)(?!.*sigcheck).*)$"));
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -259,7 +260,22 @@ namespace Python
                     });
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
+            headers.AddFiles("$(packagedir)/Python/*.h");
 
+#if true
+            if (pythonSource.Compiler is VisualCCommon.CompilerBase)
+            {
+                pythonSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryPython());
+            }
+            else if (pythonSource.Compiler is GccCommon.CompilerBase)
+            {
+                pythonSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryPython());
+            }
+            else if (pythonSource.Compiler is ClangCommon.CompilerBase)
+            {
+                pythonSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryPython());
+            }
+#else
             pythonSource["ast.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -931,8 +947,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Python/traceback.c:30:27: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         }
                     }));
-
-            headers.AddFiles("$(packagedir)/Python/*.h");
+#endif
 
             var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
