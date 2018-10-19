@@ -277,6 +277,14 @@ namespace Python
 
             var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
+            headers.AddFiles("$(packagedir)/Modules/*.h");
+            headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
+#if !PYTHON_USE_ZLIB_PACKAGE
+            headers.AddFiles("$(packagedir)/Modules/zlib/*.h");
+#endif
+            headers.AddFiles("$(packagedir)/Modules/_io/*.h");
+
+#if false
             builtinModuleSource["main.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -300,6 +308,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/main.c:49:24: error: string literal of length 525 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
+#endif
             builtinModuleSource.AddFiles("$(packagedir)/Modules/getbuildinfo.c");
 
             // Windows builds includes dynamic modules builtin the core library
@@ -309,6 +318,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var opcode = builtinModuleSource.AddFiles("$(packagedir)/Modules/_opcode.c");
+#if false
                 opcode.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -318,7 +328,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_opcode.c(23): warning C4100: 'module': unreferenced formal parameter
                         }
                     });
+#endif
                 var lsprof = builtinModuleSource.AddFiles("$(packagedir)/Modules/_lsprof.c");
+#if false
                 lsprof.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -328,8 +340,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_lsprof.c(264): warning C4100: 'pObj': unreferenced formal parameter
                         }
                     });
+#endif
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/rotatingtree.c"); // part of _lsprof
                 var json = builtinModuleSource.AddFiles("$(packagedir)/Modules/_json.c");
+#if false
                 json.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -340,7 +354,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_json.c(308): warning C4244: '=': conversion from 'Py_UCS4' to 'Py_UCS1', possible loss of data
                         }
                     });
+#endif
                 var threadmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_threadmodule.c");
+#if false
                 threadmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -351,7 +367,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_threadmodule.c(784) : warning C4706: assignment within conditional expression
                         }
                     });
+#endif
                 var arraymodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/arraymodule.c");
+#if false
                 arraymodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -365,7 +383,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\arraymodule.c(3021): warning C4152: nonstandard extension, function/data pointer conversion in expression
                         }
                     });
+#endif
                 var cmathmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/cmathmodule.c");
+#if false
                 cmathmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -375,8 +395,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\cmathmodule.c(436): warning C4100: 'module': unreferenced formal parameter
                         }
                     });
+#endif
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_math.c"); // part of cmath
                 var mathmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/mathmodule.c");
+#if false
                 mathmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -387,7 +409,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\mathmodule.c(1217) : warning C4701: potentially uninitialized local variable 'lo' used
                         }
                     });
+#endif
                 var _struct = builtinModuleSource.AddFiles("$(packagedir)/Modules/_struct.c");
+#if false
                 _struct.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -398,8 +422,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_struct.c(678): warning C4244: '=': conversion from 'int' to 'char', possible loss of data
                         }
                     });
+#endif
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_randommodule.c");
                 var _pickle = builtinModuleSource.AddFiles("$(packagedir)/Modules/_pickle.c");
+#if false
                 _pickle.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -414,7 +440,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4702"); // python-3.5.1\modules\_pickle.c(741) : warning C4702: unreachable code
                         }
                     });
+#endif
                 var _datetimemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_datetimemodule.c");
+#if false
                 _datetimemodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -426,7 +454,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_datetimemodule.c(2398): warning C4100: 'unused': unreferenced formal parameter
                         }
                     });
+#endif
                 var _bisectmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_bisectmodule.c");
+#if false
                 _bisectmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -436,7 +466,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_bisectmodule.c(47): warning C4100: 'self': unreferenced formal parameter
                         }
                     });
+#endif
                 var _heapqmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_heapqmodule.c");
+#if false
                 _heapqmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -446,7 +478,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_heapqmodule.c(100): warning C4100: 'self': unreferenced formal parameter
                         }
                     });
+#endif
                 var mmapmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/mmapmodule.c");
+#if false
                 mmapmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -467,7 +501,9 @@ namespace Python
                             }
                         }
                     });
+#endif
                 var _csv = builtinModuleSource.AddFiles("$(packagedir)/Modules/_csv.c");
+#if false
                 _csv.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -479,7 +515,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_csv.c(1279) : warning C4706: assignment within conditional expression
                         }
                     });
+#endif
                 var audioop = builtinModuleSource.AddFiles("$(packagedir)/Modules/audioop.c");
+#if false
                 audioop.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -490,7 +528,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\audioop.c(410): warning C4100: 'module': unreferenced formal parameter
                         }
                     });
+#endif
                 var md5module = builtinModuleSource.AddFiles("$(packagedir)/Modules/md5module.c");
+#if false
                 md5module.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -501,7 +541,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\md5module.c(536) : warning C4701: potentially uninitialized local variable 'buf' used
                         }
                     });
+#endif
                 var sha1module = builtinModuleSource.AddFiles("$(packagedir)/Modules/sha1module.c");
+#if false
                 sha1module.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -512,7 +554,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\sha1module.c(513) : warning C4701: potentially uninitialized local variable 'buf' used
                         }
                     });
+#endif
                 var sha256module = builtinModuleSource.AddFiles("$(packagedir)/Modules/sha256module.c");
+#if false
                 sha256module.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -523,7 +567,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\sha256module.c(634) : warning C4701: potentially uninitialized local variable 'buf' used
                         }
                     });
+#endif
                 var sha512module = builtinModuleSource.AddFiles("$(packagedir)/Modules/sha512module.c");
+#if false
                 sha512module.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -534,7 +580,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\sha512module.c(705) : warning C4701: potentially uninitialized local variable 'buf' used
                         }
                     });
+#endif
                 var binascii = builtinModuleSource.AddFiles("$(packagedir)/Modules/binascii.c");
+#if false
                 binascii.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -545,7 +593,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\binascii.c(1203): warning C4244: '=': conversion from 'int' to 'char', possible loss of data
                         }
                     });
+#endif
                 var parsermodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/parsermodule.c");
+#if false
                 parsermodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -556,11 +606,13 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4456"); // Python-3.5.1\Modules\parsermodule.c(793): warning C4456: declaration of 'err' hides previous local declaration
                         }
                     });
+#endif
 
 #if PYTHON_USE_ZLIB_PACKAGE
 #else
                 var zlib = this.CreateCSourceContainer("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
                 zlib.PrivatePatch(this.WinNotUnicodePatch);
+#if false
                 zlib.PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -647,6 +699,7 @@ namespace Python
                             }
                         }));
 #endif
+#endif
 
                 var zlibmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
                 zlibmodule.First().PrivatePatch(settings =>
@@ -655,6 +708,7 @@ namespace Python
 #if !PYTHON_USE_ZLIB_PACKAGE
                         compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
 #endif
+#if false
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
                         if (null != vcCompiler)
                         {
@@ -662,6 +716,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\zlibmodule.c(308) : warning C4706: assignment within conditional expression
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.6.1\Modules\zlibmodule.c(145): warning C4267: '=': conversion from 'size_t' to 'uInt', possible loss of data
                         }
+#endif
                     });
 
 #if PYTHON_USE_ZLIB_PACKAGE
@@ -669,6 +724,7 @@ namespace Python
 #endif
 
                 cjkcodecs.AddFiles("$(packagedir)/Modules/cjkcodecs/*.c"); // _multibytecodec, _codecs_cn, _codecs_hk, _codecs_iso2022, _codecs_jp, _codecs_kr, _codecs_tw
+#if false
                 cjkcodecs.PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -691,8 +747,10 @@ namespace Python
                             }
                         }
                     });
+#endif
 
                 var xxsubtype = builtinModuleSource.AddFiles("$(packagedir)/Modules/xxsubtype.c");
+#if false
                 xxsubtype.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -703,9 +761,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\xxsubtype.c(293): warning C4152: nonstandard extension, function/data pointer conversion in expression
                         }
                     });
+#endif
 
                 builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2module.c");
                 var blake2s_impl = builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2s_impl.c");
+#if false
                 blake2s_impl.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -717,7 +777,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\_blake2\blake2s_impl.c(120): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
                         }
                     });
+#endif
                 var blake2b_impl = builtinModuleSource.AddFiles("$(packagedir)/Modules/_blake2/blake2b_impl.c");
+#if false
                 blake2b_impl.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -729,8 +791,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.6.1\Modules\_blake2\blake2b_impl.c(120): warning C4244: '=': conversion from 'int' to 'uint8_t', possible loss of data
                         }
                     });
+#endif
 
                 var sha3module = builtinModuleSource.AddFiles("$(packagedir)/Modules/_sha3/sha3module.c");
+#if false
                 sha3module.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -742,6 +806,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // python-3.6.1\modules\_sha3\clinic/sha3module.c.h(45): warning C4100: '_unused_ignored': unreferenced formal parameter
                         }
                     });
+#endif
             }
             else
             {
@@ -751,6 +816,7 @@ namespace Python
                 // note that you need to read Setup.dist backward, as some modules are mentioned twice
                 // and it is the 'topmost' that overrules
                 var pwdmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/pwdmodule.c");
+#if false
                 pwdmodule.First().PrivatePatch(settings =>
                     {
                         var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
@@ -768,10 +834,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/pwdmodule.c:108:27: error: unused parameter 'module' [-Werror,-Wunused-parameter]
                         }
                     });
+#endif
             }
 
             // common statically compiled extension modules
             var signalmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/signalmodule.c");
+#if false
             signalmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -811,7 +879,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/signalmodule.c:1146:1: error: string literal of length 1461 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                     }
                 });
+#endif
             var gcmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/gcmodule.c");
+#if false
             gcmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -839,7 +909,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/gcmodule.c:1520:21: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var posixmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/posixmodule.c"); // implements nt module on Windows
+#if false
             posixmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -888,7 +960,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/posixmodule.c:1281:1: error: unused function 'fildes_converter' [-Werror,-Wunused-function]
                     }
                 });
+#endif
             var errnomodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/errnomodule.c");
+#if false
             errnomodule.First().PrivatePatch(settings =>
                 {
                     var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
@@ -904,7 +978,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/errnomodule.c:44:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _sre = builtinModuleSource.AddFiles("$(packagedir)/Modules/_sre.c");
+#if false
             _sre.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -929,7 +1005,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_sre.c:2672:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _codecsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_codecsmodule.c");
+#if false
             _codecsmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -953,7 +1031,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/clinic/_codecsmodule.c.h:160:33: error: missing field 'len' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _weakref = builtinModuleSource.AddFiles("$(packagedir)/Modules/_weakref.c");
+#if false
             _weakref.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -975,7 +1055,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_weakref.c:25:44: error: unused parameter 'module' [-Werror,-Wunused-parameter]
                     }
                 });
+#endif
             var _functoolsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_functoolsmodule.c");
+#if false
             _functoolsmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1001,7 +1083,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_functoolsmodule.c:205:10: error: missing field 'type' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _operator = builtinModuleSource.AddFiles("$(packagedir)/Modules/_operator.c");
+#if false
             _operator.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1026,7 +1110,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_operator.c:398:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _collectionsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_collectionsmodule.c");
+#if false
             _collectionsmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1050,7 +1136,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_collectionsmodule.c:1476:52: error: missing field 'closure' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var itertoolsmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/itertoolsmodule.c");
+#if false
             itertoolsmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1077,7 +1165,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/itertoolsmodule.c:2282:1: error: string literal of length 731 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                     }
                 });
+#endif
             var atexitmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/atexitmodule.c");
+#if false
             atexitmodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1103,7 +1193,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/atexitmodule.c:300:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var _stat = builtinModuleSource.AddFiles("$(packagedir)/Modules/_stat.c");
+#if false
             _stat.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1129,7 +1221,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_stat.c:430:1: error: string literal of length 1479 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                     }
                 });
+#endif
             var timemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
+#if false
             timemodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1157,7 +1251,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/timemodule.c:1160:1: error: unused function 'get_zone' [-Werror,-Wunused-function]
                     }
                 });
+#endif
             var _localemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
+#if false
             _localemodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1181,9 +1277,30 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_localemodule.c:605:14: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
 
             var _io = this.CreateCSourceContainer("$(packagedir)/Modules/_io/*.c");
             _io.PrivatePatch(this.CoreBuildPatch);
+#if true
+            _io["_iomodule.c"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                {
+                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
+                    if (null != vcCompiler)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        // C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um\winnt.h(154): fatal error C1189: #error:  "No Target Architecture"
+                        if (Bam.Core.OSUtilities.Is64Bit(item.BuildEnvironment.Platform))
+                        {
+                            compiler.PreprocessorDefines.Add("_AMD64_");
+                        }
+                        else
+                        {
+                            compiler.PreprocessorDefines.Add("_X86_");
+                        }
+                    }
+                }));
+#else
             _io["bufferedio.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
@@ -1388,8 +1505,10 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/_io/clinic/_iomodule.c.h:6:1: error: string literal of length 6353 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                         }
                     }));
+#endif
 
             var zipimport = builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
+#if false
             zipimport.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1417,7 +1536,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("overlength-strings"); // Python-3.5.1/Modules/zipimport.c:1446:1: error: string literal of length 591 exceeds maximum length 509 that C90 compilers are required to support [-Werror,-Woverlength-strings]
                     }
                 });
+#endif
             var faulthandler = builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
+#if false
             faulthandler.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1454,7 +1575,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/faulthandler.c:58:32: error: missing field 'interp' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var traceMallocModule = builtinModuleSource.AddFiles("$(packagedir)/Modules/_tracemalloc.c");
+#if false
             traceMallocModule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1482,7 +1605,9 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_tracemalloc.c:1340:16: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
             var hashtable = builtinModuleSource.AddFiles("$(packagedir)/Modules/hashtable.c"); // part of _tracemalloc
+#if false
             hashtable.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1512,7 +1637,9 @@ namespace Python
                         }
                     }
                 });
+#endif
             var symtablemodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/symtablemodule.c");
+#if false
             symtablemodule.First().PrivatePatch(settings =>
                 {
                     var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1536,11 +1663,13 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/symtablemodule.c:48:29: error: missing field 'ml_flags' initializer [-Werror,-Wmissing-field-initializers]
                     }
                 });
+#endif
 
             // TODO: review
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var _winapi = builtinModuleSource.AddFiles("$(packagedir)/Modules/_winapi.c");
+#if false
                 _winapi.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1557,7 +1686,9 @@ namespace Python
                             }
                         }
                     });
+#endif
                 var msvcrtmodule = builtinModuleSource.AddFiles("$(packagedir)/PC/msvcrtmodule.c");
+#if false
                 msvcrtmodule.First().PrivatePatch(settings =>
                     {
                         var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
@@ -1575,6 +1706,7 @@ namespace Python
                             }
                         }
                     });
+#endif
             }
             else
             {
@@ -1583,6 +1715,7 @@ namespace Python
                 var ModuleConfigSourceFile = Bam.Core.Graph.Instance.FindReferencedModule<ModuleConfigSourceFile>();
                 builtinModuleSource.AddFile(ModuleConfigSourceFile);
 
+#if false
                 builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
@@ -1594,14 +1727,27 @@ namespace Python
                             compiler.PreprocessorDefines.Add("VERSION", System.String.Format("\"{0}\"", Version.MajorDotMinor));
                             compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
+#endif
             }
 
-            headers.AddFiles("$(packagedir)/Modules/*.h");
-            headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
-#if !PYTHON_USE_ZLIB_PACKAGE
-            headers.AddFiles("$(packagedir)/Modules/zlib/*.h");
-#endif
-            headers.AddFiles("$(packagedir)/Modules/_io/*.h");
+            if (builtinModuleSource.Compiler is VisualCCommon.CompilerBase)
+            {
+                builtinModuleSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryBuiltinModules());
+                cjkcodecs.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryCJKCodecs());
+                _io.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryIO());
+            }
+            else if (builtinModuleSource.Compiler is GccCommon.CompilerBase)
+            {
+                builtinModuleSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryBuiltinModules());
+                cjkcodecs.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryCJKCodecs());
+                _io.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryIO());
+            }
+            else if (pythonSource.Compiler is ClangCommon.CompilerBase)
+            {
+                builtinModuleSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryBuiltinModules());
+                cjkcodecs.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryCJKCodecs());
+                _io.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryIO());
+            }
 
 #if false
             // sigcheck has a simplified error check compared to signalmodule

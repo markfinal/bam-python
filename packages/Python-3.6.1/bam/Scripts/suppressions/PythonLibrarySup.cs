@@ -128,6 +128,101 @@ namespace Python
                 this.Add("_warnings.c", 19, "4456");
             }
         }
+
+        sealed class PythonLibraryBuiltinModules :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryBuiltinModules()
+            {
+                this.Add("main.c", "4706");
+                this.Add("_opcode.c", "4100");
+                this.Add("_lsprof.c", "4100");
+                this.Add("_json.c", "4100", "4244");
+                this.Add("_threadmodule.c", "4100", "4706");
+                this.Add("arraymodule.c", "4100", "4127", "4244", "4152");
+                this.Add("arraymodule.c", 19, "4456");
+                this.Add("cmathmodule.c", "4100");
+                this.Add("mathmodule.c", "4100", "4701");
+                this.Add("_struct.c", "4100");
+                this.Add("pickle.c", "4100", "4127", "4702", "4706");
+                this.Add("pickle.c", 19, "4456", "4457");
+                this.Add("_datetimemodule.c", "4100", "4244");
+                this.Add("_datetimemodule.c", 19, "4457");
+                this.Add("_bisectmodule.c", "4100");
+                this.Add("_heapqmodule.c", "4100");
+                this.Add("mmapmodule.c", "4100", "4057");
+                this.Add("_csv.c", "4100", "4245", "4706");
+                this.Add("audioop.c", "4100", "4244");
+                this.Add("md5module.c", "4100", "4701");
+                this.Add("sha1module.c", "4100", "4701");
+                this.Add("sha256module.c", "4100", "4701");
+                this.Add("sha512module.c", "4100", "4701");
+                this.Add("binascii.c", "4100", "4244");
+                this.Add("parsermodule.c", "4100");
+                this.Add("parsermodule.c", 19, "4456");
+                this.Add("zlibmodule.c", "4100", "4267", "4706");
+                this.Add("xxsubtype.c", "4100", "4152");
+                this.Add("blake2s_impl.c", "4100", "4244", "4245");
+                this.Add("blake2b_impl.c", "4100", "4244", "4245");
+                this.Add("sha3module.c", "4100", "4324", "4245");
+                this.Add("signalmodule.c", "4100", "4057", "4706");
+                this.Add("gcmodule.c", "4100", "4244", "4706");
+                this.Add("posixmodule.c", "4100", "4057", "4389", "4201", "4701", "4702", "4703", "4706");
+                this.Add("_sre.c", "4100", "4918");
+                this.Add("codecsmodule.c", "4100");
+                this.Add("_weakref.c", "4100");
+                this.Add("_functoolsmodule.c", "4100", "4701", "4706");
+                this.Add("_operator.c", "4100");
+                this.Add("_operator.c", 19, "4456");
+                this.Add("_collectionsmodule.c", "4100");
+                this.Add("itertoolsmodule.c", "4100", "4702");
+                this.Add("atexitmodule.c", "4100", "4701", "4703");
+                this.Add("_stat.c", "4100");
+                this.Add("timemodule.c", "4100", "4244");
+                this.Add("_localemodule.c", "4100");
+                this.Add("zipimport.c", "4100", "4127");
+                this.Add("faulthandler.c", "4100", "4702", "4706");
+                this.Add("faulthandler.c", 19, "4459");
+                this.Add("_tracemalloc.c", "4100", "4204", "4359", "4706");
+                this.Add("hashtable.c", "4100");
+                this.Add("symtablemodule.c", "4100");
+                this.Add("_winapi.c", "4100", "4201", "4204", "4702");
+                this.Add("msvcrtmodule.c", "4100", "4244");
+            }
+        }
+
+        sealed class PythonLibraryCJKCodecs :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryCJKCodecs()
+            {
+                this.Add("multibytecodec.c", "4100", "4127");
+                this.Add("_codecs_cn.c", "4100", "4244");
+                this.Add("_codecs_hk.c", "4100");
+                this.Add("_codecs_iso2022.c", "4100", "4244");
+                this.Add("_codecs_jp.c", "4100", "4244");
+                this.Add("_codecs_kr.c", "4100", "4244");
+                this.Add("_codecs_tw.c", "4100");
+            }
+        }
+
+        sealed class PythonLibraryIO :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryIO()
+            {
+                this.Add("bufferedio.c", "4100", "4701", "4703");
+                this.Add("bufferedio.c", 19, "4456");
+                this.Add("bytesio.c", "4100");
+                this.Add("fileio.c", "4100", "4701", "4703", "4706");
+                this.Add("iobase.c", "4100");
+                this.Add("stringio.c", "4100");
+                this.Add("textio.c", "4100", "4244", "4701", "4703");
+                this.Add("textio.c", 19, "4456");
+                this.Add("winconsoleio.c", "4100", "4189", "4389", "4701", "4703");
+                this.Add("_iomodule.c", "4100", "4706");
+            }
+        }
     }
 
     namespace Gcc.WarningSuppression
@@ -190,6 +285,30 @@ namespace Python
                 this.Add("pythonrun.c", "unused-parameter");
                 this.Add("ceval.c", "unused-parameter");
                 this.Add("marshal.c", "unused-parameter", "missing-field-initializers");
+            }
+        }
+
+        sealed class PythonLibraryBuiltinModules :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryBuiltinModules()
+            {
+            }
+        }
+
+        sealed class PythonLibraryCJKCodecs :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryCJKCodecs()
+            {
+            }
+        }
+
+        sealed class PythonLibraryIO :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryIO()
+            {
             }
         }
     }
@@ -258,6 +377,30 @@ namespace Python
                 this.Add("peephole.c", "unused-parameter");
                 this.Add("ceval.c", "unused-parameter");
                 this.Add("pylifecycle.c", "unused-parameter", "unused-function");
+            }
+        }
+
+        sealed class PythonLibraryBuiltinModules :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryBuiltinModules()
+            {
+            }
+        }
+
+        sealed class PythonLibraryCJKCodecs :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryCJKCodecs()
+            {
+            }
+        }
+
+        sealed class PythonLibraryIO :
+            C.SuppressWarningsDelegate
+        {
+            public PythonLibraryIO()
+            {
             }
         }
     }
