@@ -216,6 +216,28 @@ namespace Python
         {
             public PythonLibraryPython()
             {
+                this.Add("codecs.c", "unused-parameter", "missing-field-initializers");
+                this.Add("formatter_unicode.c", "unused-parameter");
+                this.Add("compile.c", "unused-parameter");
+                this.Add("ast.c", "unused-parameter");
+                this.Add("thread.c", "missing-field-initializers");
+                this.Add("symtable.c", "unused-parameter", "missing-field-initializers");
+                this.Add("pyfpe.c", "unused-parameter");
+                this.Add("traceback.c", "unused-parameter", "missing-field-initializers");
+                this.Add("Python-ast.c", "missing-field-initializers");
+                this.Add("pythonrun.c", "unused-parameter");
+                this.Add("import.c", "unused-parameter", "missing-field-initializers");
+                this.Add("pytime.c", "unused-parameter");
+                this.Add("random.c", "unused-parameter", "missing-field-initializers");
+                this.Add("graminit.c", "missing-field-initializers");
+                this.Add("sysmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("bltinmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("marshal.c", "unused-parameter", "missing-field-initializers");
+                this.Add("getargs.c", "unused-parameter");
+                this.Add("_warnings.c", "unused-parameter", "missing-field-initializers");
+                this.Add("peephole.c", "unused-parameter");
+                this.Add("ceval.c", "unused-parameter");
+                this.Add("pylifecycle.c", "unused-parameter", "unused-function");
             }
         }
     }
