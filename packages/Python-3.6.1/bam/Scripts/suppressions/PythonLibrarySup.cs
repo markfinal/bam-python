@@ -106,6 +106,20 @@ namespace Python
         {
             public PythonLibraryObjects()
             {
+                this.Add("listobject.c", "unused-parameter", "missing-field-initializers");
+                this.Add("object.c", "format", "unused-parameter", "missing-field-initializers");
+                this.Add("bytes_methods.c", "unused-parameter", "missing-field-initializers");
+                this.Add("methodobject.c", "pedantic");
+                this.Add("typeobject.c", "pedantic");
+                this.Add("bytesobject.c", "unused-function");
+                this.Add("bytearrayobject.c", "unused-function");
+                this.Add("obmalloc.c", "unused-parameter");
+                this.Add("capsule.c", "missing-field-initializers");
+                this.Add("moduleobject.c", "pedantic");
+                this.Add("abstract.c", "unused-parameter");
+                this.Add("unicodeobject.c", "unused-function");
+                this.Add("structseq.c", "missing-field-initializers");
+                this.Add("exceptions.c", "missing-field-initializers", "unused-parameter");
             }
         }
     }
