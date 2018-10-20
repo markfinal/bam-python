@@ -385,6 +385,27 @@ namespace Python
         {
             public PythonLibraryBuiltinModules()
             {
+                this.Add("pwdmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("signalmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("gcmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("posixmodule.c", "unused-parameter", "missing-field-initializers", "implicit-function-declaration", "unused-function");
+                this.Add("errnomodule.c", "missing-field-initializers");
+                this.Add("_sre.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_codecsmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_weakref.c", "unused-parameter");
+                this.Add("_functoolsmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_operator.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_collectionsmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("itertoolsmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("atexitmodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_stat.c", "unused-parameter", "missing-field-initializers");
+                this.Add("timemodule.c", "unused-parameter", "missing-field-initializers", "unused-function");
+                this.Add("_localemodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("zipimport.c", "unused-parameter", "missing-field-initializers");
+                this.Add("faulthandler.c", "unused-parameter", "missing-field-initializers");
+                this.Add("_tracemalloc.c", "unused-parameter", "missing-field-initializers");
+                this.Add("hashtable.c", "unused-parameter");
+                this.Add("symtablemodule.c", "unused-parameter", "missing-field-initializers");
             }
         }
 
@@ -401,6 +422,13 @@ namespace Python
         {
             public PythonLibraryIO()
             {
+                this.Add("_iomodule.c", "unused-parameter", "missing-field-initializers", "overlength-strings");
+                this.Add("fileio.c", "unused-parameter", "missing-field-initializers");
+                this.Add("textio.c", "unused-parameter", "missing-field-initializers");
+                this.Add("bufferedio.c", "unused-parameter", "missing-field-initializers");
+                this.Add("iobase.c", "unused-parameter", "missing-field-initializers");
+                this.Add("bytesio.c", "unused-parameter", "missing-field-initializers");
+                this.Add("stringio.c", "unused-parameter", "missing-field-initializers");
             }
         }
     }

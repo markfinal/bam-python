@@ -1715,7 +1715,6 @@ namespace Python
                 var ModuleConfigSourceFile = Bam.Core.Graph.Instance.FindReferencedModule<ModuleConfigSourceFile>();
                 builtinModuleSource.AddFile(ModuleConfigSourceFile);
 
-#if false
                 builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
@@ -1727,7 +1726,6 @@ namespace Python
                             compiler.PreprocessorDefines.Add("VERSION", System.String.Format("\"{0}\"", Version.MajorDotMinor));
                             compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
-#endif
             }
 
             if (builtinModuleSource.Compiler is VisualCCommon.CompilerBase)
