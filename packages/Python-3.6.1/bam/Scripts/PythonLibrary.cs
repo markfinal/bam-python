@@ -292,6 +292,19 @@ namespace Python
                         }
                     }));
 
+                pythonSource["getplatform.c"].ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
+                        {
+                            compiler.PreprocessorDefines.Add("PLATFORM", "\"linux\"");
+                        }
+                        else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+                        {
+                            compiler.PreprocessorDefines.Add("PLATFORM", "\"darwin\"");
+                        }
+                    }));
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Python/*.h");
