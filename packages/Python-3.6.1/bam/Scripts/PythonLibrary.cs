@@ -275,6 +275,23 @@ namespace Python
                         }
                     }));
 
+                pythonSource["sysmodule.c"].ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        // TODO
+                        // no ABI defined, see sysconfig.py: TODO could get this from the compiler version?
+                        if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
+                        }
+                        if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
+                        }
+                    }));
+
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Python/*.h");
