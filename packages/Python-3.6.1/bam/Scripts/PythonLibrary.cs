@@ -258,6 +258,23 @@ namespace Python
                             gccCompiler.Pedantic = false; // Python-3.5.1/Python/dynload_shlib.c:82:21: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                         }
                     });
+
+                pythonSource["getargs.c"].ForEach(item =>
+                    item.PrivatePatch(settings =>
+                    {
+                        // TODO: I cannot see how else some symbols are exported with preprocessor settings
+                        // there's an error of __PyArg_ParseTuple_SizeT is not exported
+                        if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                        {
+                            gccCompiler.Visibility = GccCommon.EVisibility.Default;
+                        }
+
+                        if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
+                        {
+                            clangCompiler.Visibility = ClangCommon.EVisibility.Default;
+                        }
+                    }));
+
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Python/*.h");
