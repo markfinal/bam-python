@@ -95,7 +95,7 @@ namespace Python
                 this.Add("ast.c", "4100", "4702");
                 this.Add("ast.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("bltinmodule.c", "4100", "4204", "4706");
-                this.Add("ceval.c", "4100", "4918");
+                this.Add("ceval.c", "4100", "4918", "4702");
                 this.Add("ceval.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456", "4457");
                 this.Add("codecs.c", "4310", "4244", "4100", "4706");
                 this.Add("codecs.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
@@ -122,7 +122,7 @@ namespace Python
                 this.Add("symtable.c", "4100", "4706");
                 this.Add("symtable.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("sysmodule.c", "4100", "4706");
-                this.Add("thread.c", "4100", "4189");
+                this.Add("thread.c", "4100", "4189", "4389");
                 this.Add("traceback.c", "4100");
                 this.Add("_warnings.c", "4100");
                 this.Add("_warnings.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
@@ -187,7 +187,7 @@ namespace Python
                 this.Add("hashtable.c", "4100");
                 this.Add("symtablemodule.c", "4100");
                 this.Add("_winapi.c", "4100", "4201", "4204", "4702");
-                this.Add("msvcrtmodule.c", "4100", "4244");
+                this.Add("msvcrtmodule.c", "4100", "4244", "4310", "4311", "4312");
             }
         }
 
