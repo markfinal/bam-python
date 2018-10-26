@@ -109,21 +109,11 @@ namespace Python
                 if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
                     vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
                 {
-                    if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-                    {
-                        throw new Bam.Core.Exception("VisualStudio non-debug runtime detected, but Python was configured in Py_DEBUG mode. Inconsistent states.");
-                    }
-
                     NotPyDEBUGPatch(settings);
                 }
                 else
                 {
                     this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
-
-                    if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-                    {
-                        throw new Bam.Core.Exception("VisualStudio debug runtime detected, but Python was not configured in Py_DEBUG mode. Inconsistent states.");
-                    }
                 }
             }
         }
