@@ -2,7 +2,6 @@
 
 This repository only contains the Bam build scripts for Python:
 
-* Python-3.5.1
 * Python-3.6.1
 
 Download the [Python source](https://www.python.org/downloads/) and extract into the appropriate package directory in order to use it.
