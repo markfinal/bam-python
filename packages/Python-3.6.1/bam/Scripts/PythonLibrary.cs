@@ -68,10 +68,7 @@ namespace Python
                 var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                     (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                     (settings.Module as C.ObjectFile).Compiler;
-                if (compilerUsed.IsAtLeast(19))
-                {
-                }
-                else
+                if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2017_15_0))
                 {
                     compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                 }
@@ -112,21 +109,11 @@ namespace Python
                 if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
                     vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
                 {
-                    if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-                    {
-                        throw new Bam.Core.Exception("VisualStudio non-debug runtime detected, but Python was configured in Py_DEBUG mode. Inconsistent states.");
-                    }
-
                     NotPyDEBUGPatch(settings);
                 }
                 else
                 {
                     this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
-
-                    if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-                    {
-                        throw new Bam.Core.Exception("VisualStudio debug runtime detected, but Python was not configured in Py_DEBUG mode. Inconsistent states.");
-                    }
                 }
             }
         }
@@ -576,10 +563,7 @@ namespace Python
                             var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                                 (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                                 (settings.Module as C.ObjectFile).Compiler;
-                            if (compilerUsed.IsAtLeast(18))
-                            {
-                            }
-                            else
+                            if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2013))
                             {
                                 compiler.DisableWarnings.AddUnique("4305"); // Python-3.5.1\PC\winreg.c(885) : warning C4305: 'type cast' : truncation from 'void *' to 'DWORD'
                             }

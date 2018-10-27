@@ -45,7 +45,7 @@ namespace Python
         public ConfigurePython(
             Bam.Core.Environment buildEnvironment)
         {
-            this.PyDEBUG = false;
+            this.PyDEBUG = buildEnvironment.Configuration.HasFlag(Bam.Core.EConfiguration.Debug);
         }
 
         public bool PyDEBUG

@@ -59,19 +59,19 @@ namespace Python
                 this.Add("complexobject.c", "4100", "4701");
                 this.Add("descrobject.c", "4100");
                 this.Add("dictobject.c", "4100", "4702", "4706");
-                this.Add("dictobject.c", 19, "4456");
+                this.Add("dictobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("exceptions.c", "4100");
                 this.Add("fileobject.c", "4100", "4244");
                 this.Add("floatobject.c", "4100", "4244");
                 this.Add("frameobject.c", "4100");
                 this.Add("funcobject.c", "4100", "4244");
                 this.Add("genobject.c", "4100");
-                this.Add("genobject.c", 19, "4457");
+                this.Add("genobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("listobject.c", "4100");
                 this.Add("longobject.c", "4100", "4701");
-                this.Add("longobject.c", 19, "4456");
+                this.Add("longobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("memoryobject.c", "4100");
-                this.Add("memoryobject.c", 19, "4456");
+                this.Add("memoryobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("methodobject.c", "4100");
                 this.Add("moduleobject.c", "4100", "4152");
                 this.Add("namespaceobject.c", "4100");
@@ -81,9 +81,9 @@ namespace Python
                 this.Add("structseq.c", "4706");
                 this.Add("tupleobject.c", "4245");
                 this.Add("typeobject.c", "4204");
-                this.Add("typeobject.c", 19, "4456");
+                this.Add("typeobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("unicodeobject.c", "4127", "4310", "4389", "4701", "4702", "4706");
-                this.Add("unicodeobject.c", 19, "4456", "4457");
+                this.Add("unicodeobject.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456", "4457");
             }
         }
 
@@ -93,39 +93,39 @@ namespace Python
             public PythonLibraryPython()
             {
                 this.Add("ast.c", "4100", "4702");
-                this.Add("ast.c", 19, "4457");
+                this.Add("ast.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("bltinmodule.c", "4100", "4204", "4706");
-                this.Add("ceval.c", "4100", "4918");
-                this.Add("ceval.c", 19, "4456", "4457");
+                this.Add("ceval.c", "4100", "4918", "4702");
+                this.Add("ceval.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456", "4457");
                 this.Add("codecs.c", "4310", "4244", "4100", "4706");
-                this.Add("codecs.c", 19, "4456");
+                this.Add("codecs.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("compile.c", "4100", "4244", "4702");
-                this.Add("compile.c", 19, "4457");
+                this.Add("compile.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("dtoa.c", "4244", "4706");
                 this.Add("errors.c", "4706");
                 this.Add("fileutils.c", "4244", "4706");
                 this.Add("formatter_unicode.c", "4100");
                 this.Add("getargs.c", "4100", "4127", "4244", "4706");
-                this.Add("getargs.c", 19, "4456");
+                this.Add("getargs.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("import.c", "4100", "4706");
                 this.Add("marshal.c", "4100", "4244");
-                this.Add("marshal.c", 19, "4456");
+                this.Add("marshal.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("peephole.c", "4100", "4244", "4267");
                 this.Add("pyfpe.c", "4100");
                 this.Add("pylifecycle.c", "4100", "4210", "4706");
-                this.Add("pylifecycle.c", 19, "4456");
+                this.Add("pylifecycle.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("pystate.c", "4706");
-                this.Add("Python-ast.c", 19, "4456");
+                this.Add("Python-ast.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("pythonrun.c", "4100");
                 this.Add("pytime.c", "4100");
                 this.Add("random.c", "4100");
                 this.Add("symtable.c", "4100", "4706");
-                this.Add("symtable.c", 19, "4457");
+                this.Add("symtable.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("sysmodule.c", "4100", "4706");
-                this.Add("thread.c", "4100", "4189");
+                this.Add("thread.c", "4100", "4189", "4389");
                 this.Add("traceback.c", "4100");
                 this.Add("_warnings.c", "4100");
-                this.Add("_warnings.c", 19, "4456");
+                this.Add("_warnings.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
             }
         }
 
@@ -140,14 +140,14 @@ namespace Python
                 this.Add("_json.c", "4100", "4244");
                 this.Add("_threadmodule.c", "4100", "4706");
                 this.Add("arraymodule.c", "4100", "4127", "4244", "4152");
-                this.Add("arraymodule.c", 19, "4456");
+                this.Add("arraymodule.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("cmathmodule.c", "4100");
                 this.Add("mathmodule.c", "4100", "4701");
                 this.Add("_struct.c", "4100");
                 this.Add("pickle.c", "4100", "4127", "4702", "4706");
-                this.Add("pickle.c", 19, "4456", "4457");
+                this.Add("pickle.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456", "4457");
                 this.Add("_datetimemodule.c", "4100", "4244");
-                this.Add("_datetimemodule.c", 19, "4457");
+                this.Add("_datetimemodule.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4457");
                 this.Add("_bisectmodule.c", "4100");
                 this.Add("_heapqmodule.c", "4100");
                 this.Add("mmapmodule.c", "4100", "4057");
@@ -159,7 +159,7 @@ namespace Python
                 this.Add("sha512module.c", "4100", "4701");
                 this.Add("binascii.c", "4100", "4244");
                 this.Add("parsermodule.c", "4100");
-                this.Add("parsermodule.c", 19, "4456");
+                this.Add("parsermodule.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("zlibmodule.c", "4100", "4267", "4706");
                 this.Add("xxsubtype.c", "4100", "4152");
                 this.Add("blake2s_impl.c", "4100", "4244", "4245");
@@ -173,7 +173,7 @@ namespace Python
                 this.Add("_weakref.c", "4100");
                 this.Add("_functoolsmodule.c", "4100", "4701", "4706");
                 this.Add("_operator.c", "4100");
-                this.Add("_operator.c", 19, "4456");
+                this.Add("_operator.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("_collectionsmodule.c", "4100");
                 this.Add("itertoolsmodule.c", "4100", "4702");
                 this.Add("atexitmodule.c", "4100", "4701", "4703");
@@ -182,12 +182,12 @@ namespace Python
                 this.Add("_localemodule.c", "4100");
                 this.Add("zipimport.c", "4100", "4127");
                 this.Add("faulthandler.c", "4100", "4702", "4706");
-                this.Add("faulthandler.c", 19, "4459");
+                this.Add("faulthandler.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4459");
                 this.Add("_tracemalloc.c", "4100", "4204", "4359", "4706");
                 this.Add("hashtable.c", "4100");
                 this.Add("symtablemodule.c", "4100");
                 this.Add("_winapi.c", "4100", "4201", "4204", "4702");
-                this.Add("msvcrtmodule.c", "4100", "4244");
+                this.Add("msvcrtmodule.c", "4100", "4244", "4310", "4311", "4312");
             }
         }
 
@@ -212,13 +212,13 @@ namespace Python
             public PythonLibraryIO()
             {
                 this.Add("bufferedio.c", "4100", "4701", "4703");
-                this.Add("bufferedio.c", 19, "4456");
+                this.Add("bufferedio.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("bytesio.c", "4100");
                 this.Add("fileio.c", "4100", "4701", "4703", "4706");
                 this.Add("iobase.c", "4100");
                 this.Add("stringio.c", "4100");
                 this.Add("textio.c", "4100", "4244", "4701", "4703");
-                this.Add("textio.c", 19, "4456");
+                this.Add("textio.c", VisualCCommon.ToolchainVersion.VC2017_15_0, null, "4456");
                 this.Add("winconsoleio.c", "4100", "4189", "4389", "4701", "4703");
                 this.Add("_iomodule.c", "4100", "4706");
             }
@@ -387,7 +387,7 @@ namespace Python
                 this.Add("formatter_unicode.c", "unused-parameter");
                 this.Add("compile.c", "unused-parameter");
                 this.Add("ast.c", "unused-parameter");
-                this.Add("thread.c", "missing-field-initializers");
+                this.Add("thread.c", "missing-field-initializers", "format-pedantic");
                 this.Add("symtable.c", "unused-parameter", "missing-field-initializers");
                 this.Add("pyfpe.c", "unused-parameter");
                 this.Add("traceback.c", "unused-parameter", "missing-field-initializers");
@@ -432,7 +432,7 @@ namespace Python
                 this.Add("zipimport.c", "unused-parameter", "missing-field-initializers");
                 this.Add("faulthandler.c", "unused-parameter", "missing-field-initializers");
                 this.Add("_tracemalloc.c", "unused-parameter", "missing-field-initializers");
-                this.Add("hashtable.c", "unused-parameter");
+                this.Add("hashtable.c", "unused-parameter", "format-pedantic");
                 this.Add("symtablemodule.c", "unused-parameter", "missing-field-initializers");
             }
         }

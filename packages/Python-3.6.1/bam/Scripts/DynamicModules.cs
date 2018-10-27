@@ -281,10 +281,7 @@ namespace Python
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                             (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(19))
-                        {
-                        }
-                        else
+                        if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
                             compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                         }
@@ -338,17 +335,11 @@ namespace Python
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                             (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(19))
-                        {
-                        }
-                        else
+                        if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
                             compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                         }
-                        if (compilerUsed.IsAtLeast(18))
-                        {
-                        }
-                        else
+                        if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2013))
                         {
                             compiler.DisableWarnings.AddUnique("4306"); // Python-3.5.1\Modules\_testbuffer.c(1450) : warning C4306: 'type cast' : conversion from 'int' to 'PyObject *' of greater size
                         }
@@ -397,7 +388,7 @@ namespace Python
                         (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                         (settings.Module as C.ObjectFile).Compiler;
 
-                    if (compilerUsed.IsAtLeast(5))
+                    if (compilerUsed.Version.AtLeast(GccCommon.ToolchainVersion.GCC_5_4))
                     {
                         if (0 != (settings.Module.BuildEnvironment.Configuration & Bam.Core.EConfiguration.NotDebug))
                         {
@@ -666,10 +657,7 @@ namespace Python
                              var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                                  (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                                  (settings.Module as C.ObjectFile).Compiler;
-                             if (compilerUsed.IsAtLeast(19))
-                             {
-                             }
-                             else
+                             if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                              {
                                  compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                              }
@@ -838,10 +826,7 @@ namespace Python
                     var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                         (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                         (settings.Module as C.ObjectFile).Compiler;
-                    if (compilerUsed.IsAtLeast(19))
-                    {
-                    }
-                    else
+                    if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                     {
                         compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                     }
@@ -954,10 +939,7 @@ namespace Python
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                             (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(19))
-                        {
-                        }
-                        else
+                        if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
                             compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                         }
@@ -1071,10 +1053,7 @@ namespace Python
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
                             (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
-                        if (compilerUsed.IsAtLeast(19))
-                        {
-                        }
-                        else
+                        if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
                             compiler.DisableWarnings.AddUnique("4996"); // Python-3.5.1\Modules\socketmodule.c(6081) : warning C4996: 'GetVersion': was declared deprecated
                         }
@@ -1740,7 +1719,7 @@ namespace Python
                     var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
                     if (null != clangCompiler)
                     {
-                        if (this.moduleSourceModules.Compiler.IsAtLeast(700))
+                        if (this.moduleSourceModules.Compiler.Version.AtLeast(ClangCommon.ToolchainVersion.Xcode_7))
                         {
                             compiler.DisableWarnings.AddUnique("shift-negative-value"); // Python-3.5.1/Modules/zlib/inflate.c:1507:61: error: shifting a negative signed value is undefined [-Werror,-Wshift-negative-value]
                         }
