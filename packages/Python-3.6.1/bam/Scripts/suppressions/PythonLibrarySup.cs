@@ -387,7 +387,7 @@ namespace Python
                 this.Add("formatter_unicode.c", "unused-parameter");
                 this.Add("compile.c", "unused-parameter");
                 this.Add("ast.c", "unused-parameter");
-                this.Add("thread.c", "missing-field-initializers");
+                this.Add("thread.c", "missing-field-initializers", "format-pedantic");
                 this.Add("symtable.c", "unused-parameter", "missing-field-initializers");
                 this.Add("pyfpe.c", "unused-parameter");
                 this.Add("traceback.c", "unused-parameter", "missing-field-initializers");
@@ -432,7 +432,7 @@ namespace Python
                 this.Add("zipimport.c", "unused-parameter", "missing-field-initializers");
                 this.Add("faulthandler.c", "unused-parameter", "missing-field-initializers");
                 this.Add("_tracemalloc.c", "unused-parameter", "missing-field-initializers");
-                this.Add("hashtable.c", "unused-parameter");
+                this.Add("hashtable.c", "unused-parameter", "format-pedantic");
                 this.Add("symtablemodule.c", "unused-parameter", "missing-field-initializers");
             }
         }
