@@ -1,3 +1,0 @@
-# ignore everything other than the bam directory in each package
-*/*
-!*/bam
