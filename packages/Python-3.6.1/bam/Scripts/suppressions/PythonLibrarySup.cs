@@ -277,7 +277,7 @@ namespace Python
                 this.Add("pylifecycle.c", "unused-parameter");
                 this.Add("getargs.c", "unused-parameter");
                 this.Add("random.c", "unused-parameter", "missing-field-initializers");
-                this.Add("compile.c", "unused-parameter");
+                this.Add("compile.c", "unused-parameter", "overlength-strings");
                 this.Add("bltinmodule.c", "unused-parameter", "missing-field-initializers");
                 this.Add("_warnings.c", "unused-parameter", "missing-field-initializers");
                 this.Add("Python-ast.c", "missing-field-initializers");
@@ -285,6 +285,7 @@ namespace Python
                 this.Add("pythonrun.c", "unused-parameter");
                 this.Add("ceval.c", "unused-parameter");
                 this.Add("marshal.c", "unused-parameter", "missing-field-initializers");
+                this.Add("thread.c", "format");
             }
         }
 
@@ -312,7 +313,7 @@ namespace Python
                 this.Add("zipimport.c", "unused-parameter", "missing-field-initializers");
                 this.Add("faulthandler.c", "unused-parameter", "missing-field-initializers");
                 this.Add("_tracemalloc.c", "unused-parameter", "missing-field-initializers");
-                this.Add("hashtable.c", "unused-parameter");
+                this.Add("hashtable.c", "unused-parameter", "format");
                 this.Add("symtablemodule.c", "unused-parameter", "missing-field-initializers");
             }
         }
