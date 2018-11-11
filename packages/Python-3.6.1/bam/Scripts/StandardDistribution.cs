@@ -29,8 +29,6 @@
 #endregion // License
 using Bam.Core;
 using System.Linq;
-using System.Collections.Generic;
-
 namespace Python
 {
     class AllDynamicModules :
@@ -128,13 +126,14 @@ namespace Python
             }
         }
 
-        protected override void EvaluateInternal()
-        {
-        }
+        protected override void
+        EvaluateInternal()
+        {}
 
-        protected override void ExecuteInternal(ExecutionContext context)
-        {
-        }
+        protected override void
+        ExecuteInternal(
+            Bam.Core.ExecutionContext context)
+        {}
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -315,8 +314,7 @@ namespace Python.StandardDistribution
                         {
                             gccLinker.RPath.AddUnique("$ORIGIN/../lib");
                         }
-                        var clangLinker = settings as ClangCommon.ICommonLinkerSettings;
-                        if (null != clangLinker)
+                        if (settings is ClangCommon.ICommonLinkerSettings clangLinker)
                         {
                             clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
                         }

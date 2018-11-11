@@ -33,28 +33,9 @@ namespace Python
     public interface IPyDocSettings :
         Bam.Core.ISettingsBase
     {
-        bool DontWriteByteCode
-        {
-            get;
-            set;
-        }
-
-        string Module
-        {
-            get;
-            set;
-        }
-
-        bool WriteToCurrentDirectory
-        {
-            get;
-            set;
-        }
-
-        string ModuleToDocument
-        {
-            get;
-            set;
-        }
+        bool DontWriteByteCode { get; set; }
+        string Module { get; set; }
+        bool WriteToCurrentDirectory { get; set; }
+        string ModuleToDocument { get; set; }
     }
 }

@@ -44,21 +44,8 @@ namespace Python
             this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in"));
         }
 
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders/ffi.h");
-            }
-        }
-
-        protected override string GuardString
-        {
-            get
-            {
-                return null; // the template file already has one
-            }
-        }
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders/ffi.h");
+        protected override string GuardString => null; // the template file already has one
 
         protected override string Contents
         {
@@ -92,13 +79,7 @@ namespace Python
             base.Init(parent);
         }
 
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/fficonfig.h"); // not public
-            }
-        }
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/fficonfig.h"); // not public
 
         protected override string Contents
         {
@@ -132,8 +113,7 @@ namespace Python
 
             this.PublicPatch((settings, appliedTo) =>
                 {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    if (null != compiler)
+                    if (settings is C.ICommonCompilerSettings compiler)
                     {
                         compiler.IncludePaths.AddUnique(publishRoot);
                     }
@@ -199,14 +179,13 @@ namespace Python
                 var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/ffi.c");
                 ffi.First().PrivatePatch(settings =>
                     {
-                        var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                        if (null != clangCompiler)
+                        if (settings is ClangCommon.ICommonCompilerSettings)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/_ctypes/libffi_osx/ffi.c:108:1: error: unused function 'struct_on_stack' [-Werror,-Wunused-function]
                         }
                     });
-                    if (this.BitDepth == C.EBit.ThirtyTwo)
+                if (this.BitDepth == C.EBit.ThirtyTwo)
                 {
                     source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin.c");
                     asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-darwin.S");
@@ -222,8 +201,7 @@ namespace Python
                 var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/ffi.c");
                 ffi.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(293): warning C4244: '=': conversion from 'unsigned int' to 'unsigned short', possible loss of data
@@ -234,8 +212,7 @@ namespace Python
                 var prep_cif = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/prep_cif.c");
                 prep_cif.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
@@ -246,8 +223,7 @@ namespace Python
                     var win32 = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/win32.c");
                     win32.First().PrivatePatch(settings =>
                         {
-                            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                            if (null != vcCompiler)
+                            if (settings is VisualCCommon.ICommonCompilerSettings)
                             {
                                 var compiler = settings as C.ICommonCompilerSettings;
                                 compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\win32.c(46): warning C4100: 'fn': unreferenced formal parameter
@@ -262,8 +238,7 @@ namespace Python
 
             source.PrivatePatch(settings =>
                 {
-                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                    if (null != gccCompiler)
+                    if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                     {
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
@@ -285,8 +260,7 @@ namespace Python
                         gccCompiler.PositionIndependentCode = true; // since it's being included into a dynamic library
                     }
 
-                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                    if (null != clangCompiler)
+                    if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                     {
                         clangCompiler.AllWarnings = true;
                         clangCompiler.ExtraWarnings = true;
@@ -299,8 +273,7 @@ namespace Python
                         cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
                     }
 
-                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != vcCompiler)
+                    if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                     {
                         vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
                     }
@@ -308,8 +281,7 @@ namespace Python
 
             asmSource.PrivatePatch(settings =>
                 {
-                    var gccAssembler = settings as GccCommon.ICommonAssemblerSettings;
-                    if (null != gccAssembler)
+                    if (settings is GccCommon.ICommonAssemblerSettings)
                     {
                         var assembler = settings as C.ICommonAssemblerSettings;
                         assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
@@ -319,8 +291,7 @@ namespace Python
                         }
                     }
 
-                    var clangAssembler = settings as ClangCommon.ICommonAssemblerSettings;
-                    if (null != clangAssembler)
+                    if (settings is ClangCommon.ICommonAssemblerSettings)
                     {
                         var assembler = settings as C.ICommonAssemblerSettings;
                         assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
@@ -330,8 +301,7 @@ namespace Python
 
             this.PublicPatch((settings, appliedTo) =>
                 {
-                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                    if (null != clangCompiler)
+                    if (settings is ClangCommon.ICommonCompilerSettings)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
@@ -339,8 +309,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("comment"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:74:8: error: // comments are not allowed in this language [-Werror,-Wcomment]
                         compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
                     }
-                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != vcCompiler)
+                    if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));

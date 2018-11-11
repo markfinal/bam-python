@@ -33,26 +33,16 @@ namespace Python
     interface IConfigurePython :
         Bam.Core.IModuleConfiguration
     {
-        bool PyDEBUG
-        {
-            get;
-        }
+        bool PyDEBUG { get; }
     }
 
     sealed class ConfigurePython :
         IConfigurePython
     {
         public ConfigurePython(
-            Bam.Core.Environment buildEnvironment)
-        {
-            this.PyDEBUG = buildEnvironment.Configuration.HasFlag(Bam.Core.EConfiguration.Debug);
-        }
+            Bam.Core.Environment buildEnvironment) => this.PyDEBUG = buildEnvironment.Configuration.HasFlag(Bam.Core.EConfiguration.Debug);
 
-        public bool PyDEBUG
-        {
-            get;
-            set;
-        }
+        public bool PyDEBUG { get; set; }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -60,29 +50,9 @@ namespace Python
         C.ProceduralHeaderFile,
         Bam.Core.IHasModuleConfiguration
     {
-        System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
-        {
-            get
-            {
-                return typeof(IConfigurePython);
-            }
-        }
-
-        System.Type IHasModuleConfiguration.WriteableClassType
-        {
-            get
-            {
-                return typeof(ConfigurePython);
-            }
-        }
-
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/pyconfig.h");
-            }
-        }
+        System.Type Bam.Core.IHasModuleConfiguration.ReadOnlyInterfaceType => typeof(IConfigurePython);
+        System.Type Bam.Core.IHasModuleConfiguration.WriteableClassType => typeof(ConfigurePython);
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/pyconfig.h");
 
         protected override string Contents
         {
@@ -166,8 +136,7 @@ namespace Python
                 contents.AppendLine("#define PyMODINIT_FUNC extern __attribute__ ((visibility(\"default\"))) PyObject*");
                 contents.AppendLine("#endif");
                 contents.AppendLine("#define HAVE_DYNAMIC_LOADING");
-                contents.AppendFormat("#define SOABI \"{0}\"", Version.SOABI);
-                contents.AppendLine();
+                contents.AppendLine($"#define SOABI \"{Version.SOABI}\"");
                 contents.AppendLine("#define HAVE_DLFCN_H");
                 contents.AppendLine("#define HAVE_DLOPEN");
                 contents.AppendLine("#define HAVE_DECL_RTLD_LAZY 1");

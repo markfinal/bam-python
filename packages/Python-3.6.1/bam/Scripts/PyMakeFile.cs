@@ -34,29 +34,8 @@ namespace Python
     class PyMakeFile :
         C.ProceduralHeaderFile
     {
-        protected override void
-        Init(
-            Bam.Core.Module parent)
-        {
-            base.Init(parent);
-        }
-
-        protected override string GuardString
-        {
-            get
-            {
-                // no guard in a MakeFile
-                return null;
-            }
-        }
-
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/Makefile");
-            }
-        }
+        protected override string GuardString => null; // no guard in a MakeFile
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/Makefile");
 
         protected override string Contents
         {

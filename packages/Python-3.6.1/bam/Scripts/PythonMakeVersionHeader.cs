@@ -27,58 +27,35 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
-using Bam.Core;
 namespace Python
 {
     interface IConfigurePythonResourceHeader :
         Bam.Core.IModuleConfiguration
     {
-        bool DebugCRT
-        {
-            get;
-        }
+        bool DebugCRT { get; }
     }
 
     sealed class ConfigurePythonResourceHeader :
         IConfigurePythonResourceHeader
     {
         public ConfigurePythonResourceHeader(
-            Bam.Core.Environment buildEnvironment)
-        {
-            this.DebugCRT = false;
-        }
+            Bam.Core.Environment buildEnvironment) => this.DebugCRT = false;
 
-        public bool DebugCRT
-        {
-            get;
-            set;
-        }
+        public bool DebugCRT { get; set; }
     }
 
+    // in order to run a private patch
     class EmptySettings :
         Bam.Core.Settings
-    { }
+    {}
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     class PythonMakeVersionHeader :
         C.ProceduralHeaderFile,
         Bam.Core.IHasModuleConfiguration
     {
-        System.Type IHasModuleConfiguration.ReadOnlyInterfaceType
-        {
-            get
-            {
-                return typeof(IConfigurePythonResourceHeader);
-            }
-        }
-
-        System.Type IHasModuleConfiguration.WriteableClassType
-        {
-            get
-            {
-                return typeof(ConfigurePythonResourceHeader);
-            }
-        }
+        System.Type Bam.Core.IHasModuleConfiguration.ReadOnlyInterfaceType => typeof(IConfigurePythonResourceHeader);
+        System.Type Bam.Core.IHasModuleConfiguration.WriteableClassType => typeof(ConfigurePythonResourceHeader);
 
         protected override void
         Init(
@@ -88,34 +65,25 @@ namespace Python
             this.Settings = new EmptySettings(); // in order to run a private patch
         }
 
-        protected override TokenizedString OutputPath
-        {
-            get
-            {
-                return this.CreateTokenizedString("$(packagebuilddir)/$(config)/pythonnt_rc.h");
-            }
-        }
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/pythonnt_rc.h");
 
         protected override string Contents
         {
             get
             {
                 var contents = new System.Text.StringBuilder();
-                contents.AppendFormat("#define FIELD3 {0}", Version.Field3);
-                contents.AppendLine();
-                contents.AppendFormat("#define MS_DLL_ID \"{0}\"", Version.MajorDotMinor);
-                contents.AppendLine();
+                contents.AppendLine($"#define FIELD3 {Version.Field3}");
+                contents.AppendLine($"#define MS_DLL_ID \"{Version.MajorDotMinor}\"");
 
                 var useDebugCRT = (this.Configuration as IConfigurePythonResourceHeader).DebugCRT;
                 if (useDebugCRT)
                 {
-                    contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsDebugOutputName);
+                    contents.AppendLine($"#define PYTHON_DLL_NAME \"{Version.WindowsDebugOutputName}.dll\"");
                 }
                 else
                 {
-                    contents.AppendFormat("#define PYTHON_DLL_NAME \"{0}.dll\"", Version.WindowsOutputName);
+                    contents.AppendLine($"#define PYTHON_DLL_NAME \"{Version.WindowsOutputName}.dll\"");
                 }
-                contents.AppendLine();
                 return contents.ToString();
             }
         }

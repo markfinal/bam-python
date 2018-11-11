@@ -61,21 +61,18 @@ namespace Python
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                     }
 
-                    var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != visualcCompiler)
+                    if (settings is VisualCCommon.ICommonCompilerSettings visualcCompiler)
                     {
                         // warnings in pyhash.h and pytime.h
                         visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level3;
                     }
-                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                    if (null != gccCompiler)
+                    if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                     {
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = false;
                     }
-                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                    if (null != clangCompiler)
+                    if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                     {
                         clangCompiler.AllWarnings = true;
                         clangCompiler.ExtraWarnings = true;
@@ -93,62 +90,15 @@ namespace Python
 
         public Bam.Core.Settings
         CreateDefaultSettings<T>(
-            T module) where T : Bam.Core.Module
-        {
-            return new PyDocSettings(this); // TODO: currently, only pydoc is support, but this should be more generic, or not have any settings at all
-        }
+            T module) where T : Bam.Core.Module => new PyDocSettings(this); // TODO: currently, only pydoc is support, but this should be more generic, or not have any settings at all
 
-        public System.Collections.Generic.Dictionary<string, Bam.Core.TokenizedStringArray> EnvironmentVariables
-        {
-            get;
-            private set;
-        }
-
-        public Bam.Core.StringArray InheritedEnvironmentVariables
-        {
-            get;
-            private set;
-        }
-
-        public Bam.Core.TokenizedString Executable
-        {
-            get
-            {
-                return this.GeneratedPaths[C.ConsoleApplication.ExecutableKey];
-            }
-        }
-
-        public Bam.Core.TokenizedStringArray InitialArguments
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public Bam.Core.TokenizedStringArray TerminatingArguments
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public string UseResponseFileOption
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public Bam.Core.Array<int> SuccessfulExitCodes
-        {
-            get
-            {
-                return new Bam.Core.Array<int> { 0 };
-            }
-        }
+        public System.Collections.Generic.Dictionary<string, Bam.Core.TokenizedStringArray> EnvironmentVariables { get; private set; }
+        public Bam.Core.StringArray InheritedEnvironmentVariables { get; private set; }
+        public Bam.Core.TokenizedString Executable => this.GeneratedPaths[C.ConsoleApplication.ExecutableKey];
+        public Bam.Core.TokenizedStringArray InitialArguments => null;
+        public Bam.Core.TokenizedStringArray TerminatingArguments => null;
+        public string UseResponseFileOption => null;
+        public Bam.Core.Array<int> SuccessfulExitCodes => new Bam.Core.Array<int> { 0 };
     }
 
     class ShellRuntime :

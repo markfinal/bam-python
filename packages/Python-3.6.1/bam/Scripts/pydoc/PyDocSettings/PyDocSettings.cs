@@ -35,38 +35,19 @@ namespace Python
         IPyDocSettings
     {
         public PyDocSettings(
-            Bam.Core.Module module)
-        {
-            this.InitializeAllInterfaces(module, true, true);
-        }
+            Bam.Core.Module module) => this.InitializeAllInterfaces(module, true, true);
 
         [CommandLineProcessor.Bool("-B", "")]
-        bool IPyDocSettings.DontWriteByteCode
-        {
-            get;
-            set;
-        }
+        bool IPyDocSettings.DontWriteByteCode { get; set; }
 
         [CommandLineProcessor.String("-m ")]
-        string IPyDocSettings.Module
-        {
-            get;
-            set;
-        }
+        string IPyDocSettings.Module { get; set; }
 
         [CommandLineProcessor.Bool("-w", "")]
-        bool IPyDocSettings.WriteToCurrentDirectory
-        {
-            get;
-            set;
-        }
+        bool IPyDocSettings.WriteToCurrentDirectory { get; set; }
 
         [CommandLineProcessor.String("")]
-        string IPyDocSettings.ModuleToDocument
-        {
-            get;
-            set;
-        }
+        string IPyDocSettings.ModuleToDocument { get; set; }
 
         public override void AssignFileLayout()
         {
