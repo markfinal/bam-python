@@ -27,7 +27,6 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
-using Bam.Core;
 namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
@@ -50,8 +49,7 @@ namespace Python
 
             this.PublicPatch((settings, appliedTo) =>
                 {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    if (null != compiler)
+                    if (settings is C.ICommonCompilerSettings compiler)
                     {
                         compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagebuilddir)/$(config)"));
                     }
@@ -73,7 +71,7 @@ namespace Python
         }
 
         private void
-        insertBuiltinModules(
+        InsertBuiltinModules(
             ref string configText)
         {
             var declarations = new System.Text.StringBuilder();
@@ -147,7 +145,7 @@ namespace Python
 
         protected override void
         ExecuteInternal(
-            ExecutionContext context)
+            Bam.Core.ExecutionContext context)
         {
             var destPath = this.GeneratedPaths[SourceFileKey].ToString();
             var destDir = System.IO.Path.GetDirectoryName(destPath);
@@ -162,13 +160,13 @@ namespace Python
             // and separate in the distribution
             // note that you need to read Setup.dist backward, as some modules are mentioned twice
             // and it is the 'topmost' that overrules
-            insertBuiltinModules(ref stubText);
+            InsertBuiltinModules(ref stubText);
             using (System.IO.TextWriter writeFile = new System.IO.StreamWriter(destPath))
             {
                 writeFile.NewLine = "\n";
                 writeFile.Write(stubText);
             }
-            Bam.Core.Log.MessageAll("Written '{0}'", destPath);
+            Bam.Core.Log.MessageAll($"Written '{destPath}'");
         }
     }
 }

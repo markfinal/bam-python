@@ -34,13 +34,13 @@ namespace Python
     class DynamicExtensionModule :
         C.Plugin
     {
-        private string ModuleName;
-        private Bam.Core.StringArray SourceFiles;
-        private Bam.Core.StringArray LibsToLink;
-        private Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
-        private Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
-        private Bam.Core.StringArray AssemblerFiles;
-        private Bam.Core.Module.PrivatePatchDelegate AssemblerPatch;
+        private readonly string ModuleName;
+        private readonly Bam.Core.StringArray SourceFiles;
+        private readonly Bam.Core.StringArray LibsToLink;
+        private readonly Bam.Core.Module.PrivatePatchDelegate CompilationPatch;
+        private readonly Bam.Core.Module.PrivatePatchDelegate LinkerPatch;
+        private readonly Bam.Core.StringArray AssemblerFiles;
+        private readonly Bam.Core.Module.PrivatePatchDelegate AssemblerPatch;
 
         protected C.CObjectFileCollection moduleSourceModules;
 
@@ -147,25 +147,21 @@ namespace Python
                     compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
                     var cCompiler = settings as C.ICOnlyCompilerSettings;
                     cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
-                    var winCompiler = settings as C.ICommonCompilerSettingsWin;
-                    if (null != winCompiler)
+                    if (settings is C.ICommonCompilerSettingsWin winCompiler)
                     {
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
                     }
-                    var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != visualcCompiler)
+                    if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                     {
-                        visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
+                        vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
                     }
-                    var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                    if (null != gccCompiler)
+                    if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                     {
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = true;
                     }
-                    var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-                    if (null != clangCompiler)
+                    if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                     {
                         clangCompiler.AllWarnings = true;
                         clangCompiler.ExtraWarnings = true;
@@ -182,7 +178,7 @@ namespace Python
                 var assemblerSource = this.CreateAssemblerSourceContainer();
                 foreach (var leafname in this.AssemblerFiles)
                 {
-                    assemblerSource.AddFiles(System.String.Format("$(packagedir)/{0}", leafname));
+                    assemblerSource.AddFiles($"$(packagedir)/{leafname}");
                 }
                 if (null != this.AssemblerPatch)
                 {

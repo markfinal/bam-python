@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageDefinition xsi:schemaLocation="http://www.buildamation.com ./Schema/BamPackageDefinitionV1.xsd" name="Python" version="3.6.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.buildamation.com">
   <Description>Python 3.6.1</Description>
+  <Sources>
+    <Source type="http" path="https://www.python.org/ftp/python/3.6.1/Python-3.6.1.tgz" subdir="Python-3.6.1" />
+  </Sources>
   <Dependents>
     <Package name="C" />
     <Package name="Clang" version="Xcode4" />

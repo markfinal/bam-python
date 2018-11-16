@@ -36,14 +36,7 @@ namespace Python
     class PythonLibrary :
         C.DynamicLibrary
     {
-        public Bam.Core.TokenizedString
-        LibraryDirectory
-        {
-            get
-            {
-                return this.Macros["PythonLibDirectory"];
-            }
-        }
+        public Bam.Core.TokenizedString LibraryDirectory => this.Macros["PythonLibDirectory"];
 
         private void
         CoreBuildPatch(
@@ -54,13 +47,11 @@ namespace Python
             compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
             var cCompiler = settings as C.ICOnlyCompilerSettings;
             cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
-            var winCompiler = settings as C.ICommonCompilerSettingsWin;
-            if (null != winCompiler)
+            if (settings is C.ICommonCompilerSettingsWin winCompiler)
             {
                 winCompiler.CharacterSet = C.ECharacterSet.NotSet;
             }
-            var visualcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-            if (null != visualcCompiler)
+            if (settings is VisualCCommon.ICommonCompilerSettings visualcCompiler)
             {
                 visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
 
@@ -73,15 +64,13 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                 }
             }
-            var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-            if (null != gccCompiler)
+            if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
             {
                 gccCompiler.AllWarnings = true;
                 gccCompiler.ExtraWarnings = true;
                 gccCompiler.Pedantic = true;
             }
-            var clangCompiler = settings as ClangCommon.ICommonCompilerSettings;
-            if (null != clangCompiler)
+            if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
             {
                 clangCompiler.AllWarnings = true;
                 clangCompiler.ExtraWarnings = true;
@@ -101,8 +90,7 @@ namespace Python
         VCNotPyDEBUGClosingPatch(
             Bam.Core.Settings settings)
         {
-            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-            if (null != vcCompiler)
+            if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
             {
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>(settings.Module.BuildEnvironment);
 
@@ -122,8 +110,7 @@ namespace Python
         WinNotUnicodePatch(
             Bam.Core.Settings settings)
         {
-            var winCompiler = settings as C.ICommonCompilerSettingsWin;
-            if (null != winCompiler)
+            if (settings is C.ICommonCompilerSettingsWin winCompiler)
             {
                 winCompiler.CharacterSet = C.ECharacterSet.NotSet;
             }
@@ -157,15 +144,13 @@ namespace Python
                         {
                             compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
 
-                            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                            if (null != vcCompiler)
+                            if (settings is VisualCCommon.ICommonCompilerSettings)
                             {
                                 compiler.DisableWarnings.AddUnique("4115"); // python-3.5.1\include\pytime.h(112): warning C4115: 'timeval': named type definition in parentheses
                             }
                         }
 
-                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                        if (null != gccCompiler)
+                        if (settings is GccCommon.ICommonCompilerSettings)
                         {
                             compiler.DisableWarnings.AddUnique("long-long"); // Python-3.5.1/Include/pyport.h:58:27: error: ISO C90 does not support 'long long' [-Werror=long-long]
                         }
@@ -218,8 +203,7 @@ namespace Python
                 var dynload = pythonSource.AddFiles("$(packagedir)/Python/dynload_win.c");
                 dynload.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Python\dynload_win.c(191): warning C4100: 'fp': unreferenced formal parameter
@@ -239,8 +223,7 @@ namespace Python
                 var dynload = pythonSource.AddFiles("$(packagedir)/Python/dynload_shlib.c");
                 dynload.First().PrivatePatch(settings =>
                     {
-                        var gccCompiler = settings as GccCommon.ICommonCompilerSettings;
-                        if (null != gccCompiler)
+                        if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                         {
                             gccCompiler.Pedantic = false; // Python-3.5.1/Python/dynload_shlib.c:82:21: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                         }
@@ -455,7 +438,7 @@ namespace Python
                             compiler.PreprocessorDefines.Add("PREFIX", "\".\"");
                             compiler.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
                             compiler.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC, so does it need moving?
-                            compiler.PreprocessorDefines.Add("VERSION", System.String.Format("\"{0}\"", Version.MajorDotMinor));
+                            compiler.PreprocessorDefines.Add("VERSION", $"\"{Version.MajorDotMinor}\"");
                             compiler.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
             }
@@ -516,8 +499,7 @@ namespace Python
                 pcSource["dl_nt.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
-                            var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                            if (null != vcCompiler)
+                            if (settings is VisualCCommon.ICommonCompilerSettings)
                             {
                                 var compiler = settings as C.ICommonCompilerSettings;
                                 compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\dl_nt.c(90): warning C4100: 'lpReserved': unreferenced formal parameter
@@ -533,8 +515,7 @@ namespace Python
                 var getpathp = pcSource.AddFiles("$(packagedir)/PC/getpathp.c");
                 getpathp.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\PC\getpathp.c(144): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
@@ -547,8 +528,7 @@ namespace Python
                 var winreg = pcSource.AddFiles("$(packagedir)/PC/winreg.c");
                 winreg.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4311"); // Python-3.5.1\PC\winreg.c(885): warning C4311: 'type cast': pointer truncation from 'void *' to 'DWORD'
@@ -572,8 +552,7 @@ namespace Python
                 var invalid_parameter_handle = pcSource.AddFiles("$(packagedir)/PC/invalid_parameter_handler.c"); // required by VS2015+
                 invalid_parameter_handle.First().PrivatePatch(settings =>
                     {
-                        var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                        if (null != vcCompiler)
+                        if (settings is VisualCCommon.ICommonCompilerSettings)
                         {
                             var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\invalid_parameter_handler.c(16): warning C4100: 'pReserved': unreferenced formal parameter

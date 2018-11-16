@@ -27,7 +27,6 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
-using Bam.Core;
 namespace Python
 {
     static public class Version
@@ -36,60 +35,12 @@ namespace Python
         static public readonly string Minor = "6";
         static public readonly string Patch = "1";
 
-        static public string SOABI
-        {
-            get
-            {
-                return System.String.Format("cpython-{0}{1}", Major, Minor);
-            }
-        }
-
-        static public string NixOutputName
-        {
-            get
-            {
-                return "python";
-            }
-        }
-
-        static public string WindowsOutputName
-        {
-            get
-            {
-                return System.String.Format("python{0}{1}", Major, Minor);
-            }
-        }
-
-        static public string WindowsDebugOutputName
-        {
-            get
-            {
-                return System.String.Format("python{0}{1}_d", Major, Minor);
-            }
-        }
-
-        static public string MajorMinor
-        {
-            get
-            {
-                return System.String.Format("{0}{1}", Major, Minor);
-            }
-        }
-
-        static public string MajorDotMinor
-        {
-            get
-            {
-                return System.String.Format("{0}.{1}", Major, Minor);
-            }
-        }
-
-        static public string Field3
-        {
-            get
-            {
-                return "1150"; // // using PCBuild/build.bat -V
-            }
-        }
+        static public string SOABI => $"cpython-{Major}{Minor}";
+        static public string NixOutputName => "python";
+        static public string WindowsOutputName => $"python{Major}{Minor}";
+        static public string WindowsDebugOutputName => $"python{Major}{Minor}_d";
+        static public string MajorMinor => $"{Major}{Minor}";
+        static public string MajorDotMinor => $"{Major}.{Minor}";
+        static public string Field3 => "1150"; // // using PCBuild/build.bat -V
     }
 }
