@@ -42,9 +42,9 @@ namespace Python
         CoreBuildPatch(
             Bam.Core.Settings settings)
         {
-            var compiler = settings as C.ICommonCompilerSettings;
-            compiler.PreprocessorDefines.Add("Py_BUILD_CORE");
-            compiler.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+            var preprocessor = settings as C.ICommonPreprocessorSettings;
+            preprocessor.PreprocessorDefines.Add("Py_BUILD_CORE");
+            preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
             var cCompiler = settings as C.ICOnlyCompilerSettings;
             cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
             if (settings is C.ICommonCompilerSettingsWin winCompiler)
@@ -61,6 +61,7 @@ namespace Python
                     (settings.Module as C.ObjectFile).Compiler;
                 if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2017_15_0))
                 {
+                    var compiler = settings as C.ICommonCompilerSettings;
                     compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
                 }
             }
@@ -82,8 +83,8 @@ namespace Python
         NotPyDEBUGPatch(
             Bam.Core.Settings settings)
         {
-            var compiler = settings as C.ICommonCompilerSettings;
-            compiler.PreprocessorDefines.Add("NDEBUG"); // ignore asserts, which depend on Py_DEBUG
+            var preprocessor = settings as C.ICommonPreprocessorSettings;
+            preprocessor.PreprocessorDefines.Add("NDEBUG"); // ignore asserts, which depend on Py_DEBUG
         }
 
         private void
@@ -136,13 +137,13 @@ namespace Python
 
             this.PublicPatch((settings, appliedTo) =>
                 {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    if (null != compiler)
+                    if (settings is C.ICommonCompilerSettings compiler)
                     {
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                         {
-                            compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                            preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
 
                             if (settings is VisualCCommon.ICommonCompilerSettings)
                             {
@@ -252,27 +253,27 @@ namespace Python
                         // no ABI defined, see sysconfig.py: TODO could get this from the compiler version?
                         if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                         {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
+                            var preprocessor = settings as C.ICommonPreprocessorSettings;
+                            preprocessor.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
                         }
                         if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                         {
-                            var compiler = settings as C.ICommonCompilerSettings;
-                            compiler.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
+                            var preprocessor = settings as C.ICommonPreprocessorSettings;
+                            preprocessor.PreprocessorDefines.Add("ABIFLAGS", "\"\"");
                         }
                     }));
 
                 pythonSource["getplatform.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
                         {
-                            compiler.PreprocessorDefines.Add("PLATFORM", "\"linux\"");
+                            preprocessor.PreprocessorDefines.Add("PLATFORM", "\"linux\"");
                         }
                         else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
                         {
-                            compiler.PreprocessorDefines.Add("PLATFORM", "\"darwin\"");
+                            preprocessor.PreprocessorDefines.Add("PLATFORM", "\"darwin\"");
                         }
                     }));
             }
@@ -343,9 +344,9 @@ namespace Python
                 var zlibmodule = builtinModuleSource.AddFiles("$(packagedir)/Modules/zlibmodule.c");
                 zlibmodule.First().PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
 #if !PYTHON_USE_ZLIB_PACKAGE
-                        compiler.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.Add(this.CreateTokenizedString("$(packagedir)/Modules/zlib")); // for zlib.h
 #endif
                     });
 
@@ -395,18 +396,17 @@ namespace Python
             _io["_iomodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                 {
-                    var vcCompiler = settings as VisualCCommon.ICommonCompilerSettings;
-                    if (null != vcCompiler)
+                    if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
                         // C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um\winnt.h(154): fatal error C1189: #error:  "No Target Architecture"
                         if (Bam.Core.OSUtilities.Is64Bit(item.BuildEnvironment.Platform))
                         {
-                            compiler.PreprocessorDefines.Add("_AMD64_");
+                            preprocessor.PreprocessorDefines.Add("_AMD64_");
                         }
                         else
                         {
-                            compiler.PreprocessorDefines.Add("_X86_");
+                            preprocessor.PreprocessorDefines.Add("_X86_");
                         }
                     }
                 }));
@@ -433,13 +433,13 @@ namespace Python
                 builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
-                            var compiler = settings as C.ICommonCompilerSettings;
+                            var preprocessor = settings as C.ICommonPreprocessorSettings;
                             // TODO: these should be configurables
-                            compiler.PreprocessorDefines.Add("PREFIX", "\".\"");
-                            compiler.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
-                            compiler.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC, so does it need moving?
-                            compiler.PreprocessorDefines.Add("VERSION", $"\"{Version.MajorDotMinor}\"");
-                            compiler.PreprocessorDefines.Add("VPATH", "\".\"");
+                            preprocessor.PreprocessorDefines.Add("PREFIX", "\".\"");
+                            preprocessor.PreprocessorDefines.Add("EXEC_PREFIX", "\".\"");
+                            preprocessor.PreprocessorDefines.Add("PYTHONPATH", "\".:./lib-dynload\""); // TODO: this was in pyconfig.h for PC, so does it need moving?
+                            preprocessor.PreprocessorDefines.Add("VERSION", $"\"{Version.MajorDotMinor}\"");
+                            preprocessor.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
             }
 
@@ -508,8 +508,8 @@ namespace Python
                 var pcConfig = pcSource.AddFiles("$(packagedir)/PC/config.c");
                 pcConfig.First().PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("WIN32"); // required to register two extension modules
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("WIN32"); // required to register two extension modules
                     });
                 //pcSource.AddFiles("$(packagedir)/PC/frozen_dllmain.c");
                 var getpathp = pcSource.AddFiles("$(packagedir)/PC/getpathp.c");

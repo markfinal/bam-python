@@ -113,9 +113,9 @@ namespace Python
 
             this.PublicPatch((settings, appliedTo) =>
                 {
-                    if (settings is C.ICommonCompilerSettings compiler)
+                    if (settings is C.ICommonPreprocessorSettings preprocessor)
                     {
-                        compiler.IncludePaths.AddUnique(publishRoot);
+                        preprocessor.IncludePaths.AddUnique(publishRoot);
                     }
                 });
 
@@ -244,8 +244,9 @@ namespace Python
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi/src/x86/ffi.c:867:0: error: ISO C forbids an empty translation unit [-Werror=pedantic]
 
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("empty-body"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("sign-compare"); // Python-3.5.1/Modules/_ctypes/libffi/src/debug.c:50:30: error: unused parameter 'a' [-Werror=unused-parameter]
@@ -266,8 +267,8 @@ namespace Python
                         clangCompiler.ExtraWarnings = true;
                         clangCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/libffi_osx/x86/x86-ffi64.c:602:30: error: assigning to 'void *volatile' from 'void (void)' converts between void pointer and function pointer [-Werror,-Wpedantic]
 
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("MACOSX");
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("MACOSX");
 
                         var cOnly = settings as C.ICOnlyCompilerSettings;
                         cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
@@ -303,16 +304,17 @@ namespace Python
                 {
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        preprocessor.PreprocessorDefines.Add("MACOSX");
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
-                        compiler.PreprocessorDefines.Add("MACOSX");
                         compiler.DisableWarnings.AddUnique("comment"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:74:8: error: // comments are not allowed in this language [-Werror,-Wcomment]
                         compiler.DisableWarnings.AddUnique("newline-eof"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:88:34: error: no newline at end of file [-Werror,-Wnewline-eof]
                     }
                     if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                     }
                 });
         }

@@ -54,15 +54,17 @@ namespace Python
                     }
                     if (settings is GccCommon.ICommonCompilerSettings)
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("HAVE_SEM_OPEN");
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("HAVE_SEM_OPEN");
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:335:48: error: unused parameter 'args' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:653:1: error: missing initializer for field 'tp_free' of 'PyTypeObject' [-Werror=missing-field-initializers]
                     }
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("POSIX_SEMAPHORES_NOT_ENABLED"); // macOS does not support semaphores
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("POSIX_SEMAPHORES_NOT_ENABLED"); // macOS does not support semaphores
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:158:31: error: unused variable 'value' [-Werror,-Wunused-variable]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:134:10: error: missing field 'ml_meth' initializer [-Werror,-Wmissing-field-initializers]
                         compiler.DisableWarnings.AddUnique("unused-variable"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:158:31: error: unused variable 'value' [-Werror,-Wunused-variable]
@@ -91,8 +93,9 @@ namespace Python
                  new Bam.Core.StringArray("Modules/_sqlite/*"),
                  settings =>
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("MODULE_NAME", "\"sqlite3\"");
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("MODULE_NAME", "\"sqlite3\"");
                         if (settings is VisualCCommon.ICommonCompilerSettings)
                         {
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_sqlite\cache.c(57): warning C4100: 'kwargs': unreferenced formal parameter
@@ -600,11 +603,12 @@ namespace Python
                  new Bam.Core.StringArray("Modules/_elementtree"),
                  settings =>
                      {
-                         var compiler = settings as C.ICommonCompilerSettings;
-                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
-                         compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
-                         compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
+                         var preprocessor = settings as C.ICommonPreprocessorSettings;
+                         preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
+                         preprocessor.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
 
+                         var compiler = settings as C.ICommonCompilerSettings;
                          if (settings is VisualCCommon.ICommonCompilerSettings)
                          {
                              compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_elementtree.c(315): warning C4100: 'kwds': unreferenced formal parameter
@@ -976,8 +980,9 @@ namespace Python
                 {
                     if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.PreprocessorDefines.Add("_WINSOCK_DEPRECATED_NO_WARNINGS");
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.PreprocessorDefines.Add("_WINSOCK_DEPRECATED_NO_WARNINGS");
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\socketmodule.c(1134): warning C4100: 'proto': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4245"); // Python-3.5.1\Modules\socketmodule.c(1388): warning C4245: '=': conversion from 'int' to 'std::size_t', signed/unsigned mismatch
                         compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\socketmodule.c(1597): warning C4244: '=': conversion from 'int' to 'ADDRESS_FAMILY', possible loss of data
@@ -1619,9 +1624,10 @@ namespace Python
             this.moduleSourceModules["zlibmodule"].ForEach(item =>
                 item.PrivatePatch(settings =>
                     {
-                        var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/zlib"));
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/zlib"));
 
+                        var compiler = settings as C.ICommonCompilerSettings;
                         if (settings is GccCommon.ICommonCompilerSettings)
                         {
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/clinic/zlibmodule.c.h:26:5: error: missing initializer for field 'len' of 'Py_buffer' [-Werror=missing-field-initializers]
@@ -1692,14 +1698,15 @@ namespace Python
                  new Bam.Core.StringArray("Modules/expat/xmlparse", "Modules/expat/xmlrole", "Modules/expat/xmltok", "Modules/pyexpat"),
                  settings =>
                      {
-                         var compiler = settings as C.ICommonCompilerSettings;
-                         compiler.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
-                         compiler.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
-                         compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         var preprocessor = settings as C.ICommonPreprocessorSettings;
+                         preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
+                         preprocessor.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
+                         preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
                          if (settings is VisualCCommon.ICommonCompilerSettings)
                          {
-                             compiler.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
-                             compiler.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
+                             preprocessor.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
+                             preprocessor.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
+                             var compiler = settings as C.ICommonCompilerSettings;
                              compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\pyexpat.c(18): warning C4232: nonstandard extension used: 'malloc_fcn': address of dllimport 'PyObject_Malloc' is not static, identity not guaranteed
                              compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\expat\xmlparse.c(4916): warning C4100: 'nextPtr': unreferenced formal parameter
                              compiler.DisableWarnings.AddUnique("4244"); // Python-3.5.1\Modules\expat\xmlparse.c(1844) : warning C4244: 'return' : conversion from '__int64' to 'XML_Index', possible loss of data
@@ -1710,17 +1717,19 @@ namespace Python
                          }
                          else
                          {
-                             compiler.PreprocessorDefines.Add("HAVE_MEMMOVE", "1");
+                             preprocessor.PreprocessorDefines.Add("HAVE_MEMMOVE", "1");
                          }
                          if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                          {
+                             var compiler = settings as C.ICommonCompilerSettings;
                              compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/expat/xmlparse.c:4914:28: error: unused parameter 's' [-Werror=unused-parameter]
                              compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/expat/xmltok.c:471:1: error: missing initializer for field 'isName2' of 'const struct normal_encoding' [-Werror=missing-field-initializers]
                              gccCompiler.Pedantic = false; // Python-3.5.1/Modules/pyexpat.c:1362:27: error: ISO C forbids assignment between function pointer and 'void *' [-Werror=pedantic]
                          }
                         if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                         {
-                            compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/expat/xmlparse.c:4914:28: error: unused parameter 's' [-Werror,-Wunused-parameter]
+                             var compiler = settings as C.ICommonCompilerSettings;
+                             compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/expat/xmlparse.c:4914:28: error: unused parameter 's' [-Werror,-Wunused-parameter]
                             compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/expat/xmltok.c:471:1: error: missing field 'isName2' initializer [-Werror,-Wmissing-field-initializers]
                             clangCompiler.Pedantic = false; // Python-3.5.1/Modules/pyexpat.c:1362:27: error: assigning to 'xmlhandler' (aka 'void *') from 'void (void *, const XML_Char *, int)' (aka 'void (void *, const char *, int)') converts between void pointer and function pointer [-Werror,-Wpedantic]
                         }
@@ -1957,8 +1966,9 @@ namespace Python
                 {
                     if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                         var compiler = settings as C.ICommonCompilerSettings;
-                        compiler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(155): warning C4100: 'kw': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(603): warning C4054: 'type cast': from function pointer 'FARPROC' to data pointer 'void *'
                         compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(3324): warning C4152: nonstandard extension, function/data pointer conversion in expression
