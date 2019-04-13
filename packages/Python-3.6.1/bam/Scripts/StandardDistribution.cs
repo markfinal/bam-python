@@ -138,7 +138,7 @@ namespace Python
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     public class PythonZip :
-        Publisher.ZipModule
+        Installer.ZipModule
     {
         protected override void
         Init(
@@ -163,7 +163,7 @@ namespace Python
 
             this.PrivatePatch(settings =>
                 {
-                    var zipSettings = settings as Publisher.IZipSettings;
+                    var zipSettings = settings as Installer.IZipSettings;
                     zipSettings.RecursivePaths = true;
                     zipSettings.Update = true;
                 }
@@ -220,7 +220,7 @@ namespace Python.StandardDistribution
             }
             collator.Mapping.Register(
                 typeof(Python.PythonZip),
-                Publisher.ZipModule.ZipKey,
+                Installer.ZipModule.ZipKey,
                 collator.CreateTokenizedString(
                     zipCollationPath,
                     new[] { collator.ExecutableDir }
