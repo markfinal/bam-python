@@ -254,6 +254,7 @@ namespace Python
                 this.Add("typeobject.c", "pedantic");
                 this.Add("bytesobject.c", "unused-function");
                 this.Add("bytearrayobject.c", "unused-function");
+                this.Add("bytearrayobject.c", GccCommon.ToolchainVersion.GCC_5, null, Bam.Core.EConfiguration.NotDebug, "strict-overflow");
                 this.Add("obmalloc.c", "unused-parameter");
                 this.Add("capsule.c", "missing-field-initializers");
                 this.Add("moduleobject.c", "pedantic");
