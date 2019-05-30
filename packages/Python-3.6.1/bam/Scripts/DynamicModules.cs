@@ -1686,6 +1686,26 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("implicit-function-declaration"); // Python-3.5.1/Modules/zlib/gzwrite.c:84:15: error: implicit declaration of function 'write' [-Werror,-Wimplicit-function-declaration]
                         }
                     }));
+
+            this.moduleSourceModules["infback"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                {
+                    if (settings is GccCommon.ICommonCompilerSettings)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("implicit-fallthrough"); // TODO: GCC 7+
+                    }
+                }));
+
+            this.moduleSourceModules["inflate"].ForEach(item =>
+                item.PrivatePatch(settings =>
+                {
+                    if (settings is GccCommon.ICommonCompilerSettings)
+                    {
+                        var compiler = settings as C.ICommonCompilerSettings;
+                        compiler.DisableWarnings.AddUnique("implicit-fallthrough"); // TODO: GCC 7+
+                    }
+                }));
         }
     }
 
@@ -1724,6 +1744,7 @@ namespace Python
                              var compiler = settings as C.ICommonCompilerSettings;
                              compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/expat/xmlparse.c:4914:28: error: unused parameter 's' [-Werror=unused-parameter]
                              compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/expat/xmltok.c:471:1: error: missing initializer for field 'isName2' of 'const struct normal_encoding' [-Werror=missing-field-initializers]
+                             compiler.DisableWarnings.AddUnique("implicit-fallthrough"); // TODO GCC7+
                              gccCompiler.Pedantic = false; // Python-3.5.1/Modules/pyexpat.c:1362:27: error: ISO C forbids assignment between function pointer and 'void *' [-Werror=pedantic]
                          }
                         if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
@@ -1830,6 +1851,7 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/cjkcodecs/cjkcodecs.h:300:5: error: missing initializer for field 'ml_flags' of 'struct PyMethodDef' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/cjkcodecs/cjkcodecs.h:259:20: error: unused parameter 'self' [-Werror=unused-parameter]
+                        compiler.DisableWarnings.AddUnique("implicit-fallthrough"); // TODO GCC 7+
                     }
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
@@ -1993,6 +2015,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:210:1: error: missing initializer for field 'tp_is_gc' of 'PyTypeObject' [-Werror=missing-field-initializers]
                         compiler.DisableWarnings.AddUnique("format"); // Python-3.5.1/Modules/_ctypes/_ctypes.c:321:17: error: ISO C90 does not support the 'z' gnu_printf length modifier [-Werror=format=]
                         compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.6.1/Modules/_ctypes/cfield.c:715:1: error: 'bool_set' defined but not used [-Werror=unused-function]
+                        compiler.DisableWarnings.AddUnique("implicit-fallthrough"); // TODO: Gcc7+
                         gccCompiler.Pedantic = false; // Python-3.5.1/Modules/_ctypes/_ctypes.c:3298:15: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                     }
                     if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)

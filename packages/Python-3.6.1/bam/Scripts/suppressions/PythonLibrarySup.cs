@@ -260,6 +260,7 @@ namespace Python
                 this.Add("moduleobject.c", "pedantic");
                 this.Add("abstract.c", "unused-parameter");
                 this.Add("unicodeobject.c", "unused-function");
+                this.Add("unicodeobject.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("structseq.c", "missing-field-initializers");
                 this.Add("exceptions.c", "missing-field-initializers", "unused-parameter");
             }
@@ -273,16 +274,21 @@ namespace Python
                 this.Add("sysmodule.c", "unused-parameter", "missing-field-initializers");
                 this.Add("graminit.c", "missing-field-initializers");
                 this.Add("ast.c", "unused-parameter");
+                this.Add("ast.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("traceback.c", "unused-parameter", "missing-field-initializers");
                 this.Add("symtable.c", "unused-parameter", "missing-field-initializers");
                 this.Add("peephole.c", "unused-parameter");
+                this.Add("peephole.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("formatter_unicode.c", "unused-parameter");
+                this.Add("formatter_unicode.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("import.c", "unused-parameter", "missing-field-initializers");
                 this.Add("codecs.c", "unused-parameter", "missing-field-initializers");
                 this.Add("pylifecycle.c", "unused-parameter");
                 this.Add("getargs.c", "unused-parameter");
+                this.Add("getargs.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("random.c", "unused-parameter", "missing-field-initializers");
                 this.Add("compile.c", "unused-parameter", "overlength-strings");
+                this.Add("compile.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("bltinmodule.c", "unused-parameter", "missing-field-initializers");
                 this.Add("_warnings.c", "unused-parameter", "missing-field-initializers");
                 this.Add("Python-ast.c", "missing-field-initializers");
@@ -290,7 +296,10 @@ namespace Python
                 this.Add("pythonrun.c", "unused-parameter");
                 this.Add("ceval.c", "unused-parameter");
                 this.Add("marshal.c", "unused-parameter", "missing-field-initializers");
+                this.Add("marshal.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("thread.c", "format");
+                this.Add("eval.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
+                this.Add("pyhash.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
             }
         }
 

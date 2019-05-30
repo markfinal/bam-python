@@ -156,7 +156,16 @@ namespace Python
                 }
                 else
                 {
-                    source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+                    var ffi64 = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+                    ffi64.First().PrivatePatch(settings =>
+                    {
+                        // TODO: Gcc 7+
+                        if (settings is GccCommon.ICommonCompilerSettings)
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("implicit-fallthrough");
+                        }
+                    });
                     asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
                 }
 

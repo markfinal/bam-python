@@ -65,6 +65,7 @@ namespace Python
                     contents.AppendLine("#define Py_DEBUG");
                 }
                 contents.AppendLine("#define _BSD_SOURCE 1");
+                contents.AppendLine("#define _DEFAULT_SOURCE 1"); // future replacement of _BSD_SOURCE
                 contents.AppendLine("#include <limits.h>"); // so that __USE_POSIX is not undeffed
                 contents.AppendLine("#define __USE_POSIX 1");
                 contents.AppendLine("#define __USE_POSIX199309 1");
