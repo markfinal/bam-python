@@ -140,7 +140,7 @@ namespace Python
                     if (settings is C.ICommonCompilerSettings compiler)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
-                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                        preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
                         if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
                         {
                             preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));

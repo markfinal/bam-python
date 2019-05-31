@@ -1721,7 +1721,7 @@ namespace Python
                          var preprocessor = settings as C.ICommonPreprocessorSettings;
                          preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          preprocessor.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
-                         preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
                          if (settings is VisualCCommon.ICommonCompilerSettings)
                          {
                              preprocessor.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build

@@ -53,6 +53,7 @@ namespace Python
         System.Type Bam.Core.IHasModuleConfiguration.ReadOnlyInterfaceType => typeof(IConfigurePython);
         System.Type Bam.Core.IHasModuleConfiguration.WriteableClassType => typeof(ConfigurePython);
         protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/pyconfig.h");
+        protected override bool UseSystemIncludeSearchPaths => true;
 
         protected override string Contents
         {

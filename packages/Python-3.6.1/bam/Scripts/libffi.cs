@@ -314,7 +314,7 @@ namespace Python
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
-                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         preprocessor.PreprocessorDefines.Add("MACOSX");
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("comment"); // Python-3.5.1/Modules/_ctypes/libffi_osx/include/x86-ffitarget.h:74:8: error: // comments are not allowed in this language [-Werror,-Wcomment]
