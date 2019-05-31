@@ -70,6 +70,7 @@ namespace Python
                 this.Add("listobject.c", "4100");
                 this.Add("longobject.c", "4100", "4701");
                 this.Add("longobject.c", VisualCCommon.ToolchainVersion.VC2015, null, "4456");
+                this.Add("longobject.c", VisualCCommon.ToolchainVersion.VC2015, null, C.EBit.ThirtyTwo, "4244");
                 this.Add("memoryobject.c", "4100");
                 this.Add("memoryobject.c", VisualCCommon.ToolchainVersion.VC2015, null, "4456");
                 this.Add("methodobject.c", "4100");
@@ -191,6 +192,7 @@ namespace Python
                 this.Add("hashtable.c", "4100");
                 this.Add("symtablemodule.c", "4100");
                 this.Add("_winapi.c", "4100", "4201", "4204", "4702");
+                this.Add("_winapi.c", C.EBit.ThirtyTwo, "4389");
                 this.Add("msvcrtmodule.c", "4100", "4244", "4310", "4311", "4312");
             }
         }
