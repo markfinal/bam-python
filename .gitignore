@@ -1,2 +1,4 @@
 PackageDebug
 build
+*.pyc
+tests/Logs
