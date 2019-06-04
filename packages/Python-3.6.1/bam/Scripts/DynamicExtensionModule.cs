@@ -117,6 +117,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 this.Macros["pluginext"] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
+
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
                 {

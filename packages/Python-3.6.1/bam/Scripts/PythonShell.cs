@@ -43,12 +43,23 @@ namespace Python
         {
             base.Init(parent);
 
-            this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+            var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
 
             var source = this.CreateCSourceContainer("$(packagedir)/Programs/python.c");
-            if (!this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+                if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python_d");
+                }
+                else
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
+                }
+            }
+            else
+            {
+                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim("python");
                 source.DependsOn(pyConfigHeader);
                 source.UsePublicPatches(pyConfigHeader);
             }

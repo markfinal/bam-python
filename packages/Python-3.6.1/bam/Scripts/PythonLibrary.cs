@@ -83,28 +83,10 @@ namespace Python
         NotPyDEBUGPatch(
             Bam.Core.Settings settings)
         {
+            // need asserts to dissolve to nothing, since they contain expressions which
+            // depende on Py_DEBUG being set
             var preprocessor = settings as C.ICommonPreprocessorSettings;
-            preprocessor.PreprocessorDefines.Add("NDEBUG"); // ignore asserts, which depend on Py_DEBUG
-        }
-
-        private void
-        VCNotPyDEBUGClosingPatch(
-            Bam.Core.Settings settings)
-        {
-            if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
-            {
-                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>(settings.Module.BuildEnvironment);
-
-                if (vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreaded ||
-                    vcCompiler.RuntimeLibrary == VisualCCommon.ERuntimeLibrary.MultiThreadedDLL)
-                {
-                    NotPyDEBUGPatch(settings);
-                }
-                else
-                {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
-                }
-            }
+            preprocessor.PreprocessorDefines.Add("NDEBUG");
         }
 
         private void
@@ -123,9 +105,20 @@ namespace Python
         {
             base.Init(parent);
 
+            // although PyConfigHeader is only explicitly used on non-Windows platforms in the main library, it's needed
+            // for the closing patch on Windows, and the output name of the library
+            var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
+                if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
+                }
+                else
+                {
+                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
+                }
             }
             else
             {
@@ -478,11 +471,7 @@ namespace Python
                 });
 #endif
 
-            // although PyConfigHeader is only explicitly used on non-Windows platforms in the main library, it's needed
-            // for the closing patch on Windows
-
             // TODO: is there a call for a CompileWith function?
-            var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
             this.UsePublicPatches(pyConfigHeader);
             parserSource.DependsOn(pyConfigHeader);
             objectSource.DependsOn(pyConfigHeader);
@@ -569,13 +558,10 @@ namespace Python
                     });
                 headers.AddFiles("$(packagedir)/PC/*.h");
 
-                parserSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                objectSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                pythonSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                builtinModuleSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                cjkcodecs.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                _io.ClosingPatch(VCNotPyDEBUGClosingPatch);
-                pcSource.ClosingPatch(VCNotPyDEBUGClosingPatch);
+                if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+                {
+                    pcSource.ClosingPatch(NotPyDEBUGPatch);
+                }
 
                 if (null != this.WindowsVersionResource)
                 {
@@ -610,16 +596,6 @@ namespace Python
             }
             else
             {
-                if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
-                {
-                    parserSource.PrivatePatch(NotPyDEBUGPatch);
-                    objectSource.PrivatePatch(NotPyDEBUGPatch);
-                    pythonSource.PrivatePatch(NotPyDEBUGPatch);
-                    builtinModuleSource.PrivatePatch(NotPyDEBUGPatch);
-                    cjkcodecs.PrivatePatch(NotPyDEBUGPatch);
-                    _io.PrivatePatch(NotPyDEBUGPatch);
-                }
-
                 var sysConfigDataPy = Bam.Core.Graph.Instance.FindReferencedModule<SysConfigDataPythonFile>();
                 this.Requires(sysConfigDataPy);
 
@@ -635,6 +611,16 @@ namespace Python
                     });
 
                 headers.AddFile(pyConfigHeader);
+            }
+
+            if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
+            {
+                parserSource.PrivatePatch(NotPyDEBUGPatch);
+                objectSource.PrivatePatch(NotPyDEBUGPatch);
+                pythonSource.PrivatePatch(NotPyDEBUGPatch);
+                builtinModuleSource.PrivatePatch(NotPyDEBUGPatch);
+                cjkcodecs.PrivatePatch(NotPyDEBUGPatch);
+                _io.PrivatePatch(NotPyDEBUGPatch);
             }
         }
     }

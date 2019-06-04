@@ -39,8 +39,14 @@ namespace Python
     sealed class ConfigurePython :
         IConfigurePython
     {
+        // on non-Windows platforms, setting Py_DEBUG to true will 'do the right thing' as the pyconfig.h
+        // is generated in code below
+        // on Windows, PC/pyconfig.h is part of the source, and Py_DEBUG is only defined when _DEBUG
+        // is defined, which is when a debug CRT is in use
+        //  - user packages are expected to be consistent in their setting of this module configuration
+        //    and the CRT in use, or Python library compilations will occur
         public ConfigurePython(
-            Bam.Core.Environment buildEnvironment) => this.PyDEBUG = buildEnvironment.Configuration.HasFlag(Bam.Core.EConfiguration.Debug);
+            Bam.Core.Environment buildEnvironment) => this.PyDEBUG = false;
 
         public bool PyDEBUG { get; set; }
     }
