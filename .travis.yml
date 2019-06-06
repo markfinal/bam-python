@@ -30,7 +30,7 @@ matrix:
     script:
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode10 --C.bitdepth=64 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Native
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode10 --C.bitdepth=64 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1
-      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode10 --C.bitdepth=64 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2
+      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode10 --C.bitdepth=64 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2 -T ExtensionModuleTest2
   - os: osx
     osx_image: xcode9.4
     mono: none
@@ -38,7 +38,7 @@ matrix:
     script:
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Native
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1
-      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2
+      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2 -T ExtensionModuleTest2
   - os: osx
     osx_image: xcode8.3
     mono: none
@@ -46,4 +46,4 @@ matrix:
     script:
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Native
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1
-      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2
+      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2 -T ExtensionModuleTest2
