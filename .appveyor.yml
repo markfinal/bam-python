@@ -12,23 +12,27 @@ for:
         - image: Ubuntu
     environment:
       GCC_VERSION: 5
+      EXCLUDED_TESTS: -T InterpreterTest2
   - matrix:
       only:
         - image: Ubuntu1804
     environment:
       GCC_VERSION: 7
+      EXCLUDED_TESTS: -T InterpreterTest1
   - matrix:
       only:
         - image: Visual Studio 2017
     environment:
-        VC_VERSION: 15.0
-        VC_PRERELEASE_ARGS:
+      VC_VERSION: 15.0
+      VC_PRERELEASE_ARGS:
+      EXCLUDED_TESTS: -T InterpreterTest1
   - matrix:
       only:
         - image: Visual Studio 2019 Preview
     environment:
-        VC_VERSION: 16
-        VC_PRERELEASE_ARGS: "--VisualC.discoverprereleases"
+      VC_VERSION: 16
+      VC_PRERELEASE_ARGS: "--VisualC.discoverprereleases"
+      EXCLUDED_TESTS: -T InterpreterTest2
 install:
   - sh: sudo apt-get -q update
   - sh: sudo apt-get -q -y --no-install-recommends install g++ gcc-multilib g++-multilib python
@@ -41,8 +45,8 @@ test_script:
   - cmd: c:\BuildAMation\env.bat
   - cmd: "SET PATH=C:\\Python27-x64;%PATH%"
   - cmd: python c:\BuildAMation\tests\runtests.py -x Mingw --VisualC.version=%VC_VERSION% %VC_PRERELEASE_ARGS% -b Native -c debug -c profile -j0 -d --nodefaultrepo -r .
-  - cmd: python c:\BuildAMation\tests\runtests.py -x Mingw --VisualC.version=%VC_VERSION% %VC_PRERELEASE_ARGS% -b VSSolution -c debug -c profile -j0 -d --nodefaultrepo -r .
-  - cmd: python c:\BuildAMation\tests\runtests.py -x Mingw --VisualC.version=%VC_VERSION% %VC_PRERELEASE_ARGS% -b MakeFile -c debug -c profile -j0 -d --MakeFile.format=NMAKE --nodefaultrepo -r .
+  - cmd: python c:\BuildAMation\tests\runtests.py -x Mingw --VisualC.version=%VC_VERSION% %VC_PRERELEASE_ARGS% -b VSSolution -c debug -c profile -j0 -d --nodefaultrepo -r . %EXCLUDED_TESTS%
+  - cmd: python c:\BuildAMation\tests\runtests.py -x Mingw --VisualC.version=%VC_VERSION% %VC_PRERELEASE_ARGS% -b MakeFile -c debug -c profile -j0 -d --MakeFile.format=NMAKE --nodefaultrepo -r . %EXCLUDED_TESTS%
   - sh: source ~/BuildAMation/env.sh
   - sh: python ~/BuildAMation/tests/runtests.py --Gcc.version=$GCC_VERSION -b Native -c debug -c profile -j0 -d --nodefaultrepo -r .
-  - sh: python ~/BuildAMation/tests/runtests.py --Gcc.version=$GCC_VERSION -b MakeFile -c debug -c profile -j0 -d --nodefaultrepo -r .
+  - sh: python ~/BuildAMation/tests/runtests.py --Gcc.version=$GCC_VERSION -b MakeFile -c debug -c profile -j0 -d --nodefaultrepo -r . $EXCLUDED_TESTS
