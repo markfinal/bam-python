@@ -37,7 +37,7 @@ matrix:
     dotnet: 2.1.401
     script:
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Native -T ExtensionModuleTest1
-      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1
+      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1 -T ShellTest1
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode9 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2 -T ExtensionModuleTest2 -T ShellTest2
   - os: osx
     osx_image: xcode8.3
@@ -45,5 +45,5 @@ matrix:
     dotnet: 2.1.401
     script:
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Native -T ExtensionModuleTest1
-      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1
+      - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b MakeFile -T InterpreterTest1 -T ShellTest1
       - python /tmp/BuildAMation/tests/runtests.py --Clang.version=Xcode8 -c debug -c profile -j0 -d --nodefaultrepo -r . -b Xcode -T InterpreterTest2 -T ExtensionModuleTest2 -T ShellTest2

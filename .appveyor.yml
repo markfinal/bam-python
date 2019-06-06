@@ -25,14 +25,14 @@ for:
     environment:
       VC_VERSION: 15.0
       VC_PRERELEASE_ARGS:
-      EXCLUDED_TESTS: -T InterpreterTest1 -T ExtensionModuleTest2
+      EXCLUDED_TESTS: -T InterpreterTest1 -T ExtensionModuleTest2 -T ShellTest1
   - matrix:
       only:
         - image: Visual Studio 2019 Preview
     environment:
       VC_VERSION: 16
       VC_PRERELEASE_ARGS: "--VisualC.discoverprereleases"
-      EXCLUDED_TESTS: -T InterpreterTest2 -T ExtensionModuleTest1
+      EXCLUDED_TESTS: -T InterpreterTest2 -T ExtensionModuleTest1 -T ShellTest2
 install:
   - sh: sudo apt-get -q update
   - sh: sudo apt-get -q -y --no-install-recommends install g++ gcc-multilib g++-multilib python
