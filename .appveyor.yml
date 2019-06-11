@@ -171,84 +171,72 @@ for:
     environment:
       BAM_BUILD_MODE: Native
       VC_VERSION: 15.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2017 MakeFile
     environment:
       BAM_BUILD_MODE: MakeFile --MakeFile.format=NMAKE
       VC_VERSION: 15.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2017 VSSolution
     environment:
       BAM_BUILD_MODE: VSSolution
       VC_VERSION: 15.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2015 Native
     environment:
       BAM_BUILD_MODE: Native
       VC_VERSION: 14.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2015 MakeFile
     environment:
       BAM_BUILD_MODE: MakeFile --MakeFile.format=NMAKE
       VC_VERSION: 14.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2015 VSSolution
     environment:
       BAM_BUILD_MODE: VSSolution
       VC_VERSION: 14.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2013 Native
     environment:
       BAM_BUILD_MODE: Native
       VC_VERSION: 12.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2013 MakeFile
     environment:
       BAM_BUILD_MODE: MakeFile --MakeFile.format=NMAKE
       VC_VERSION: 12.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2013 VSSolution
     environment:
       BAM_BUILD_MODE: VSSolution
       VC_VERSION: 12.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2012 Native
     environment:
       BAM_BUILD_MODE: Native
       VC_VERSION: 11.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2012 MakeFile
     environment:
       BAM_BUILD_MODE: MakeFile --MakeFile.format=NMAKE
       VC_VERSION: 11.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2012 VSSolution
     environment:
       BAM_BUILD_MODE: VSSolution
       VC_VERSION: 11.0
-      EXTRA_TEST_ARGS:
   - matrix:
       only:
         - job_name: Visual Studio 2010 Native
