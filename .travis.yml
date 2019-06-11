@@ -43,6 +43,7 @@ matrix:
       - BAM_BUILD_MODE=Native
       - BAM_TOOLCHAIN_NAME=Clang
       - BAM_TOOLCHAIN_VERSION=Xcode10
+      - EXTRA_TEST_ARGS=--C.bitdepth=64 # 32-bit support removed
   - os: osx
     osx_image: xcode10.2
     mono: none
@@ -52,6 +53,7 @@ matrix:
       - BAM_BUILD_MODE=MakeFile
       - BAM_TOOLCHAIN_NAME=Clang
       - BAM_TOOLCHAIN_VERSION=Xcode10
+      - EXTRA_TEST_ARGS=--C.bitdepth=64 # 32-bit support removed
   - os: osx
     osx_image: xcode10.2
     mono: none
@@ -61,6 +63,7 @@ matrix:
       - BAM_BUILD_MODE=Xcode
       - BAM_TOOLCHAIN_NAME=Clang
       - BAM_TOOLCHAIN_VERSION=Xcode10
+      - EXTRA_TEST_ARGS=--C.bitdepth=64 # 32-bit support removed
   - os: osx
     osx_image: xcode9.4
     mono: none
