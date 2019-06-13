@@ -288,6 +288,7 @@ namespace Python
                 this.Add("rangeobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
                 this.Add("exceptions.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
                 this.Add("object.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("structseq.c", GccCommon.ToolchainVersion.GCC_9, null, Bam.Core.EConfiguration.NotDebug, "stringop-overflow");
             }
         }
 
