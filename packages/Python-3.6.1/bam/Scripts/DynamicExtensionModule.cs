@@ -161,6 +161,11 @@ namespace Python
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = true;
+                        if ((settings.Module.Tool as C.CompilerTool).Version.AtLeast(GccCommon.ToolchainVersion.GCC_8))
+                        {
+                            var compiler = settings as C.ICommonCompilerSettings;
+                            compiler.DisableWarnings.AddUnique("cast-function-type");
+                        }
                     }
                     if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                     {

@@ -265,6 +265,29 @@ namespace Python
                 this.Add("unicodeobject.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("structseq.c", "missing-field-initializers");
                 this.Add("exceptions.c", "missing-field-initializers", "unused-parameter");
+                this.Add("odictobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("namespaceobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("memoryobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("structseq.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("setobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("bytesobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("methodobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("frameobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("genobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("tupleobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("complexobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("dictobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("unicodeobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("funcobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("listobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("enumobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("typeobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("iterobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("longobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("bytearrayobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("rangeobject.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("exceptions.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("object.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
             }
         }
 
@@ -302,6 +325,12 @@ namespace Python
                 this.Add("thread.c", "format");
                 this.Add("eval.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
                 this.Add("pyhash.c", GccCommon.ToolchainVersion.GCC_7, null, "implicit-fallthrough");
+                this.Add("traceback.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("thread.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("sysmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_warnings.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("bltinmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("Python-ast.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
             }
         }
 
@@ -331,6 +360,18 @@ namespace Python
                 this.Add("_tracemalloc.c", "unused-parameter", "missing-field-initializers");
                 this.Add("hashtable.c", "unused-parameter", "format");
                 this.Add("symtablemodule.c", "unused-parameter", "missing-field-initializers");
+                this.Add("gcmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("posixmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_sre.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_codecsmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_functoolsmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_operator.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_collectionsmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("itertoolsmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("atexitmodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_localemodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("faulthandler.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_tracemalloc.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
             }
         }
 
@@ -354,6 +395,11 @@ namespace Python
                 this.Add("bytesio.c", "unused-parameter", "missing-field-initializers");
                 this.Add("iobase.c", "unused-parameter", "missing-field-initializers");
                 this.Add("fileio.c", "unused-parameter", "missing-field-initializers");
+                this.Add("textio.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("fileio.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("stringio.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("bytesio.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
+                this.Add("_iomodule.c", GccCommon.ToolchainVersion.GCC_8, null, "cast-function-type");
             }
         }
     }
