@@ -48,24 +48,26 @@ environment:
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
   - job_name: Visual Studio 2015 VSSolution
     APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2013 Native
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2013 MakeFile
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2013 VSSolution
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2012 Native
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2012 MakeFile
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2012 VSSolution
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2010 Native
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2010 MakeFile
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-  - job_name: Visual Studio 2010 VSSolution
-    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  # Python3.6+ is not supported on VisualStudios without inttype.h: https://bugs.python.org/issue29244, i.e. VS2010 and 2012.
+  # Python3.6 headers also need C99 'inline' keyword support, which was introduced in VS2015+
+  #- job_name: Visual Studio 2013 Native
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2013 MakeFile
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2013 VSSolution
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2012 Native
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2012 MakeFile
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2012 VSSolution
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2010 Native
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2010 MakeFile
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+  #- job_name: Visual Studio 2010 VSSolution
+  #  APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 for:
   - matrix:
       only:

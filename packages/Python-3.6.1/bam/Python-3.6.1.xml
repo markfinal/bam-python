@@ -12,17 +12,24 @@
     <Package name="Clang" version="Xcode7" />
     <Package name="Clang" version="Xcode8" default="true" />
     <Package name="Clang" version="Xcode9" />
+    <Package name="Clang" version="Xcode10" />
     <Package name="Gcc" version="4.8" default="true" />
     <Package name="Gcc" version="5" />
+    <Package name="Gcc" version="6" />
+    <Package name="Gcc" version="7" />
+    <Package name="Gcc" version="8" />
+    <Package name="Gcc" version="9" />
     <Package name="Installer" />
     <Package name="MakeFileBuilder" />
     <Package name="NativeBuilder" />
     <Package name="Publisher" />
-    <Package name="VisualC" version="10.0" />
-    <Package name="VisualC" version="11.0" />
-    <Package name="VisualC" version="12.0" />
+    <!--
+    Python3.6+ is not supported on VisualStudios without inttype.h: https://bugs.python.org/issue29244, i.e. VS2010 and 2012.
+    Python3.6 headers also need C99 'inline' keyword support, which was introduced in VS2015+
+    -->
     <Package name="VisualC" version="14.0" default="true" />
     <Package name="VisualC" version="15.0" />
+    <Package name="VisualC" version="16" />
     <Package name="VSSolutionBuilder" />
     <Package name="XcodeBuilder" />
   </Dependents>
