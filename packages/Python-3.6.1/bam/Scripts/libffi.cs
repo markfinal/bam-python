@@ -46,6 +46,7 @@ namespace Python
 
         protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders/ffi.h");
         protected override string GuardString => null; // the template file already has one
+        protected override bool UseSystemIncludeSearchPaths => true;
 
         protected override string Contents
         {
@@ -80,6 +81,7 @@ namespace Python
         }
 
         protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/fficonfig.h"); // not public
+        protected override bool UseSystemIncludeSearchPaths => true;
 
         protected override string Contents
         {
