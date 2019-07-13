@@ -428,9 +428,9 @@ namespace Python
                 this.Add("moduleobject.c", "unused-parameter", "missing-field-initializers", "pedantic");
                 this.Add("enumobject.c", "missing-field-initializers");
                 this.Add("object.c", "unused-parameter", "missing-field-initializers", "format-pedantic");
-                this.Add("complexobject.c", "extended-offsetof");
+                this.Add("complexobject.c", null, ClangCommon.ToolchainVersion.Xcode_9, "extended-offsetof");
                 this.Add("capsule.c", "missing-field-initializers");
-                this.Add("typeobject.c", "extended-offsetof");
+                this.Add("typeobject.c", null, ClangCommon.ToolchainVersion.Xcode_9, "extended-offsetof");
                 this.Add("obmalloc.c", "unused-parameter", "format-pedantic");
                 this.Add("unicodeobject.c", "unused-function");
                 this.Add("structseq.c", "missing-field-initializers");
