@@ -563,7 +563,7 @@ namespace Python
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_testcapimodule.c:52:23: error: unused parameter 'self' [-Werror,-Wunused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_testcapimodule.c:294:1: error: missing field 'tp_free' initializer [-Werror,-Wmissing-field-initializers]
-                        if ((settings.Module.Tool as C.CompilerTool).Version.AtMost(ClangCommon.ToolchainVersion.Xcode_9))
+                        if ((settings.Module.Tool as C.CompilerTool).Version.AtMost(ClangCommon.ToolchainVersion.Xcode_9_4_1))
                         {
                             compiler.DisableWarnings.AddUnique("extended-offsetof"); // Python-3.5.1/Modules/_testcapimodule.c:3738:24: error: using extended field designator is an extension [-Werror,-Wextended-offsetof]
                         }
