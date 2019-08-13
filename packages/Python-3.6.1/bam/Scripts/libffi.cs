@@ -37,10 +37,9 @@ namespace Python
         C.ProceduralHeaderFile
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
             this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in"));
         }
 
@@ -74,10 +73,9 @@ namespace Python
         C.ProceduralHeaderFile
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
         }
 
         protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/fficonfig.h"); // not public
@@ -106,10 +104,9 @@ namespace Python
         Publisher.Collation
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             var publishRoot = this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders");
 
@@ -139,10 +136,9 @@ namespace Python
         C.StaticLibrary
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             var source = this.CreateCSourceContainer();
             var asmSource = this.CreateAssemblerSourceContainer();

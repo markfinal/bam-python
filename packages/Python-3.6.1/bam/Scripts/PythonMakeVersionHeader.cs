@@ -58,10 +58,9 @@ namespace Python
         System.Type Bam.Core.IHasModuleConfiguration.WriteableClassType => typeof(ConfigurePythonResourceHeader);
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
             this.Settings = new EmptySettings(); // in order to run a private patch
         }
 

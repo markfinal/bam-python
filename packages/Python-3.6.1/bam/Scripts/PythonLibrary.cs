@@ -100,10 +100,9 @@ namespace Python
         }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             // although PyConfigHeader is only explicitly used on non-Windows platforms in the main library, it's needed
             // for the closing patch on Windows, and the output name of the library

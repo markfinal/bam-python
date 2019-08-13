@@ -37,10 +37,9 @@ namespace Python
         public const string SysConfigDataPythonFileKey = "_sysconfigdata Python file";
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
             // format from sysconfig.py: '_sysconfigdata_{abi}_{platform}_{multiarch}'
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {

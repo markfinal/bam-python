@@ -34,10 +34,9 @@ namespace Python
         C.SourceFile
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
             this.RegisterGeneratedFile(
                 SourceFileKey,
                 this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c")

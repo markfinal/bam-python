@@ -127,10 +127,9 @@ namespace Python
 
 #if PYTHON_WITH_SQLITE
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.CompileAndLinkAgainst<sqlite.SqliteShared>(this.moduleSourceModules);
         }
@@ -184,10 +183,9 @@ namespace Python
 
 #if PYTHON_WITH_OPENSSL
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.CompileAndLinkAgainst<openssl.OpenSSL>(this.moduleSourceModules);
         }
@@ -1082,10 +1080,9 @@ namespace Python
 
 #if PYTHON_WITH_OPENSSL
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.CompileAndLinkAgainst<openssl.OpenSSL>(this.moduleSourceModules);
         }
@@ -1606,10 +1603,9 @@ namespace Python
         { }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.moduleSourceModules.PrivatePatch(settings =>
                 {
@@ -2044,10 +2040,9 @@ namespace Python
         { }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init (parent);
+            base.Init();
 
             this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
         }

@@ -42,10 +42,9 @@ namespace ExtensionModuleTest2
         { }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             var shell = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonShell>();
             shell.Requires(this);
@@ -63,10 +62,9 @@ namespace ExtensionModuleTest2
         }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
@@ -90,10 +88,9 @@ namespace ExtensionModuleTest2
         Python.PyDocGeneratedHtml
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             // must execute after publishing
             var publishing = Bam.Core.Graph.Instance.FindReferencedModule<CustomModuleRuntime>() as CustomModuleRuntime;
@@ -116,10 +113,9 @@ namespace ExtensionModuleTest2
         Publisher.DebugSymbolCollation
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.CreateSymbolsFrom<CustomModuleRuntime>();
         }
@@ -130,10 +126,9 @@ namespace ExtensionModuleTest2
         Publisher.StrippedBinaryCollation
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.StripBinariesFrom<CustomModuleRuntime, CustomModuleDebugSymbols>();
 

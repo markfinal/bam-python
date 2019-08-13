@@ -42,10 +42,9 @@ namespace ExtensionModuleTest1
         { }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             var shell = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonShell>();
             shell.Requires(this);
@@ -56,10 +55,9 @@ namespace ExtensionModuleTest1
         Publisher.Collation
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();

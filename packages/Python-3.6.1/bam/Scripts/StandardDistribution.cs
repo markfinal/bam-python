@@ -42,10 +42,9 @@ namespace Python
         }
 
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             // common to all platforms
             this.RequiredToExist<_multiprocessing>();
@@ -141,8 +140,7 @@ namespace Python
         Installer.ZipModule
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
             var basename = Version.WindowsOutputName; // pythonMN.zip - applicable to all platforms
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
@@ -159,7 +157,7 @@ namespace Python
             this.DependsOn(pylib);
             this.Macros.Add("pathtozip", pylib.LibraryDirectory);
 
-            base.Init(parent);
+            base.Init();
 
             this.PrivatePatch(settings =>
                 {

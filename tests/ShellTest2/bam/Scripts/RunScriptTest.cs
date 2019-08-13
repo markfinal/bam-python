@@ -60,10 +60,9 @@ namespace ShellTest2
         Python.PythonShell
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             // additional runtime dependency is required, for the zipped library
             var libraryZip = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonZip>();
@@ -75,10 +74,9 @@ namespace ShellTest2
         Publisher.Collation
     {
         protected override void
-        Init(
-            Bam.Core.Module parent)
+        Init()
         {
-            base.Init(parent);
+            base.Init();
 
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
             this.RegisterPythonModuleTypesToCollate();
