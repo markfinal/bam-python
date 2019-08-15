@@ -98,9 +98,7 @@ namespace Python
             this.InheritedEnvironmentVariables = new Bam.Core.StringArray { "*" }; // seem to require all of them
         }
 
-        public Bam.Core.Settings
-        CreateDefaultSettings<T>(
-            T module) where T : Bam.Core.Module => new PyDocSettings(this); // TODO: currently, only pydoc is support, but this should be more generic, or not have any settings at all
+        System.Type Bam.Core.ITool.SettingsType => typeof(PyDocSettings);
 
         public System.Collections.Generic.Dictionary<string, Bam.Core.TokenizedStringArray> EnvironmentVariables { get; private set; }
         public Bam.Core.StringArray InheritedEnvironmentVariables { get; private set; }
