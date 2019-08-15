@@ -112,16 +112,16 @@ namespace Python
             {
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
                 {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
+                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
                 }
                 else
                 {
-                    this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
+                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
                 }
             }
             else
             {
-                this.Macros["OutputName"] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
+                this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
             }
             this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);
 
