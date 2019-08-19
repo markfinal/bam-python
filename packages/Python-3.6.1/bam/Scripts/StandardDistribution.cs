@@ -168,13 +168,13 @@ namespace Python
             );
         }
 
-        public override System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>> InputModules
+        public override System.Collections.Generic.IEnumerable<(Bam.Core.Module module, string pathKey)> InputModulePaths
         {
             get
             {
                 // since there is a dependency on PythonLibrary which does not need to be passed
                 // through to Zip
-                return System.Linq.Enumerable.Empty<System.Collections.Generic.KeyValuePair<string, Bam.Core.Module>>();
+                return System.Linq.Enumerable.Empty<(Bam.Core.Module, string)>();
             }
         }
     }
