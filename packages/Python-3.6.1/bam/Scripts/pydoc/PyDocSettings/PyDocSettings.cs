@@ -35,7 +35,12 @@ namespace Python
         IPyDocSettings
     {
         public PyDocSettings(
-            Bam.Core.Module module) => this.InitializeAllInterfaces(module, true, true);
+            Bam.Core.Module module)
+            :
+            base(ELayout.Cmds_Outputs_Inputs)
+        {
+            this.InitializeAllInterfaces(module, true, true);
+        }
 
         [CommandLineProcessor.Bool("-B", "")]
         bool IPyDocSettings.DontWriteByteCode { get; set; }
@@ -48,10 +53,5 @@ namespace Python
 
         [CommandLineProcessor.String("")]
         string IPyDocSettings.ModuleToDocument { get; set; }
-
-        public override void AssignFileLayout()
-        {
-            this.FileLayout = ELayout.Cmds_Outputs_Inputs;
-        }
     }
 }
