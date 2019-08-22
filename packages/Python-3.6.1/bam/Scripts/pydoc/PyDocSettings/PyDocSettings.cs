@@ -34,13 +34,10 @@ namespace Python
         Bam.Core.Settings,
         IPyDocSettings
     {
-        public PyDocSettings(
-            Bam.Core.Module module)
+        public PyDocSettings()
             :
             base(ELayout.Cmds_Outputs_Inputs)
-        {
-            this.InitializeAllInterfaces(module, false, true);
-        }
+        {}
 
         [CommandLineProcessor.Bool("-B", "")]
         bool IPyDocSettings.DontWriteByteCode { get; set; }
