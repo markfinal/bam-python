@@ -40,10 +40,5 @@ namespace Python.DefaultSettings
             settings.Module = "pydoc";
             settings.WriteToCurrentDirectory = true;
         }
-
-        public static void
-        Empty(
-            this IPyDocSettings settings)
-        {}
     }
 }
