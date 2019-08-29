@@ -57,7 +57,7 @@ namespace Python
 
                 // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                 var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                    (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                    (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                     (settings.Module as C.ObjectFile).Compiler;
                 if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2017_15_0))
                 {
@@ -150,9 +150,9 @@ namespace Python
                     }
                 });
 
-            var headers = this.CreateHeaderContainer("$(packagedir)/Include/*.h");
+            var headers = this.CreateHeaderCollection("$(packagedir)/Include/*.h");
 
-            var parserSource = this.CreateCSourceContainer(
+            var parserSource = this.CreateCSourceCollection(
                 "$(packagedir)/Parser/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*pgen).*)$")
             );
@@ -172,7 +172,7 @@ namespace Python
             }
 
 
-            var objectSource = this.CreateCSourceContainer("$(packagedir)/Objects/*.c");
+            var objectSource = this.CreateCSourceCollection("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Objects/*.h");
             if (objectSource.Compiler is VisualCCommon.CompilerBase)
@@ -189,7 +189,7 @@ namespace Python
             }
 
 
-            var pythonSource = this.CreateCSourceContainer("$(packagedir)/Python/*.c",
+            var pythonSource = this.CreateCSourceCollection("$(packagedir)/Python/*.c",
                 filter: new System.Text.RegularExpressions.Regex(@"^((?!.*dynload_)(?!.*dup2)(?!.*strdup)(?!.*frozenmain)(?!.*sigcheck).*)$"));
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
@@ -285,7 +285,7 @@ namespace Python
                 pythonSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryPython());
             }
 
-            var builtinModuleSource = this.CreateCSourceContainer("$(packagedir)/Modules/main.c");
+            var builtinModuleSource = this.CreateCSourceCollection("$(packagedir)/Modules/main.c");
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Modules/*.h");
             headers.AddFiles("$(packagedir)/Modules/cjkcodecs/*.h");
@@ -298,7 +298,7 @@ namespace Python
 
             // Windows builds includes dynamic modules builtin the core library
             // see PC/config.c
-            var cjkcodecs = this.CreateCSourceContainer(); // empty initially, as only Windows populates it as static modules
+            var cjkcodecs = this.CreateCSourceCollection(); // empty initially, as only Windows populates it as static modules
             cjkcodecs.PrivatePatch(this.CoreBuildPatch);
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
@@ -329,7 +329,7 @@ namespace Python
 
 #if PYTHON_USE_ZLIB_PACKAGE
 #else
-                var zlib = this.CreateCSourceContainer("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
+                var zlib = this.CreateCSourceCollection("$(packagedir)/Modules/zlib/*.c", filter: new System.Text.RegularExpressions.Regex(@"^((?!.*example)(?!.*minigzip).*)$"));
                 zlib.PrivatePatch(this.WinNotUnicodePatch);
 #endif
 
@@ -383,7 +383,7 @@ namespace Python
             builtinModuleSource.AddFiles("$(packagedir)/Modules/timemodule.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/_localemodule.c");
 
-            var _io = this.CreateCSourceContainer("$(packagedir)/Modules/_io/*.c");
+            var _io = this.CreateCSourceCollection("$(packagedir)/Modules/_io/*.c");
             _io.PrivatePatch(this.CoreBuildPatch);
             _io["_iomodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
@@ -456,7 +456,7 @@ namespace Python
 
 #if false
             // sigcheck has a simplified error check compared to signalmodule
-            var signalSource = this.CreateCSourceContainer("$(packagedir)/Python/sigcheck.c");
+            var signalSource = this.CreateCSourceCollection("$(packagedir)/Python/sigcheck.c");
             signalSource.PrivatePatch(settings =>
                 {
                     var compiler = settings as C.ICommonCompilerSettings;
@@ -482,7 +482,7 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                var pcSource = this.CreateCSourceContainer("$(packagedir)/PC/dl_nt.c");
+                var pcSource = this.CreateCSourceCollection("$(packagedir)/PC/dl_nt.c");
                 pcSource.PrivatePatch(this.CoreBuildPatch);
                 pcSource["dl_nt.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
@@ -529,7 +529,7 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\PC\winreg.c(578): warning C4389: '==': signed/unsigned mismatch
                             }
                             var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                                (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                                 (settings.Module as C.ObjectFile).Compiler;
                             if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2013))
                             {

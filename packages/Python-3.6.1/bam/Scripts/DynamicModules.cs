@@ -262,7 +262,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4152"); // Python-3.5.1\Modules\_testmultiphase.c(84): warning C4152: nonstandard extension, function/data pointer conversion in expression
                         // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
                         if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
@@ -313,7 +313,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\_testbuffer.c(2643): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
                         // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
                         if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
@@ -362,7 +362,7 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_json.c:1203:43: error: unused parameter 'args' [-Werror=unused-parameter]
 
                     var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                        (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                         (settings.Module as C.ObjectFile).Compiler;
 
                     if (compilerUsed.Version.AtLeast(GccCommon.ToolchainVersion.GCC_5_4))
@@ -619,7 +619,7 @@ namespace Python
                              compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\_elementtree.c(1749) : warning C4706: assignment within conditional expression
                              // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                              var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                                 (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                                 (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                                  (settings.Module as C.ObjectFile).Compiler;
                              if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                              {
@@ -777,7 +777,7 @@ namespace Python
                     compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\unicodedata.c(1273): warning C4232: nonstandard extension used: 'tp_dealloc': address of dllimport 'PyObject_Free' is not static, identity not guaranteed
                     // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                     var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                        (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                        (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                         (settings.Module as C.ObjectFile).Compiler;
                     if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                     {
@@ -883,7 +883,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4706"); // python-3.5.1\modules\selectmodule.c(98) : warning C4706: assignment within conditional expression
                         // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
                         if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {
@@ -990,7 +990,7 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Modules\socketmodule.c(2241): warning C4127: conditional expression is constant
                         compiler.DisableWarnings.AddUnique("4232"); // Python-3.5.1\Modules\socketmodule.c(4356): warning C4232: nonstandard extension used: 'tp_getattro': address of dllimport 'PyObject_GenericGetAttr' is not static, identity not guaranteed
                         var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                            (settings.Module as C.CCompilableModuleContainer<C.ObjectFile>).Compiler :
+                            (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
                             (settings.Module as C.ObjectFile).Compiler;
                         if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2015))
                         {

@@ -44,7 +44,7 @@ namespace Python
 
             var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
 
-            var source = this.CreateCSourceContainer("$(packagedir)/Programs/python.c");
+            var source = this.CreateCSourceCollection("$(packagedir)/Programs/python.c");
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)

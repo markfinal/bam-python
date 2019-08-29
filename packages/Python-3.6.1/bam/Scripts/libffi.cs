@@ -140,8 +140,8 @@ namespace Python
         {
             base.Init();
 
-            var source = this.CreateCSourceContainer();
-            var asmSource = this.CreateAssemblerSourceContainer();
+            var source = this.CreateCSourceCollection();
+            var asmSource = this.CreateAssemblerSourceCollection();
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Linux))
             {

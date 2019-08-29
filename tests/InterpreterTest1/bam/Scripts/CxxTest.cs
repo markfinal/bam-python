@@ -40,7 +40,7 @@ namespace InterpreterTest1
         {
             base.Init();
 
-            var source = this.CreateCxxSourceContainer("$(packagedir)/source/*.c");
+            var source = this.CreateCxxSourceCollection("$(packagedir)/source/*.c");
             source.PrivatePatch(settings =>
                 {
                     var winCompiler = settings as C.ICommonCompilerSettingsWin;

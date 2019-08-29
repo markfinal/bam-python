@@ -136,7 +136,7 @@ namespace Python
 
             this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);
 
-            this.moduleSourceModules = this.CreateCSourceContainer();
+            this.moduleSourceModules = this.CreateCSourceCollection();
             foreach (var basename in this.SourceFiles)
             {
                 this.moduleSourceModules.AddFiles(System.String.Format("$(packagedir)/{0}.c", basename));
@@ -180,7 +180,7 @@ namespace Python
 
             if (null != this.AssemblerFiles)
             {
-                var assemblerSource = this.CreateAssemblerSourceContainer();
+                var assemblerSource = this.CreateAssemblerSourceCollection();
                 foreach (var leafname in this.AssemblerFiles)
                 {
                     assemblerSource.AddFiles($"$(packagedir)/{leafname}");
