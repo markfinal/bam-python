@@ -30,7 +30,7 @@
 namespace Python
 {
     [Bam.Core.SettingsExtensions(typeof(DefaultSettings.DefaultSettingsExtensions))]
-    public interface IPyDocSettings :
+    interface IPyDocSettings :
         Bam.Core.ISettingsBase
     {
         bool DontWriteByteCode { get; set; }

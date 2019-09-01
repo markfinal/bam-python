@@ -30,7 +30,7 @@
 using System.Linq;
 namespace Python
 {
-    public class PyDocGeneratedHtml :
+    class PyDocGeneratedHtml :
         Bam.Core.Module
     {
         public const string PyDocHtmlKey = "PyDoc.Html";

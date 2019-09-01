@@ -29,7 +29,7 @@
 #endregion // License
 namespace Python
 {
-    static public class Version
+    static class Version
     {
         static public readonly string Major = "3";
         static public readonly string Minor = "6";

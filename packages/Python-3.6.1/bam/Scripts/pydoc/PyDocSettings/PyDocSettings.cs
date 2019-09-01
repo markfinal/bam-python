@@ -30,7 +30,7 @@
 namespace Python
 {
     [CommandLineProcessor.OutputPath(PyDocGeneratedHtml.PyDocHtmlKey, "", ignore: true)]
-    public sealed class PyDocSettings :
+    sealed class PyDocSettings :
         Bam.Core.Settings,
         IPyDocSettings
     {

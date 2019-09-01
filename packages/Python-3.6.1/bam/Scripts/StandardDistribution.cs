@@ -136,7 +136,7 @@ namespace Python
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
-    public class PythonZip :
+    class PythonZip :
         Installer.ZipModule
     {
         protected override void
@@ -181,7 +181,7 @@ namespace Python
 }
 namespace Python.StandardDistribution
 {
-    public static class PublisherExtensions
+    static class PublisherExtensions
     {
         public static void
         RegisterPythonModuleTypesToCollate(
