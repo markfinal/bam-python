@@ -90,11 +90,10 @@ namespace Python
                     }
                 });
 
-            // TODO
-            //this.LinkAgainst<PythonLibrary>();
+            this.UseSDK<SDK>(source);
 
-            var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
-            this.Requires(allModules);
+            //var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
+            //this.Requires(allModules);
 
             this.InheritedEnvironmentVariables = new Bam.Core.StringArray { "*" }; // seem to require all of them
         }

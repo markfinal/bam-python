@@ -33,6 +33,16 @@ namespace Python
 {
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
     [C.Thirdparty("$(packagedir)/PC/python_nt.rc")]
+    class SDK :
+        C.SDKTemplate
+    {
+        protected override Bam.Core.TypeArray LibraryModuleTypes { get; } = new Bam.Core.TypeArray(
+            typeof(PythonLibrary)
+        );
+    }
+
+    [Bam.Core.ModuleGroup("Thirdparty/Python")]
+    [C.Thirdparty("$(packagedir)/PC/python_nt.rc")]
     class PythonLibrary :
         C.DynamicLibrary
     {
@@ -46,6 +56,13 @@ namespace Python
             compiler.WarningsAsErrors = false;
 
             var preprocessor = settings as C.ICommonPreprocessorSettings;
+            preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                // C:\Program Files (x86)\Windows Kits\10\include\10.0.17134.0\um\winnt.h(154): fatal error C1189: #error:  "No Target Architecture"
+                preprocessor.PreprocessorDefines.Add(Bam.Core.OSUtilities.Is64Bit(this.BuildEnvironment.Platform) ? "_AMD64_" : "_X86_");
+            }
             preprocessor.PreprocessorDefines.Add("Py_BUILD_CORE");
             preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
 
@@ -508,7 +525,6 @@ namespace Python
                         }
                     });
                     */
-                /*
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
@@ -518,7 +534,6 @@ namespace Python
                         linker.Libraries.Add("Shlwapi.lib");
                         linker.Libraries.Add("version.lib");
                     });
-                    */
                 headers.AddFiles("$(packagedir)/PC/*.h");
 
                 if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
