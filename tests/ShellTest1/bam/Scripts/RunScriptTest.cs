@@ -27,7 +27,6 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion // License
-using Bam.Core;
 using System.Linq;
 using Python.StandardDistribution;
 namespace ShellTest1
@@ -44,9 +43,9 @@ namespace ShellTest1
             this.RegisterPythonModuleTypesToCollate();
 
             var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.ExecutableKey);
-            /*
             this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
+            /*
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);
             */
         }
