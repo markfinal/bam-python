@@ -42,11 +42,16 @@ namespace Python
         CoreBuildPatch(
             Bam.Core.Settings settings)
         {
+            var compiler = settings as C.ICommonCompilerSettings;
+            compiler.WarningsAsErrors = false;
+
             var preprocessor = settings as C.ICommonPreprocessorSettings;
             preprocessor.PreprocessorDefines.Add("Py_BUILD_CORE");
             preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+
             var cCompiler = settings as C.ICOnlyCompilerSettings;
             cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+
             if (settings is C.ICommonCompilerSettingsWin winCompiler)
             {
                 winCompiler.CharacterSet = C.ECharacterSet.NotSet;
@@ -54,16 +59,6 @@ namespace Python
             if (settings is VisualCCommon.ICommonCompilerSettings visualcCompiler)
             {
                 visualcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
-
-                // VisualC 2015 onwards does not issue C4127 for idiomatic cases such as 1 or true
-                var compilerUsed = (settings.Module is Bam.Core.IModuleGroup) ?
-                    (settings.Module as C.CCompilableModuleCollection<C.ObjectFile>).Compiler :
-                    (settings.Module as C.ObjectFile).Compiler;
-                if (compilerUsed.Version.AtMost(VisualCCommon.ToolchainVersion.VC2017_15_0))
-                {
-                    var compiler = settings as C.ICommonCompilerSettings;
-                    compiler.DisableWarnings.AddUnique("4127"); // Python-3.5.1\Parser\myreadline.c(39) : warning C4127: conditional expression is constant
-                }
             }
             if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
             {
@@ -127,6 +122,7 @@ namespace Python
 
             this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
 
+            /*
             this.PublicPatch((settings, appliedTo) =>
                 {
                     if (settings is C.ICommonCompilerSettings compiler)
@@ -149,6 +145,7 @@ namespace Python
                         }
                     }
                 });
+                */
 
             var headers = this.CreateHeaderCollection("$(packagedir)/Include/*.h");
 
@@ -158,35 +155,11 @@ namespace Python
             );
             parserSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Parser/*.h");
-            if (parserSource.Compiler is VisualCCommon.CompilerBase)
-            {
-                parserSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryParser());
-            }
-            else if (parserSource.Compiler is GccCommon.CompilerBase)
-            {
-                parserSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryParser());
-            }
-            else if (parserSource.Compiler is ClangCommon.CompilerBase)
-            {
-                parserSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryParser());
-            }
 
 
             var objectSource = this.CreateCSourceCollection("$(packagedir)/Objects/*.c");
             objectSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Objects/*.h");
-            if (objectSource.Compiler is VisualCCommon.CompilerBase)
-            {
-                objectSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryObjects());
-            }
-            else if (objectSource.Compiler is GccCommon.CompilerBase)
-            {
-                objectSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryObjects());
-            }
-            else if (objectSource.Compiler is ClangCommon.CompilerBase)
-            {
-                objectSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryObjects());
-            }
 
 
             var pythonSource = this.CreateCSourceCollection("$(packagedir)/Python/*.c",
@@ -194,6 +167,7 @@ namespace Python
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var dynload = pythonSource.AddFiles("$(packagedir)/Python/dynload_win.c");
+                /*
                 dynload.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
@@ -209,11 +183,13 @@ namespace Python
                             }
                         }
                     });
+                    */
             }
             else
             {
                 // don't use dynload_next, as it's for older OSX (10.2 or below)
                 var dynload = pythonSource.AddFiles("$(packagedir)/Python/dynload_shlib.c");
+                /*
                 dynload.First().PrivatePatch(settings =>
                     {
                         if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
@@ -268,22 +244,11 @@ namespace Python
                             preprocessor.PreprocessorDefines.Add("PLATFORM", "\"darwin\"");
                         }
                     }));
+                    */
             }
             pythonSource.PrivatePatch(this.CoreBuildPatch);
             headers.AddFiles("$(packagedir)/Python/*.h");
 
-            if (pythonSource.Compiler is VisualCCommon.CompilerBase)
-            {
-                pythonSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryPython());
-            }
-            else if (pythonSource.Compiler is GccCommon.CompilerBase)
-            {
-                pythonSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryPython());
-            }
-            else if (pythonSource.Compiler is ClangCommon.CompilerBase)
-            {
-                pythonSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryPython());
-            }
 
             var builtinModuleSource = this.CreateCSourceCollection("$(packagedir)/Modules/main.c");
             builtinModuleSource.PrivatePatch(this.CoreBuildPatch);
@@ -385,6 +350,7 @@ namespace Python
 
             var _io = this.CreateCSourceCollection("$(packagedir)/Modules/_io/*.c");
             _io.PrivatePatch(this.CoreBuildPatch);
+            /*
             _io["_iomodule.c"].ForEach(item =>
                 item.PrivatePatch(settings =>
                 {
@@ -402,6 +368,7 @@ namespace Python
                         }
                     }
                 }));
+                */
 
             builtinModuleSource.AddFiles("$(packagedir)/Modules/zipimport.c");
             builtinModuleSource.AddFiles("$(packagedir)/Modules/faulthandler.c");
@@ -422,6 +389,7 @@ namespace Python
                 var ModuleConfigSourceFile = Bam.Core.Graph.Instance.FindReferencedModule<ModuleConfigSourceFile>();
                 builtinModuleSource.AddFile(ModuleConfigSourceFile);
 
+                /*
                 builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
@@ -433,25 +401,7 @@ namespace Python
                             preprocessor.PreprocessorDefines.Add("VERSION", $"\"{Version.MajorDotMinor}\"");
                             preprocessor.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
-            }
-
-            if (builtinModuleSource.Compiler is VisualCCommon.CompilerBase)
-            {
-                builtinModuleSource.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryBuiltinModules());
-                cjkcodecs.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryCJKCodecs());
-                _io.SuppressWarningsDelegate(new VisualC.WarningSuppression.PythonLibraryIO());
-            }
-            else if (builtinModuleSource.Compiler is GccCommon.CompilerBase)
-            {
-                builtinModuleSource.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryBuiltinModules());
-                cjkcodecs.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryCJKCodecs());
-                _io.SuppressWarningsDelegate(new Gcc.WarningSuppression.PythonLibraryIO());
-            }
-            else if (pythonSource.Compiler is ClangCommon.CompilerBase)
-            {
-                builtinModuleSource.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryBuiltinModules());
-                cjkcodecs.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryCJKCodecs());
-                _io.SuppressWarningsDelegate(new Clang.WarningSuppression.PythonLibraryIO());
+                        */
             }
 
 #if false
@@ -470,6 +420,7 @@ namespace Python
                 });
 #endif
 
+            /*
             // TODO: is there a call for a CompileWith function?
             this.UsePublicPatches(pyConfigHeader);
             parserSource.DependsOn(pyConfigHeader);
@@ -479,11 +430,13 @@ namespace Python
             cjkcodecs.DependsOn(pyConfigHeader);
             _io.DependsOn(pyConfigHeader);
             // TODO: end of function
+            */
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var pcSource = this.CreateCSourceCollection("$(packagedir)/PC/dl_nt.c");
                 pcSource.PrivatePatch(this.CoreBuildPatch);
+                /*
                 pcSource["dl_nt.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
@@ -493,14 +446,18 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\dl_nt.c(90): warning C4100: 'lpReserved': unreferenced formal parameter
                             }
                         }));
+                        */
                 var pcConfig = pcSource.AddFiles("$(packagedir)/PC/config.c");
+                /*
                 pcConfig.First().PrivatePatch(settings =>
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.PreprocessorDefines.Add("WIN32"); // required to register two extension modules
                     });
+                    */
                 //pcSource.AddFiles("$(packagedir)/PC/frozen_dllmain.c");
                 var getpathp = pcSource.AddFiles("$(packagedir)/PC/getpathp.c");
+                /*
                 getpathp.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -513,7 +470,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4459"); // Python-3.6.1\PC\getpathp.c(541): warning C4459: declaration of 'prefix' hides global declaration
                         }
                     });
+                    */
                 var winreg = pcSource.AddFiles("$(packagedir)/PC/winreg.c");
+                /*
                 winreg.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
@@ -537,7 +496,9 @@ namespace Python
                             }
                         }
                     });
+                    */
                 var invalid_parameter_handle = pcSource.AddFiles("$(packagedir)/PC/invalid_parameter_handler.c"); // required by VS2015+
+                /*
                 invalid_parameter_handle.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -546,6 +507,8 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\PC\invalid_parameter_handler.c(16): warning C4100: 'pReserved': unreferenced formal parameter
                         }
                     });
+                    */
+                /*
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
@@ -555,6 +518,7 @@ namespace Python
                         linker.Libraries.Add("Shlwapi.lib");
                         linker.Libraries.Add("version.lib");
                     });
+                    */
                 headers.AddFiles("$(packagedir)/PC/*.h");
 
                 if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
@@ -586,11 +550,13 @@ namespace Python
                             }
                         });
 
+                    /*
                     this.PrivatePatch(settings =>
                         {
                             var vcLinker = settings as VisualCCommon.ICommonLinkerSettings;
                             vcLinker.GenerateManifest = false; // as the .rc file refers to this already
                         });
+                        */
                 }
             }
             else
@@ -601,6 +567,7 @@ namespace Python
                 var pyMakeFile = Bam.Core.Graph.Instance.FindReferencedModule<PyMakeFile>();
                 this.Requires(pyMakeFile);
 
+                /*
                 this.PrivatePatch(settings =>
                     {
                         var linker = settings as C.ICommonLinkerSettings;
@@ -608,6 +575,7 @@ namespace Python
                         linker.Libraries.Add("-lm");
                         linker.Libraries.Add("-ldl");
                     });
+                    */
 
                 headers.AddFile(pyConfigHeader);
             }

@@ -301,17 +301,14 @@ namespace Python.StandardDistribution
         {
             anchor.SourceModule.PrivatePatch(settings =>
                 {
-                    var gccLinker = settings as GccCommon.ICommonLinkerSettings;
-                    if (null != gccLinker)
+                    var linuxLinker = settings as C.ICommonLinkerSettingsLinux;
+                    if (null != linuxLinker)
                     {
-                        gccLinker.CanUseOrigin = true;
+                        linuxLinker.CanUseOrigin = true;
                     }
                     if (Publisher.Collation.EPublishingType.WindowedApplication == collator.PublishingType)
                     {
-                        if (null != gccLinker)
-                        {
-                            gccLinker.RPath.AddUnique("$ORIGIN/../lib");
-                        }
+                        linuxLinker?.RPath.AddUnique("$ORIGIN/../lib");
                         if (settings is ClangCommon.ICommonLinkerSettings clangLinker)
                         {
                             clangLinker.RPath.AddUnique("@executable_path/../Frameworks/");
@@ -319,10 +316,7 @@ namespace Python.StandardDistribution
                     }
                     else
                     {
-                        if (null != gccLinker)
-                        {
-                            gccLinker.RPath.AddUnique("$ORIGIN");
-                        }
+                        linuxLinker?.RPath.AddUnique("$ORIGIN");
                     }
                 }
             );

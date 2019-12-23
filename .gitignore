@@ -2,3 +2,4 @@ PackageDebug
 build
 *.pyc
 tests/Logs
+prebuiltsdks

@@ -143,10 +143,15 @@ namespace Python
             }
             this.moduleSourceModules.PrivatePatch(settings =>
                 {
+                    var compiler = settings as C.ICommonCompilerSettings;
+                    compiler.WarningsAsErrors = false;
+
                     var preprocessor = settings as C.ICommonPreprocessorSettings;
                     preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+
                     var cCompiler = settings as C.ICOnlyCompilerSettings;
                     cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+
                     if (settings is C.ICommonCompilerSettingsWin winCompiler)
                     {
                         winCompiler.CharacterSet = C.ECharacterSet.NotSet;
@@ -160,11 +165,12 @@ namespace Python
                         gccCompiler.AllWarnings = true;
                         gccCompiler.ExtraWarnings = true;
                         gccCompiler.Pedantic = true;
+                        /*
                         if ((settings.Module.Tool as C.CompilerTool).Version.AtLeast(GccCommon.ToolchainVersion.GCC_8))
                         {
-                            var compiler = settings as C.ICommonCompilerSettings;
                             compiler.DisableWarnings.AddUnique("cast-function-type");
                         }
+                        */
                     }
                     if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
                     {
@@ -191,7 +197,8 @@ namespace Python
                 }
             }
 
-            this.CompileAndLinkAgainst<PythonLibrary>(this.moduleSourceModules);
+            // TODO
+            //this.CompileAndLinkAgainst<PythonLibrary>(this.moduleSourceModules);
 
             if (this.LibsToLink != null)
             {

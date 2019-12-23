@@ -45,14 +45,16 @@ namespace Python
             {
                 this.RegisterGeneratedFile(
                     SysConfigDataPythonFileKey,
-                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__darwin_.py") // no ABI, no multiarch
+                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__darwin_.py"), // no ABI, no multiarch
+                    true
                 );
             }
             else
             {
                 this.RegisterGeneratedFile(
                     SysConfigDataPythonFileKey,
-                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__linux_.py") // no ABI, no multiarch
+                    this.CreateTokenizedString("$(packagebuilddir)/$(config)/_sysconfigdata__linux_.py"), // no ABI, no multiarch
+                    true
                 );
             }
         }

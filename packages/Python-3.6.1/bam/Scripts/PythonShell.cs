@@ -90,7 +90,8 @@ namespace Python
                     }
                 });
 
-            this.LinkAgainst<PythonLibrary>();
+            // TODO
+            //this.LinkAgainst<PythonLibrary>();
 
             var allModules = Bam.Core.Graph.Instance.FindReferencedModule<AllDynamicModules>();
             this.Requires(allModules);

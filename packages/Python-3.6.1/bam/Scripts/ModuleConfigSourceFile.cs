@@ -39,7 +39,8 @@ namespace Python
             base.Init();
             this.RegisterGeneratedFile(
                 SourceFileKey,
-                this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c")
+                this.CreateTokenizedString("$(packagebuilddir)/$(config)/config.c"),
+                true
             );
             this.Macros.Add(
                 "templateConfig",

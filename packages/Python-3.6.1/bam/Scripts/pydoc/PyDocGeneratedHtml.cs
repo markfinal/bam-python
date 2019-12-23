@@ -61,7 +61,8 @@ namespace Python
                     "$(0)/$(1).html",
                     outputDirectory,
                     Bam.Core.TokenizedString.CreateVerbatim(nameOfModule)
-                )
+                ),
+                true
             );
         }
 
