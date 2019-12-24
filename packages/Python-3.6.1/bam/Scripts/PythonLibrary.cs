@@ -84,8 +84,10 @@ namespace Python
             preprocessor.PreprocessorDefines.Add("Py_BUILD_CORE");
             preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
 
-            var cCompiler = settings as C.ICOnlyCompilerSettings;
-            cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+            if (settings is C.ICOnlyCompilerSettings cCompiler)
+            {
+                cCompiler.LanguageStandard = C.ELanguageStandard.C99; // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+            }
 
             if (settings is C.ICommonCompilerSettingsWin winCompiler)
             {
@@ -424,7 +426,6 @@ namespace Python
                 var ModuleConfigSourceFile = Bam.Core.Graph.Instance.FindReferencedModule<ModuleConfigSourceFile>();
                 builtinModuleSource.AddFile(ModuleConfigSourceFile);
 
-                /*
                 builtinModuleSource["getpath.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                         {
@@ -436,7 +437,6 @@ namespace Python
                             preprocessor.PreprocessorDefines.Add("VERSION", $"\"{Version.MajorDotMinor}\"");
                             preprocessor.PreprocessorDefines.Add("VPATH", "\".\"");
                         }));
-                        */
             }
 
 #if false
@@ -611,6 +611,13 @@ namespace Python
                     */
 
                 headers.AddFile(pyConfigHeader);
+
+                parserSource.UsePublicPatches(pyConfigHeader);
+                objectSource.UsePublicPatches(pyConfigHeader);
+                pythonSource.UsePublicPatches(pyConfigHeader);
+                builtinModuleSource.UsePublicPatches(pyConfigHeader);
+                _io.UsePublicPatches(pyConfigHeader);
+                // TODO: MF: cjkcodecs is empty on non-windows platforms, intentional?
             }
 
             if (!(pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
