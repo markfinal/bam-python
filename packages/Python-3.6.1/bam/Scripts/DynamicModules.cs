@@ -61,16 +61,18 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:335:48: error: unused parameter 'args' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:653:1: error: missing initializer for field 'tp_free' of 'PyTypeObject' [-Werror=missing-field-initializers]
                     }
+                    */
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.PreprocessorDefines.Add("POSIX_SEMAPHORES_NOT_ENABLED"); // macOS does not support semaphores
+                        /*
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:158:31: error: unused variable 'value' [-Werror,-Wunused-variable]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:134:10: error: missing field 'ml_meth' initializer [-Werror,-Wmissing-field-initializers]
                         compiler.DisableWarnings.AddUnique("unused-variable"); // Python-3.5.1/Modules/_multiprocessing/multiprocessing.c:158:31: error: unused variable 'value' [-Werror,-Wunused-variable]
+                        */
                     }
-                    */
                 },
             settings =>
                 {
@@ -1817,16 +1819,20 @@ namespace Python
                  new Bam.Core.StringArray("Modules/expat/xmlparse", "Modules/expat/xmlrole", "Modules/expat/xmltok", "Modules/pyexpat"),
                  settings =>
                      {
+                         var preprocessor = settings as C.ICommonPreprocessorSettings;
+                         preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
                          if (settings is VisualCCommon.ICommonCompilerSettings)
                          {
-                             var preprocessor = settings as C.ICommonPreprocessorSettings;
                              preprocessor.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
                              preprocessor.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
-                             preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         }
+                         else
+                         {
+                             preprocessor.PreprocessorDefines.Add("HAVE_MEMMOVE", "1");
+                             preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          }
                          /*
                          var preprocessor = settings as C.ICommonPreprocessorSettings;
-                         preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          preprocessor.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
                          preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
                          if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -2133,6 +2139,12 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\Modules\_ctypes\cfield.c(1447): warning C4389: '!=': signed/unsigned mismatch
                         }
                         */
+                    }
+                    if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
+                    {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        preprocessor.PreprocessorDefines.Add("MACOSX");
                     }
                     /*
                     if (settings is GccCommon.ICommonCompilerSettings gccCompiler)

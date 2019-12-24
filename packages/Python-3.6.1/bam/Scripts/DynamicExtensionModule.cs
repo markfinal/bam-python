@@ -30,8 +30,10 @@
 using Bam.Core;
 namespace Python
 {
+    // TODO: MF: Is this used externally?
+    // TODO: MF: check install_name for macOS - looks like has a lib prefix and version number, and doesn't match output name
     [Bam.Core.ModuleGroup("Thirdparty/Python/DynamicModules")]
-    class DynamicExtensionModule :
+    abstract class DynamicExtensionModule :
         C.Plugin
     {
         private readonly string ModuleName;
@@ -154,8 +156,10 @@ namespace Python
                         preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
                     }
 
-                    //var cCompiler = settings as C.ICOnlyCompilerSettings;
-                    //cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+                    if (settings is C.ICOnlyCompilerSettings cCompiler)
+                    {
+                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+                    }
 
                     if (settings is C.ICommonCompilerSettingsWin winCompiler)
                     {
@@ -220,6 +224,12 @@ namespace Python
             if (null != this.LinkerPatch)
             {
                 this.PrivatePatch(this.LinkerPatch);
+            }
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
+            {
+                var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
+                this.moduleSourceModules.UsePublicPatches(pyConfigHeader);
             }
         }
     }

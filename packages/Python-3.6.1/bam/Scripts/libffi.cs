@@ -305,6 +305,19 @@ namespace Python
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                     }
+                    if (settings is ClangCommon.ICommonCompilerSettings clangCompiler)
+                    {
+                        clangCompiler.AllWarnings = true;
+                        clangCompiler.ExtraWarnings = true;
+                        clangCompiler.Pedantic = true;
+
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
+                        preprocessor.PreprocessorDefines.Add("MACOSX");
+
+                        var cOnly = settings as C.ICOnlyCompilerSettings;
+                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+                    }
                 });
 
             asmSource.PrivatePatch(settings =>
@@ -319,6 +332,7 @@ namespace Python
                             assembler.PreprocessorDefines.Add("HAVE_AS_ASCII_PSEUDO_OP", "1");
                         }
                     }
+                    */
 
                     if (settings is ClangCommon.ICommonAssemblerSettings)
                     {
@@ -326,7 +340,6 @@ namespace Python
                         assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         assembler.PreprocessorDefines.Add("MACOSX");
                     }
-                    */
                 });
 
             /*

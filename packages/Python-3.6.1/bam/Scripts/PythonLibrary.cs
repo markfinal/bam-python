@@ -234,6 +234,7 @@ namespace Python
                             gccCompiler.Pedantic = false; // Python-3.5.1/Python/dynload_shlib.c:82:21: error: ISO C forbids conversion of object pointer to function pointer type [-Werror=pedantic]
                         }
                     });
+                    */
 
                 pythonSource["getargs.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
@@ -251,6 +252,7 @@ namespace Python
                         }
                     }));
 
+                /*
                 pythonSource["sysmodule.c"].ForEach(item =>
                     item.PrivatePatch(settings =>
                     {
