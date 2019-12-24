@@ -74,13 +74,11 @@ namespace Python
                 },
             settings =>
                 {
-                    /*
                     if (settings is VisualCCommon.ICommonLinkerSettings)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ws2_32.lib");
                     }
-                    */
                 })
         { }
     }
@@ -640,9 +638,9 @@ namespace Python
                  new Bam.Core.StringArray("Modules/_elementtree"),
                  settings =>
                      {
-                         /*
                          var preprocessor = settings as C.ICommonPreprocessorSettings;
                          preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         /*
                          preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
                          preprocessor.PreprocessorDefines.Add("USE_PYEXPAT_CAPI");
 
@@ -961,13 +959,11 @@ namespace Python
                 },
             settings =>
                 {
-                    /*
                     if (settings is VisualCCommon.ICommonLinkerSettings)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ws2_32.lib");
                     }
-                    */
                 })
         { }
     }
@@ -1079,13 +1075,11 @@ namespace Python
                 },
                 settings =>
                 {
-                    /*
                     if (settings is VisualCCommon.ICommonLinkerSettings)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ws2_32.lib");
                     }
-                    */
                 })
         { }
     }
@@ -1823,6 +1817,13 @@ namespace Python
                  new Bam.Core.StringArray("Modules/expat/xmlparse", "Modules/expat/xmlrole", "Modules/expat/xmltok", "Modules/pyexpat"),
                  settings =>
                      {
+                         if (settings is VisualCCommon.ICommonCompilerSettings)
+                         {
+                             var preprocessor = settings as C.ICommonPreprocessorSettings;
+                             preprocessor.PreprocessorDefines.Add("COMPILED_FROM_DSP"); // to indicate a Windows build
+                             preprocessor.PreprocessorDefines.Add("XML_STATIC"); // to avoid unwanted declspecs
+                             preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/expat"));
+                         }
                          /*
                          var preprocessor = settings as C.ICommonPreprocessorSettings;
                          preprocessor.PreprocessorDefines.Add("HAVE_EXPAT_CONFIG_H");
@@ -2109,11 +2110,11 @@ namespace Python
             null,
             settings =>
                 {
-                    /*
                     if (settings is VisualCCommon.ICommonCompilerSettings)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
+                        /*
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(155): warning C4100: 'kw': unreferenced formal parameter
                         compiler.DisableWarnings.AddUnique("4054"); // Python-3.5.1\Modules\_ctypes\_ctypes.c(603): warning C4054: 'type cast': from function pointer 'FARPROC' to data pointer 'void *'
@@ -2131,7 +2132,9 @@ namespace Python
                         {
                             compiler.DisableWarnings.AddUnique("4389"); // Python-3.5.1\Modules\_ctypes\cfield.c(1447): warning C4389: '!=': signed/unsigned mismatch
                         }
+                        */
                     }
+                    /*
                     if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                     {
                         var compiler = settings as C.ICommonCompilerSettings;
@@ -2153,14 +2156,12 @@ namespace Python
                 },
             settings =>
                 {
-                    /*
                     if (settings is VisualCCommon.ICommonLinkerSettings)
                     {
                         var linker = settings as C.ICommonLinkerSettings;
                         linker.Libraries.AddUnique("Ole32.lib");
                         linker.Libraries.AddUnique("OleAut32.lib");
                     }
-                    */
                 },
             null,
             null
@@ -2174,6 +2175,7 @@ namespace Python
 
             // TODO: MF
             //this.CompileAndLinkAgainst<ffi>(this.moduleSourceModules);
+            this.LinkOnlyAgainst<ffi>();
         }
     }
 

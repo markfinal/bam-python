@@ -155,6 +155,7 @@ namespace Python
                 else
                 {
                     var ffi64 = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/ffi64.c");
+                    /*
                     ffi64.First().PrivatePatch(settings =>
                     {
                         // TODO: Gcc 7+
@@ -164,9 +165,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("implicit-fallthrough");
                         }
                     });
+                    */
                     asmSource.AddFiles("$(packagedir)/Modules/_ctypes/libffi/src/x86/unix64.S");
                 }
 
+                /*
                 var copyheaders = Bam.Core.Graph.Instance.FindReferencedModule<CopyNonPublicHeadersToPublic>();
                 source.DependsOn(copyheaders);
                 source.UsePublicPatches(copyheaders);
@@ -180,10 +183,12 @@ namespace Python
                 source.DependsOn(ffiConfig);
                 asmSource.UsePublicPatches(ffiConfig);
                 asmSource.DependsOn(ffiConfig);
+                */
             }
             else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
                 var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/ffi.c");
+                /*
                 ffi.First().PrivatePatch(settings =>
                     {
                         if (settings is ClangCommon.ICommonCompilerSettings)
@@ -192,6 +197,7 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("unused-function"); // Python-3.5.1/Modules/_ctypes/libffi_osx/ffi.c:108:1: error: unused function 'struct_on_stack' [-Werror,-Wunused-function]
                         }
                     });
+                    */
                 if (this.BitDepth == C.EBit.ThirtyTwo)
                 {
                     source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_osx/x86/x86-ffi_darwin.c");
@@ -206,6 +212,7 @@ namespace Python
             else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 var ffi = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/ffi.c");
+                /*
                 ffi.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -216,7 +223,9 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\ffi.c(416): warning C4100: 'codeloc': unreferenced formal parameter
                         }
                     });
+                    */
                 var prep_cif = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/prep_cif.c");
+                /*
                 prep_cif.First().PrivatePatch(settings =>
                     {
                         if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -225,9 +234,11 @@ namespace Python
                             compiler.DisableWarnings.AddUnique("4267"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\prep_cif.c(170): warning C4267: '+=': conversion from 'size_t' to 'unsigned int', possible loss of data
                         }
                     });
+                    */
                 if (this.BitDepth == C.EBit.ThirtyTwo)
                 {
                     var win32 = source.AddFiles("$(packagedir)/Modules/_ctypes/libffi_msvc/win32.c");
+                    /*
                     win32.First().PrivatePatch(settings =>
                         {
                             if (settings is VisualCCommon.ICommonCompilerSettings)
@@ -236,6 +247,7 @@ namespace Python
                                 compiler.DisableWarnings.AddUnique("4100"); // Python-3.5.1\Modules\_ctypes\libffi_msvc\win32.c(46): warning C4100: 'fn': unreferenced formal parameter
                             }
                         });
+                        */
                 }
                 else
                 {
@@ -245,6 +257,7 @@ namespace Python
 
             source.PrivatePatch(settings =>
                 {
+                    /*
                     if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
                     {
                         gccCompiler.AllWarnings = true;
@@ -280,15 +293,23 @@ namespace Python
                         var cOnly = settings as C.ICOnlyCompilerSettings;
                         cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
                     }
-
+                    */
+                    if (settings is C.ICommonCompilerSettings compiler)
+                    {
+                        compiler.WarningsAsErrors = false;
+                    }
                     if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                     {
                         vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
+
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                     }
                 });
 
             asmSource.PrivatePatch(settings =>
                 {
+                    /*
                     if (settings is GccCommon.ICommonAssemblerSettings)
                     {
                         var assembler = settings as C.ICommonAssemblerSettings;
@@ -305,8 +326,10 @@ namespace Python
                         assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         assembler.PreprocessorDefines.Add("MACOSX");
                     }
+                    */
                 });
 
+            /*
             this.PublicPatch((settings, appliedTo) =>
                 {
                     if (settings is ClangCommon.ICommonCompilerSettings)
@@ -324,6 +347,7 @@ namespace Python
                         preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_msvc"));
                     }
                 });
+                */
         }
     }
 }

@@ -37,8 +37,26 @@ namespace Python
         C.SDKTemplate
     {
         protected override Bam.Core.TypeArray LibraryModuleTypes { get; } = new Bam.Core.TypeArray(
-            typeof(PythonLibrary)
+            typeof(PythonLibrary),
+            typeof(_multiprocessing),
+            typeof(_ctypes),
+            typeof(_testmultiphase),
+            typeof(_testimportmultiple),
+            typeof(_testbuffer),
+            typeof(_testcapi),
+            typeof(_elementtree),
+            typeof(unicodedata),
+            typeof(select),
+            typeof(_socket),
+            typeof(fpectl),
+            typeof(fpetest),
+            typeof(pyexpat)
         );
+
+        protected override System.Collections.Generic.IEnumerable<Module> LibraryFilter()
+        {
+            return base.LibraryFilter().Where(item => !(item is ffi));
+        }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]

@@ -148,9 +148,14 @@ namespace Python
 
                     var preprocessor = settings as C.ICommonPreprocessorSettings;
                     preprocessor.PreprocessorDefines.Add("Py_ENABLE_SHARED");
+                    preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Include"));
+                    if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+                    {
+                        preprocessor.IncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/PC"));
+                    }
 
-                    var cCompiler = settings as C.ICOnlyCompilerSettings;
-                    cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
+                    //var cCompiler = settings as C.ICOnlyCompilerSettings;
+                    //cCompiler.LanguageStandard = C.ELanguageStandard.C99; // // some C99 features are now used from 3.6 (https://www.python.org/dev/peps/pep-0007/#c-dialect)
 
                     if (settings is C.ICommonCompilerSettingsWin winCompiler)
                     {
@@ -199,6 +204,7 @@ namespace Python
 
             // TODO
             //this.CompileAndLinkAgainst<PythonLibrary>(this.moduleSourceModules);
+            this.LinkOnlyAgainst<PythonLibrary>();
 
             if (this.LibsToLink != null)
             {

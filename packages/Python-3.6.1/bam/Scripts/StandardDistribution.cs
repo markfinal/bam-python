@@ -47,19 +47,19 @@ namespace Python
             base.Init();
 
             // common to all platforms
-            this.RequiredToExist<_multiprocessing>();
-            this.RequiredToExist<_ctypes>();
-            this.RequiredToExist<_testmultiphase>();
-            this.RequiredToExist<_testimportmultiple>();
-            this.RequiredToExist<_testbuffer>();
-            this.RequiredToExist<_testcapi>();
-            this.RequiredToExist<_elementtree>();
-            this.RequiredToExist<unicodedata>();
-            this.RequiredToExist<select>();
-            this.RequiredToExist<_socket>();
-            this.RequiredToExist<fpectl>();
-            this.RequiredToExist<fpetest>();
-            this.RequiredToExist<pyexpat>();
+            //this.RequiredToExist<_multiprocessing>();
+            //this.RequiredToExist<_ctypes>();
+            //this.RequiredToExist<_testmultiphase>();
+            //this.RequiredToExist<_testimportmultiple>();
+            //this.RequiredToExist<_testbuffer>();
+            //this.RequiredToExist<_testcapi>();
+            //this.RequiredToExist<_elementtree>();
+            //this.RequiredToExist<unicodedata>();
+            //this.RequiredToExist<select>();
+            //this.RequiredToExist<_socket>();
+            //this.RequiredToExist<fpectl>();
+            //this.RequiredToExist<fpetest>();
+            //this.RequiredToExist<pyexpat>();
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.NotWindows))
             {
