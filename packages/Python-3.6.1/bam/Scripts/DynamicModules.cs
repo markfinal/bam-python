@@ -53,15 +53,17 @@ namespace Python
                         compiler.DisableWarnings.AddUnique("4701"); // python-3.5.1\modules\_multiprocessing\semaphore.c(120) : warning C4701: potentially uninitialized local variable 'sigint_event' used
                         compiler.DisableWarnings.AddUnique("4703"); // python-3.5.1\modules\_multiprocessing\semaphore.c(120) : warning C4703: potentially uninitialized local pointer variable 'sigint_event' used
                     }
+                    */
                     if (settings is GccCommon.ICommonCompilerSettings)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.PreprocessorDefines.Add("HAVE_SEM_OPEN");
+                        /*
                         var compiler = settings as C.ICommonCompilerSettings;
                         compiler.DisableWarnings.AddUnique("unused-parameter"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:335:48: error: unused parameter 'args' [-Werror=unused-parameter]
                         compiler.DisableWarnings.AddUnique("missing-field-initializers"); // Python-3.5.1/Modules/_multiprocessing/semaphore.c:653:1: error: missing initializer for field 'tp_free' of 'PyTypeObject' [-Werror=missing-field-initializers]
+                        */
                     }
-                    */
                     if (settings is ClangCommon.ICommonCompilerSettings)
                     {
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
@@ -2145,6 +2147,11 @@ namespace Python
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         preprocessor.PreprocessorDefines.Add("MACOSX");
+                    }
+                    if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                    {
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.SystemIncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86"));
                     }
                     /*
                     if (settings is GccCommon.ICommonCompilerSettings gccCompiler)

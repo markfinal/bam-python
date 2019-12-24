@@ -43,7 +43,7 @@ namespace Python
             this.Macros.Add("templateConfig", this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include/ffi.h.in"));
         }
 
-        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/PublicHeaders/ffi.h");
+        protected override Bam.Core.TokenizedString OutputPath => this.CreateTokenizedString("$(packagebuilddir)/$(config)/ffi.h");
         protected override string GuardString => null; // the template file already has one
         protected override bool UseSystemIncludeSearchPaths => true;
 
@@ -98,6 +98,7 @@ namespace Python
         }
     }
 
+    /*
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
     [Bam.Core.PlatformFilter(Bam.Core.EPlatform.Linux)]
     class CopyNonPublicHeadersToPublic :
@@ -130,6 +131,7 @@ namespace Python
             }
         }
     }
+    */
 
     [Bam.Core.ModuleGroup("Thirdparty/Python/libffi")]
     class ffi :
@@ -174,16 +176,16 @@ namespace Python
                 source.DependsOn(copyheaders);
                 source.UsePublicPatches(copyheaders);
 
+                */
                 var ffiHeader = Bam.Core.Graph.Instance.FindReferencedModule<libffiheader>();
-                this.UsePublicPatches(ffiHeader);
                 source.DependsOn(ffiHeader);
+                source.UsePublicPatches(ffiHeader);
 
                 var ffiConfig = Bam.Core.Graph.Instance.FindReferencedModule<libfficonfig>();
-                source.UsePublicPatches(ffiConfig);
                 source.DependsOn(ffiConfig);
-                asmSource.UsePublicPatches(ffiConfig);
+                source.UsePublicPatches(ffiConfig);
                 asmSource.DependsOn(ffiConfig);
-                */
+                asmSource.UsePublicPatches(ffiConfig);
             }
             else if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
             {
@@ -298,6 +300,10 @@ namespace Python
                     {
                         compiler.WarningsAsErrors = false;
                     }
+                    if (settings is C.ICOnlyCompilerSettings cCompiler)
+                    {
+                        cCompiler.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+                    }
                     if (settings is VisualCCommon.ICommonCompilerSettings vcCompiler)
                     {
                         vcCompiler.WarningLevel = VisualCCommon.EWarningLevel.Level4;
@@ -314,25 +320,34 @@ namespace Python
                         var preprocessor = settings as C.ICommonPreprocessorSettings;
                         preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi_osx/include"));
                         preprocessor.PreprocessorDefines.Add("MACOSX");
+                    }
+                    if (settings is GccCommon.ICommonCompilerSettings gccCompiler)
+                    {
+                        gccCompiler.AllWarnings = true;
+                        gccCompiler.ExtraWarnings = true;
+                        gccCompiler.Pedantic = true;
 
-                        var cOnly = settings as C.ICOnlyCompilerSettings;
-                        cOnly.LanguageStandard = C.ELanguageStandard.C99; // for C++ style comments, etc
+                        var preprocessor = settings as C.ICommonPreprocessorSettings;
+                        preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
+                        preprocessor.SystemIncludePaths.AddUnique(this.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86"));
                     }
                 });
 
             asmSource.PrivatePatch(settings =>
                 {
-                    /*
                     if (settings is GccCommon.ICommonAssemblerSettings)
                     {
                         var assembler = settings as C.ICommonAssemblerSettings;
+                        assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/include"));
+                        assembler.IncludePaths.AddUnique(settings.Module.CreateTokenizedString("$(packagedir)/Modules/_ctypes/libffi/src/x86"));
                         assembler.PreprocessorDefines.Add("HAVE_AS_X86_PCREL", "1");
-                        if (this.BitDepth == C.EBit.ThirtyTwo)
-                        {
-                            assembler.PreprocessorDefines.Add("HAVE_AS_ASCII_PSEUDO_OP", "1");
-                        }
+                        /*
+                            if (this.BitDepth == C.EBit.ThirtyTwo)
+                            {
+                                assembler.PreprocessorDefines.Add("HAVE_AS_ASCII_PSEUDO_OP", "1");
+                            }
+                        */
                     }
-                    */
 
                     if (settings is ClangCommon.ICommonAssemblerSettings)
                     {

@@ -602,15 +602,20 @@ namespace Python
                 var pyMakeFile = Bam.Core.Graph.Instance.FindReferencedModule<PyMakeFile>();
                 this.Requires(pyMakeFile);
 
-                /*
                 this.PrivatePatch(settings =>
+                {
+                    if (settings is C.ICommonLinkerSettingsLinux linuxLinker)
                     {
-                        var linker = settings as C.ICommonLinkerSettings;
-                        linker.Libraries.Add("-lpthread");
-                        linker.Libraries.Add("-lm");
-                        linker.Libraries.Add("-ldl");
-                    });
-                    */
+                        linuxLinker.SharedObjectName = this.CreateTokenizedString("$(dynamicprefix)$(OutputName)$(sonameext)");
+                        if (settings is C.ICommonLinkerSettings linker)
+                        {
+                            linker.Libraries.Add("-lpthread");
+                            linker.Libraries.Add("-lm");
+                            linker.Libraries.Add("-ldl");
+
+                        }
+                    }
+                });
 
                 headers.AddFile(pyConfigHeader);
 
