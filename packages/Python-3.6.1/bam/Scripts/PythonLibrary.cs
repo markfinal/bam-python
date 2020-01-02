@@ -57,6 +57,17 @@ namespace Python
         {
             return base.LibraryFilter().Where(item => !(item is ffi));
         }
+
+        protected override void
+        Init()
+        {
+            base.Init();
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                this.Macros["PluginDir"].Set("$(0)/DLLs", new[] { this.PublishRoot });
+            }
+        }
     }
 
     [Bam.Core.ModuleGroup("Thirdparty/Python")]
