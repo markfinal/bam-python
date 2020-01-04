@@ -61,12 +61,80 @@ namespace Python
         protected override void
         Init()
         {
+            this.AddCExtensionModules();
+
             base.Init();
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
                 this.Macros.FromName("PluginDir").Set("$(0)/DLLs", this, new[] { this.PublishRoot });
             }
+        }
+
+        private void
+        AddCExtensionModules()
+        {
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
+            {
+                return;
+            }
+
+            if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.OSX))
+            {
+                this.LibraryModuleTypes.Add(typeof(_scproxy));
+                this.LibraryModuleTypes.Add(typeof(_curses));
+                this.LibraryModuleTypes.Add(typeof(_curses_panel));
+            }
+
+            this.LibraryModuleTypes.Add(typeof(_opcode));
+            this.LibraryModuleTypes.Add(typeof(_lsprof));
+            this.LibraryModuleTypes.Add(typeof(_json));
+            this.LibraryModuleTypes.Add(typeof(_thread));
+            this.LibraryModuleTypes.Add(typeof(array));
+            this.LibraryModuleTypes.Add(typeof(cmath));
+            this.LibraryModuleTypes.Add(typeof(math));
+            this.LibraryModuleTypes.Add(typeof(_struct));
+            this.LibraryModuleTypes.Add(typeof(_random));
+            this.LibraryModuleTypes.Add(typeof(_pickle));
+            this.LibraryModuleTypes.Add(typeof(_datetime));
+            this.LibraryModuleTypes.Add(typeof(_bisect));
+            this.LibraryModuleTypes.Add(typeof(_heapq));
+            this.LibraryModuleTypes.Add(typeof(fcntl));
+            this.LibraryModuleTypes.Add(typeof(grp));
+            this.LibraryModuleTypes.Add(typeof(mmap));
+            this.LibraryModuleTypes.Add(typeof(_csv));
+            this.LibraryModuleTypes.Add(typeof(_crypt));
+            this.LibraryModuleTypes.Add(typeof(nis));
+            this.LibraryModuleTypes.Add(typeof(termios));
+            this.LibraryModuleTypes.Add(typeof(resource));
+            this.LibraryModuleTypes.Add(typeof(_posixsubprocess));
+            this.LibraryModuleTypes.Add(typeof(audioop));
+            this.LibraryModuleTypes.Add(typeof(_md5));
+            this.LibraryModuleTypes.Add(typeof(_sha1));
+            this.LibraryModuleTypes.Add(typeof(_sha256));
+            this.LibraryModuleTypes.Add(typeof(_sha512));
+            this.LibraryModuleTypes.Add(typeof(syslog));
+            this.LibraryModuleTypes.Add(typeof(binascii));
+            this.LibraryModuleTypes.Add(typeof(parser));
+            this.LibraryModuleTypes.Add(typeof(zlib));
+            this.LibraryModuleTypes.Add(typeof(_multibytecodec));
+            this.LibraryModuleTypes.Add(typeof(_codecs_cn));
+            this.LibraryModuleTypes.Add(typeof(_codecs_hk));
+            this.LibraryModuleTypes.Add(typeof(_codecs_iso2022));
+            this.LibraryModuleTypes.Add(typeof(_codecs_jp));
+            this.LibraryModuleTypes.Add(typeof(_codecs_kr));
+            this.LibraryModuleTypes.Add(typeof(_codecs_tw));
+            this.LibraryModuleTypes.Add(typeof(xxsubtype));
+            this.LibraryModuleTypes.Add(typeof(_blake2));
+            this.LibraryModuleTypes.Add(typeof(_sha3));
+
+#if PYTHON_WITH_OPENSSL
+            this.LibraryModuleTypes.Add(typeof(_ssl));
+            this.LibraryModuleTypes.Add(typeof(_hashlib));
+#endif
+#if PYTHON_WITH_SQLITE
+            this.LibraryModuleTypes.Add(typeof(_sqlite3));
+#endif
         }
     }
 
