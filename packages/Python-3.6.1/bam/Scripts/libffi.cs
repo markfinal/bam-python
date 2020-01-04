@@ -52,7 +52,7 @@ namespace Python
             get
             {
                 var contents = new System.Text.StringBuilder();
-                using (System.IO.TextReader reader = new System.IO.StreamReader(this.Macros["templateConfig"].ToString()))
+                using (System.IO.TextReader reader = new System.IO.StreamReader(this.Macros.FromName("templateConfig").ToString()))
                 {
                     contents.Append(reader.ReadToEnd());
                 }

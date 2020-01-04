@@ -117,23 +117,23 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros[C.ModuleMacroNames.PluginFileExtension] = Bam.Core.TokenizedString.CreateVerbatim(".pyd");
+                this.Macros.AddVerbatim(C.ModuleMacroNames.PluginFileExtension, ".pyd");
 
                 var pyConfigHeader = Bam.Core.Graph.Instance.FindReferencedModule<PyConfigHeader>();
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName + "_d");
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim($"{this.ModuleName}_d");
                 }
                 else
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim(this.ModuleName);
                 }
             }
             else
             {
-                this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(this.ModuleName);
-                this.Macros[C.ModuleMacroNames.PluginPrefix] = Bam.Core.TokenizedString.CreateVerbatim(string.Empty);
-                this.Macros[C.ModuleMacroNames.PluginFileExtension] = Bam.Core.TokenizedString.CreateVerbatim(".so");
+                this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim(this.ModuleName);
+                this.Macros.AddVerbatim(C.ModuleMacroNames.PluginPrefix, string.Empty);
+                this.Macros.AddVerbatim(C.ModuleMacroNames.PluginFileExtension, ".so");
             }
 
             this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);

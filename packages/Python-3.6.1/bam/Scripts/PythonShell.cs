@@ -49,16 +49,16 @@ namespace Python
             {
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim("python_d");
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim("python_d");
                 }
                 else
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim("python");
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim("python");
                 }
             }
             else
             {
-                this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim("python");
+                this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim("python");
                 source.DependsOn(pyConfigHeader);
                 source.UsePublicPatches(pyConfigHeader);
             }

@@ -65,7 +65,7 @@ namespace Python
 
             if (this.BuildEnvironment.Platform.Includes(Bam.Core.EPlatform.Windows))
             {
-                this.Macros["PluginDir"].Set("$(0)/DLLs", new[] { this.PublishRoot });
+                this.Macros.FromName("PluginDir").Set("$(0)/DLLs", this, new[] { this.PublishRoot });
             }
         }
     }
@@ -75,7 +75,7 @@ namespace Python
     class PythonLibrary :
         C.DynamicLibrary
     {
-        public Bam.Core.TokenizedString LibraryDirectory => this.Macros["PythonLibDirectory"];
+        public Bam.Core.TokenizedString LibraryDirectory => this.Macros.FromName("PythonLibDirectory");
 
         private void
         CoreBuildPatch(
@@ -155,20 +155,20 @@ namespace Python
             {
                 if ((pyConfigHeader.Configuration as IConfigurePython).PyDEBUG)
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsDebugOutputName);
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim(Version.WindowsDebugOutputName);
                 }
                 else
                 {
-                    this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.WindowsOutputName);
+                    this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim(Version.WindowsOutputName);
                 }
             }
             else
             {
-                this.Macros[Bam.Core.ModuleMacroNames.OutputName] = Bam.Core.TokenizedString.CreateVerbatim(Version.NixOutputName);
+                this.Macros.FromName(Bam.Core.ModuleMacroNames.OutputName).SetVerbatim(Version.NixOutputName);
             }
             this.SetSemanticVersion(Version.Major, Version.Minor, Version.Patch);
 
-            this.Macros["PythonLibDirectory"] = this.CreateTokenizedString("$(packagedir)/Lib");
+            this.Macros.Add("PythonLibDirectory", this.CreateTokenizedString("$(packagedir)/Lib"));
 
             /*
             this.PublicPatch((settings, appliedTo) =>

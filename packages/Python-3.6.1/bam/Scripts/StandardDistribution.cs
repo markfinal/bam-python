@@ -151,7 +151,7 @@ namespace Python
                     basename = Version.WindowsDebugOutputName; // pythonMN_d.zip
                 }
             }
-            this.Macros.Add("zipoutputbasename", basename);
+            this.Macros.AddVerbatim("zipoutputbasename", basename);
 
             var pylib = Bam.Core.Graph.Instance.FindReferencedModule<Python.PythonLibrary>();
             this.DependsOn(pylib);
