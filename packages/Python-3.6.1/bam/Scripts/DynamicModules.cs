@@ -2219,13 +2219,11 @@ namespace Python
                 },
             settings =>
                 {
-                    /*
                     if (settings is C.ICommonLinkerSettingsOSX osxLinker)
                     {
                         osxLinker.Frameworks.AddUnique("SystemConfiguration");
                         osxLinker.Frameworks.AddUnique("CoreFoundation");
                     }
-                    */
                 })
         {}
     }
