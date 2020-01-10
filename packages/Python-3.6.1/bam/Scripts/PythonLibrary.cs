@@ -53,14 +53,10 @@ namespace Python
             typeof(pyexpat)
         );
 
-        protected override System.Collections.Generic.IEnumerable<Module> LibraryFilter()
-        {
-            return base.LibraryFilter().Where(item => !(item is ffi));
-        }
-
         protected override void
         Init()
         {
+            this.InternalSDKModuleTypes.AddUnique(typeof(ffi));
             this.AddCExtensionModules();
 
             base.Init();
