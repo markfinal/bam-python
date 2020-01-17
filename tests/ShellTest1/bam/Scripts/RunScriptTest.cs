@@ -40,10 +40,14 @@ namespace ShellTest1
             base.Init();
 
             this.SetDefaultMacrosAndMappings(EPublishingType.ConsoleApplication);
-            this.RegisterPythonModuleTypesToCollate();
+            //this.RegisterPythonModuleTypesToCollate();
 
-            var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.ExecutableKey);
-            this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
+            this.IncludeSDK<Python.SDK>(
+                Python.SDK.ShellComponent
+            );
+
+            //var appAnchor = this.Include<Python.PythonShell>(C.ConsoleApplication.ExecutableKey);
+            //this.IncludePythonStandardDistribution(appAnchor, this.Find<Python.PythonLibrary>().First());
 
             /*
             this.IncludeFiles(this.CreateTokenizedString("$(packagedir)/data/helloworld.py"), this.ExecutableDir, appAnchor);

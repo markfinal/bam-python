@@ -90,9 +90,10 @@ namespace Python
                     }
                 });
 
-            this.UseSDK<SDK>(source);
+            //this.UseSDK<SDK>(source);
 
-            this.InheritedEnvironmentVariables = new Bam.Core.StringArray { "*" }; // seem to require all of them
+            //this.InheritedEnvironmentVariables = new Bam.Core.StringArray { "*" }; // seem to require all of them
+            this.LinkOnlyAgainst<PythonLibrary>();
         }
 
         System.Type Bam.Core.ITool.SettingsType => typeof(PyDocSettings);

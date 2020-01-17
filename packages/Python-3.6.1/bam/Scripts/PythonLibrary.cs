@@ -36,8 +36,11 @@ namespace Python
     class SDK :
         C.SDKTemplate
     {
+        public const string ShellComponent = "Shell";
+
         protected override Bam.Core.TypeArray LibraryModuleTypes { get; } = new Bam.Core.TypeArray(
             typeof(PythonLibrary),
+            typeof(PythonShell),
             typeof(_multiprocessing),
             typeof(_ctypes),
             typeof(_testmultiphase),
@@ -131,6 +134,20 @@ namespace Python
 #if PYTHON_WITH_SQLITE
             this.LibraryModuleTypes.Add(typeof(_sqlite3));
 #endif
+        }
+
+        public override (Bam.Core.Module, string)
+        Component(
+            string name)
+        {
+            switch (name)
+            {
+                case ShellComponent:
+                    return (this.realLibraryModules.First(item => item is PythonShell), C.ConsoleApplication.ExecutableKey);
+
+                default:
+                    throw new Bam.Core.Exception($"Unrecognized component with name: {name}");
+            }
         }
     }
 
